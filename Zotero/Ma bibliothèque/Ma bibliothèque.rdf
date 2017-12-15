@@ -1,0 +1,282 @@
+<rdf:RDF
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+ xmlns:z="http://www.zotero.org/namespaces/export#"
+ xmlns:dcterms="http://purl.org/dc/terms/"
+ xmlns:dc="http://purl.org/dc/elements/1.1/"
+ xmlns:bib="http://purl.org/net/biblio#"
+ xmlns:foaf="http://xmlns.com/foaf/0.1/"
+ xmlns:link="http://purl.org/rss/1.0/modules/link/"
+ xmlns:prism="http://prismstandard.org/namespaces/1.2/basic/">
+    <rdf:Description rdf:about="#item_2">
+        <z:itemType>conferencePaper</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+                <dc:title>Appeared in the Proceedings of the International Conference on Visualization, Imaging and Image Processing (VIIP 2001), Marbella, Spain</dc:title>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Richard</foaf:surname>
+                        <foaf:givenname>Manuel M. Oliveira Brian Bowen</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Chang</foaf:surname>
+                        <foaf:givenname>McKenna Yu-Sung</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <link:link rdf:resource="#item_4"/>
+        <link:link rdf:resource="#item_3"/>
+        <bib:pages>106–107</bib:pages>
+        <dc:date>2001</dc:date>
+        <z:libraryCatalog>Google Scholar</z:libraryCatalog>
+        <dc:title>Fast digital image inpainting</dc:title>
+    </rdf:Description>
+    <z:Attachment rdf:about="#item_4">
+        <z:itemType>attachment</z:itemType>
+        <rdf:resource rdf:resource="files/4/Richard et Chang - 2001 - Fast digital image inpainting.pdf"/>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://spin2013.cs.sunysb.edu/~richard/docs/inpainting.pdf</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2017-12-15 13:30:21</dcterms:dateSubmitted>
+        <dc:title>Fulltext</dc:title>
+        <z:linkMode>1</z:linkMode>
+        <link:type>application/pdf</link:type>
+    </z:Attachment>
+    <z:Attachment rdf:about="#item_3">
+        <z:itemType>attachment</z:itemType>
+        <rdf:resource rdf:resource="files/3/Richard et Chang - 2001 - Fast digital image inpainting.pdf"/>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://spin2013.cs.sunysb.edu/~richard/docs/inpainting.pdf</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2017-12-15 13:30:20</dcterms:dateSubmitted>
+        <dc:title>Snapshot</dc:title>
+        <z:linkMode>1</z:linkMode>
+        <link:type>application/pdf</link:type>
+    </z:Attachment>
+    <bib:Article rdf:about="#item_5">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+                <prism:volume>12</prism:volume>
+                <prism:number>8</prism:number>
+                <dc:title>IEEE Transactions on image processing</dc:title>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Bertalmio</foaf:surname>
+                        <foaf:givenname>Marcelo</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Vese</foaf:surname>
+                        <foaf:givenname>Luminita</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Sapiro</foaf:surname>
+                        <foaf:givenname>Guillermo</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Osher</foaf:surname>
+                        <foaf:givenname>Stanley</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <link:link rdf:resource="#item_7"/>
+        <link:link rdf:resource="#item_6"/>
+        <bib:pages>882–889</bib:pages>
+        <dc:date>2003</dc:date>
+        <z:libraryCatalog>Google Scholar</z:libraryCatalog>
+        <dc:title>Simultaneous structure and texture image inpainting</dc:title>
+    </bib:Article>
+    <z:Attachment rdf:about="#item_7">
+        <z:itemType>attachment</z:itemType>
+        <rdf:resource rdf:resource="files/7/Bertalmio et al. - 2003 - Simultaneous structure and texture image inpaintin.pdf"/>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://conservancy.umn.edu/bitstream/handle/11299/3807/1869.pdf?sequence=1&amp;isAllowed=y</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2017-12-15 13:32:04</dcterms:dateSubmitted>
+        <dc:title>Fulltext</dc:title>
+        <z:linkMode>1</z:linkMode>
+        <link:type>application/pdf</link:type>
+    </z:Attachment>
+    <z:Attachment rdf:about="#item_6">
+        <z:itemType>attachment</z:itemType>
+        <rdf:resource rdf:resource="files/6/1217265.html"/>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://ieeexplore.ieee.org.docelec.univ-lyon1.fr/abstract/document/1217265/</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2017-12-15 13:31:56</dcterms:dateSubmitted>
+        <dc:title>Snapshot</dc:title>
+        <z:linkMode>1</z:linkMode>
+        <link:type>text/html</link:type>
+    </z:Attachment>
+    <rdf:Description rdf:about="#item_8">
+        <z:itemType>conferencePaper</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+                <dc:title>Proceedings of the 27th annual conference on Computer graphics and interactive techniques</dc:title>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <dc:publisher>
+            <foaf:Organization>
+               <foaf:name>ACM Press/Addison-Wesley Publishing Co.</foaf:name>
+            </foaf:Organization>
+        </dc:publisher>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Bertalmio</foaf:surname>
+                        <foaf:givenname>Marcelo</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Sapiro</foaf:surname>
+                        <foaf:givenname>Guillermo</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Caselles</foaf:surname>
+                        <foaf:givenname>Vincent</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Ballester</foaf:surname>
+                        <foaf:givenname>Coloma</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <link:link rdf:resource="#item_10"/>
+        <link:link rdf:resource="#item_9"/>
+        <bib:pages>417–424</bib:pages>
+        <dc:date>2000</dc:date>
+        <z:libraryCatalog>Google Scholar</z:libraryCatalog>
+        <dc:title>Image inpainting</dc:title>
+    </rdf:Description>
+    <z:Attachment rdf:about="#item_10">
+        <z:itemType>attachment</z:itemType>
+        <rdf:resource rdf:resource="files/10/Bertalmio et al. - 2000 - Image inpainting.pdf"/>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://www.dtic.mil/get-tr-doc/pdf?AD=ADA437378</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2017-12-15 13:33:14</dcterms:dateSubmitted>
+        <dc:title>Fulltext</dc:title>
+        <z:linkMode>1</z:linkMode>
+        <link:type>application/pdf</link:type>
+    </z:Attachment>
+    <z:Attachment rdf:about="#item_9">
+        <z:itemType>attachment</z:itemType>
+        <rdf:resource rdf:resource="files/9/citation.html"/>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>https://dl.acm.org/citation.cfm?id=344972</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2017-12-15 13:32:52</dcterms:dateSubmitted>
+        <dc:title>Snapshot</dc:title>
+        <z:linkMode>1</z:linkMode>
+        <link:type>text/html</link:type>
+    </z:Attachment>
+    <rdf:Description rdf:about="#item_11">
+        <z:itemType>conferencePaper</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+                <prism:volume>2</prism:volume>
+                <dc:title>Computer Vision and Pattern Recognition, 2003. Proceedings. 2003 IEEE Computer Society Conference on</dc:title>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <dc:publisher>
+           <foaf:Organization><foaf:name>IEEE</foaf:name></foaf:Organization>
+        </dc:publisher>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Criminisi</foaf:surname>
+                        <foaf:givenname>Antonio</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Perez</foaf:surname>
+                        <foaf:givenname>Patrick</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Toyama</foaf:surname>
+                        <foaf:givenname>Kentaro</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <link:link rdf:resource="#item_13"/>
+        <link:link rdf:resource="#item_12"/>
+        <bib:pages>II–II</bib:pages>
+        <dc:date>2003</dc:date>
+        <z:libraryCatalog>Google Scholar</z:libraryCatalog>
+        <dc:title>Object removal by exemplar-based inpainting</dc:title>
+    </rdf:Description>
+    <z:Attachment rdf:about="#item_13">
+        <z:itemType>attachment</z:itemType>
+        <rdf:resource rdf:resource="files/13/Criminisi et al. - 2003 - Object removal by exemplar-based inpainting.pdf"/>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://pdfs.semanticscholar.org/5f99/096f3a584c02397325b621199a94fcd81736.pdf</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2017-12-15 13:34:14</dcterms:dateSubmitted>
+        <dc:title>Fulltext</dc:title>
+        <z:linkMode>1</z:linkMode>
+        <link:type>application/pdf</link:type>
+    </z:Attachment>
+    <z:Attachment rdf:about="#item_12">
+        <z:itemType>attachment</z:itemType>
+        <rdf:resource rdf:resource="files/12/1211538.html"/>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://ieeexplore.ieee.org.docelec.univ-lyon1.fr/abstract/document/1211538/</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2017-12-15 13:34:14</dcterms:dateSubmitted>
+        <dc:title>Snapshot</dc:title>
+        <z:linkMode>1</z:linkMode>
+        <link:type>text/html</link:type>
+    </z:Attachment>
+    <z:Collection rdf:about="#collection_2">
+        <dc:title>Inpainting</dc:title>
+        <dcterms:hasPart rdf:resource="#item_2"/>
+        <dcterms:hasPart rdf:resource="#item_5"/>
+        <dcterms:hasPart rdf:resource="#item_8"/>
+        <dcterms:hasPart rdf:resource="#item_11"/>
+    </z:Collection>
+</rdf:RDF>
