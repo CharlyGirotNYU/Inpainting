@@ -1,12 +1,30 @@
-Auteur principal : 
-Année :
+Auteur principal : Alexandru Telea
+Année : 2003
 
-Titre : 
+Titre : An image Inpainting Technique Based on the Fast Marching Method
 
 Technique / Algo  : 
 
+Technic based on propagating an image smoothness estimator along the image gradient. Image smoothness is estimated as a weighted average over a known image neighborhood of the pixel to inpaint.
+Fast Marching Method to propagate the image inforamtion.
+
+ALGORITHME : 
+Step 1 : Extratcs the band point with the smallest T(distance to the boundaries)
+Step 2 : Marches the boundaries inward by adding new points on it 
+Step 3 : performs the inpainting
+Step 4 : Propagates the value T to its neighbors
+Step 5 : inserts(k,l) with its new T in the heap
+
+Comment : Fig 4 algo écrit dans le papier
+
 
 Avantage de la méthode / Cas d'utilisation / Limitations : 
+
+Simple à implémenter, rapide, résultats proches des méthodes plus complexe 
+
+S'applique sur des petites régions endommagées
+
+Limitation avec une regions plus grosse que 15 pixels, apparition d'un flou
 
 
 
