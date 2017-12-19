@@ -1,0 +1,30 @@
+Auteur principal : CRIMINISI A, PEREZ P
+Année : 2003
+
+Titre : Object Removal by Exemplar-Based Inpainting
+
+But : Removing large objects from digital photographs
+
+
+Technique / Algo  : 
+
+The approch employs an exemplar based texture synthesis technique modulated by a unified scheme for determining the fill orfer of the target region, fill priority influenced by pixel value of confidence and image isophotes.
+
+
+REGION FILLING ALGORITHM
+-Extract the manually selected initial front
+- Repeat until done : 
+	-Identify the fill front , exit if null
+	- Compute priorities P(p) pour tout les p du contour
+	- Trouver le patch de priorité maximale
+	- Trouver le patch Sigq qui minimise la distance au patch 		Sigp
+	-Copy image data from Sigq to Sigp 
+	- Update C(p) pour tout les points du patch Sigp contenu 		dans le mask
+
+
+Avantage de la méthode / Cas d'utilisation / Limitations : 
+Propagating both linear structure and two dimensional texture into the targer region. Outperforms earlier work in terms of both perceptual quality and computational efficiency. 
+
+Investigating extensions for more accurate propagation of curved structures in still photographs and for object removal from video. 
+
+

@@ -2,12 +2,351 @@
  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
  xmlns:z="http://www.zotero.org/namespaces/export#"
  xmlns:dcterms="http://purl.org/dc/terms/"
- xmlns:dc="http://purl.org/dc/elements/1.1/"
  xmlns:bib="http://purl.org/net/biblio#"
  xmlns:foaf="http://xmlns.com/foaf/0.1/"
  xmlns:link="http://purl.org/rss/1.0/modules/link/"
- xmlns:prism="http://prismstandard.org/namespaces/1.2/basic/">
-    <rdf:Description rdf:about="#item_2">
+ xmlns:dc="http://purl.org/dc/elements/1.1/"
+ xmlns:prism="http://prismstandard.org/namespaces/1.2/basic/"
+ xmlns:vcard="http://nwalsh.com/rdf/vCard#">
+    <bib:Article rdf:about="https://doi.org/10.1080/10867651.2004.10487596">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf rdf:resource="urn:issn:1086-7651"/>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Telea</foaf:surname>
+                        <foaf:givenname>Alexandru</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <link:link rdf:resource="#item_4"/>
+        <link:link rdf:resource="#item_3"/>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://doi.org/10.1080/10867651.2004.10487596</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <bib:pages>23-34</bib:pages>
+        <dc:date>January 1, 2004</dc:date>
+        <dcterms:dateSubmitted>2017-12-12 12:44:58</dcterms:dateSubmitted>
+        <z:libraryCatalog>Taylor and Francis+NEJM</z:libraryCatalog>
+        <dcterms:abstract>Digital inpainting provides a means for reconstruction of small damaged portions of an image. Although the inpainting basics are straightforward, most inpainting techniques published in the literature are complex to understand and implement. We present here a new algorithm for digital inpainting based on the fast marching method for level set applications. Our algorithm is very simple to implement, fast, and produces nearly identical results to more complex, and usually slower, known methods. Source code is available online.</dcterms:abstract>
+        <dc:title>An Image Inpainting Technique Based on the Fast Marching Method</dc:title>
+    </bib:Article>
+    <bib:Journal rdf:about="urn:issn:1086-7651">
+        <prism:volume>9</prism:volume>
+        <prism:number>1</prism:number>
+        <dc:title>Journal of Graphics Tools</dc:title>
+        <dc:identifier>ISSN 1086-7651</dc:identifier>
+        <dc:identifier>DOI 10.1080/10867651.2004.10487596</dc:identifier>
+    </bib:Journal>
+    <z:Attachment rdf:about="#item_4">
+        <z:itemType>attachment</z:itemType>
+        <rdf:resource rdf:resource="files/4/2004JGraphToolsTelea.pdf"/>
+        <dc:title>2004JGraphToolsTelea.pdf</dc:title>
+        <link:type>application/pdf</link:type>
+    </z:Attachment>
+    <z:Attachment rdf:about="#item_3">
+        <z:itemType>attachment</z:itemType>
+        <rdf:resource rdf:resource="files/3/10867651.2004.html"/>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://www.tandfonline.com.docelec.univ-lyon1.fr/doi/abs/10.1080/10867651.2004.10487596</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2017-12-12 12:45:05</dcterms:dateSubmitted>
+        <dc:title>Snapshot</dc:title>
+        <z:linkMode>1</z:linkMode>
+        <link:type>text/html</link:type>
+    </z:Attachment>
+    <rdf:Description rdf:about="urn:isbn:978-1-58113-208-3">
+        <z:itemType>conferencePaper</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+                <dcterms:isPartOf>
+                   <bib:Series><dc:title>SIGGRAPH '00</dc:title></bib:Series>
+                </dcterms:isPartOf>
+                <dc:identifier>ISBN 978-1-58113-208-3</dc:identifier>
+                <dc:identifier>DOI 10.1145/344779.344972</dc:identifier>
+                <dc:title>Proceedings of the 27th Annual Conference on Computer Graphics and Interactive Techniques</dc:title>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <dc:publisher>
+            <foaf:Organization>
+                <vcard:adr>
+                    <vcard:Address>
+                       <vcard:locality>New York, NY, USA</vcard:locality>
+                    </vcard:Address>
+                </vcard:adr>
+                <foaf:name>ACM Press/Addison-Wesley Publishing Co.</foaf:name>
+            </foaf:Organization>
+        </dc:publisher>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Bertalmio</foaf:surname>
+                        <foaf:givenname>Marcelo</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Sapiro</foaf:surname>
+                        <foaf:givenname>Guillermo</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Caselles</foaf:surname>
+                        <foaf:givenname>Vincent</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Ballester</foaf:surname>
+                        <foaf:givenname>Coloma</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:subject>
+            <z:AutomaticTag>
+               <rdf:value>anisotropic diffusion</rdf:value>
+            </z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+            <z:AutomaticTag>
+               <rdf:value>image restoration</rdf:value>
+            </z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+           <z:AutomaticTag><rdf:value>inpainting</rdf:value></z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+           <z:AutomaticTag><rdf:value>isophotes</rdf:value></z:AutomaticTag>
+        </dc:subject>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>http://dx.doi.org/10.1145/344779.344972</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <bib:pages>417–424</bib:pages>
+        <dc:date>2000</dc:date>
+        <dcterms:dateSubmitted>2017-12-12 12:51:50</dcterms:dateSubmitted>
+        <z:libraryCatalog>ACM Digital Library</z:libraryCatalog>
+        <dcterms:abstract>Inpainting, the technique of modifying an image in an undetectable form, is as ancient as art itself. The goals and applications of inpainting are numerous, from the restoration of damaged paintings and photographs to the removal/replacement of selected objects. In this paper, we introduce a novel algorithm for digital inpainting of still images that attempts to replicate the basic techniques used by professional restorators. After the user selects the regions to be restored, the algorithm automatically fills-in these regions with information surrounding them. The fill-in is done in such a way that isophote lines arriving at the regions' boundaries are completed inside. In contrast with previous approaches, the technique here introduced does not require the user to specify where the novel information comes from. This is automatically done (and in a fast way), thereby allowing to simultaneously fill-in numerous regions containing completely different structures and surrounding backgrounds. In addition, no limitations are imposed on the topology of the region to be inpainted. Applications of this technique include the restoration of old photographs and damaged film; removal of superimposed text like dates, subtitles, or publicity; and the removal of entire objects from the image like microphones or wires in special effects.</dcterms:abstract>
+        <dc:title>Image Inpainting</dc:title>
+    </rdf:Description>
+    <bib:Article rdf:about="#item_7">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf rdf:resource="urn:issn:1057-7149"/>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Criminisi</foaf:surname>
+                        <foaf:givenname>A.</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Perez</foaf:surname>
+                        <foaf:givenname>P.</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Toyama</foaf:surname>
+                        <foaf:givenname>K.</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <link:link rdf:resource="#item_8"/>
+        <link:link rdf:resource="#item_9"/>
+        <dc:subject>
+            <z:AutomaticTag>
+               <rdf:value>image restoration</rdf:value>
+            </z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+           <z:AutomaticTag><rdf:value>Algorithms</rdf:value></z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+            <z:AutomaticTag>
+               <rdf:value>best-first algorithm</rdf:value>
+            </z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+           <z:AutomaticTag><rdf:value>color images</rdf:value></z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+            <z:AutomaticTag>
+               <rdf:value>Computational efficiency</rdf:value>
+            </z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+            <z:AutomaticTag>
+               <rdf:value>Computer Graphics</rdf:value>
+            </z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+           <z:AutomaticTag><rdf:value>digital images</rdf:value></z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+           <z:AutomaticTag><rdf:value>Digital images</rdf:value></z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+            <z:AutomaticTag>
+               <rdf:value>exemplar-based image inpainting</rdf:value>
+            </z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+           <z:AutomaticTag><rdf:value>Filling</rdf:value></z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+           <z:AutomaticTag><rdf:value>Humans</rdf:value></z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+           <z:AutomaticTag><rdf:value>Hypermedia</rdf:value></z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+            <z:AutomaticTag>
+               <rdf:value>image colour analysis</rdf:value>
+            </z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+            <z:AutomaticTag>
+               <rdf:value>Image Enhancement</rdf:value>
+            </z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+            <z:AutomaticTag>
+               <rdf:value>Image generation</rdf:value>
+            </z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+            <z:AutomaticTag>
+               <rdf:value>Image Interpretation, Computer-Assisted</rdf:value>
+            </z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+           <z:AutomaticTag><rdf:value>image sampling</rdf:value></z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+           <z:AutomaticTag><rdf:value>Image sampling</rdf:value></z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+            <z:AutomaticTag>
+               <rdf:value>image sampling process</rdf:value>
+            </z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+           <z:AutomaticTag><rdf:value>image texture</rdf:value></z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+            <z:AutomaticTag>
+               <rdf:value>Information Storage and Retrieval</rdf:value>
+            </z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+            <z:AutomaticTag>
+               <rdf:value>Numerical Analysis, Computer-Assisted</rdf:value>
+            </z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+           <z:AutomaticTag><rdf:value>object removal</rdf:value></z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+           <z:AutomaticTag><rdf:value>Paintings</rdf:value></z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+            <z:AutomaticTag>
+               <rdf:value>Pattern Recognition, Automated</rdf:value>
+            </z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+           <z:AutomaticTag><rdf:value>region filling</rdf:value></z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+            <z:AutomaticTag>
+               <rdf:value>Reproducibility of Results</rdf:value>
+            </z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+           <z:AutomaticTag><rdf:value>Robustness</rdf:value></z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+            <z:AutomaticTag>
+               <rdf:value>Sensitivity and Specificity</rdf:value>
+            </z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+           <z:AutomaticTag><rdf:value>Shape</rdf:value></z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+            <z:AutomaticTag>
+               <rdf:value>Signal Processing, Computer-Assisted</rdf:value>
+            </z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+            <z:AutomaticTag>
+               <rdf:value>structure propagation</rdf:value>
+            </z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+            <z:AutomaticTag>
+               <rdf:value>Subtraction Technique</rdf:value>
+            </z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+            <z:AutomaticTag>
+               <rdf:value>texture synthesis algorithms</rdf:value>
+            </z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+            <z:AutomaticTag>
+               <rdf:value>Two dimensional displays</rdf:value>
+            </z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+           <z:AutomaticTag><rdf:value>Water resources</rdf:value></z:AutomaticTag>
+        </dc:subject>
+        <bib:pages>1200-1212</bib:pages>
+        <dc:date>Sept 2004</dc:date>
+        <z:libraryCatalog>IEEE Xplore</z:libraryCatalog>
+        <dcterms:abstract>A new algorithm is proposed for removing large objects from digital images. The challenge is to fill in the hole that is left behind in a visually plausible way. In the past, this problem has been addressed by two classes of algorithms: 1) &quot;texture synthesis&quot; algorithms for generating large image regions from sample textures and 2) &quot;inpainting&quot; techniques for filling in small image gaps. The former has been demonstrated for &quot;textures&quot;-repeating two-dimensional patterns with some stochasticity; the latter focus on linear &quot;structures&quot; which can be thought of as one-dimensional patterns, such as lines and object contours. This paper presents a novel and efficient algorithm that combines the advantages of these two approaches. We first note that exemplar-based texture synthesis contains the essential process required to replicate both texture and structure; the success of structure propagation, however, is highly dependent on the order in which the filling proceeds. We propose a best-first algorithm in which the confidence in the synthesized pixel values is propagated in a manner similar to the propagation of information in inpainting. The actual color values are computed using exemplar-based synthesis. In this paper, the simultaneous propagation of texture and structure information is achieved by a single , efficient algorithm. Computational efficiency is achieved by a block-based sampling process. A number of examples on real and synthetic images demonstrate the effectiveness of our algorithm in removing large occluding objects, as well as thin scratches. Robustness with respect to the shape of the manually selected target region is also demonstrated. Our results compare favorably to those obtained by existing techniques.</dcterms:abstract>
+        <dc:title>Region filling and object removal by exemplar-based image inpainting</dc:title>
+    </bib:Article>
+    <bib:Journal rdf:about="urn:issn:1057-7149">
+        <prism:volume>13</prism:volume>
+        <prism:number>9</prism:number>
+        <dc:title>IEEE Transactions on Image Processing</dc:title>
+        <dc:identifier>ISSN 1057-7149</dc:identifier>
+        <dc:identifier>DOI 10.1109/TIP.2004.833105</dc:identifier>
+    </bib:Journal>
+    <z:Attachment rdf:about="#item_8">
+        <z:itemType>attachment</z:itemType>
+        <rdf:resource rdf:resource="files/8/1323101.html"/>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://ieeexplore.ieee.org/abstract/document/1323101/?reload=true</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2017-12-12 15:08:18</dcterms:dateSubmitted>
+        <dc:title>IEEE Xplore Abstract Record</dc:title>
+        <z:linkMode>1</z:linkMode>
+        <link:type>text/html</link:type>
+    </z:Attachment>
+    <z:Attachment rdf:about="#item_9">
+        <z:itemType>attachment</z:itemType>
+        <rdf:resource rdf:resource="files/9/Planning HH.pdf"/>
+        <dc:title>Planning HH.pdf</dc:title>
+        <link:type>application/pdf</link:type>
+    </z:Attachment>
+    <rdf:Description rdf:about="#item_11">
         <z:itemType>conferencePaper</z:itemType>
         <dcterms:isPartOf>
             <bib:Journal>
@@ -30,17 +369,17 @@
                 </rdf:li>
             </rdf:Seq>
         </bib:authors>
-        <link:link rdf:resource="#item_4"/>
-        <link:link rdf:resource="#item_21"/>
-        <link:link rdf:resource="#item_3"/>
+        <link:link rdf:resource="#item_12"/>
+        <link:link rdf:resource="#item_13"/>
+        <link:link rdf:resource="#item_14"/>
         <bib:pages>106–107</bib:pages>
         <dc:date>2001</dc:date>
         <z:libraryCatalog>Google Scholar</z:libraryCatalog>
         <dc:title>Fast digital image inpainting</dc:title>
     </rdf:Description>
-    <z:Attachment rdf:about="#item_4">
+    <z:Attachment rdf:about="#item_12">
         <z:itemType>attachment</z:itemType>
-        <rdf:resource rdf:resource="files/4/Richard et Chang - 2001 - Fast digital image inpainting.pdf"/>
+        <rdf:resource rdf:resource="files/12/Richard et Chang - 2001 - Fast digital image inpainting.pdf"/>
         <dc:identifier>
             <dcterms:URI>
                 <rdf:value>http://spin2013.cs.sunysb.edu/~richard/docs/inpainting.pdf</rdf:value>
@@ -51,16 +390,15 @@
         <z:linkMode>1</z:linkMode>
         <link:type>application/pdf</link:type>
     </z:Attachment>
-    <z:Attachment rdf:about="#item_21">
+    <z:Attachment rdf:about="#item_13">
         <z:itemType>attachment</z:itemType>
-        <rdf:resource rdf:resource="files/21/richard_chang_2001"/>
+        <rdf:resource rdf:resource="files/13/richard_chang_2001"/>
         <dc:title>richard_chang_2001</dc:title>
-        <z:linkMode>2</z:linkMode>
         <link:type>text/plain</link:type>
     </z:Attachment>
-    <z:Attachment rdf:about="#item_3">
+    <z:Attachment rdf:about="#item_14">
         <z:itemType>attachment</z:itemType>
-        <rdf:resource rdf:resource="files/3/Richard et Chang - 2001 - Fast digital image inpainting.pdf"/>
+        <rdf:resource rdf:resource="files/14/Richard et Chang - 2001 - Fast digital image inpainting.pdf"/>
         <dc:identifier>
             <dcterms:URI>
                 <rdf:value>http://spin2013.cs.sunysb.edu/~richard/docs/inpainting.pdf</rdf:value>
@@ -71,7 +409,7 @@
         <z:linkMode>1</z:linkMode>
         <link:type>application/pdf</link:type>
     </z:Attachment>
-    <bib:Article rdf:about="#item_5">
+    <bib:Article rdf:about="#item_15">
         <z:itemType>journalArticle</z:itemType>
         <dcterms:isPartOf>
             <bib:Journal>
@@ -108,24 +446,23 @@
                 </rdf:li>
             </rdf:Seq>
         </bib:authors>
-        <link:link rdf:resource="#item_25"/>
-        <link:link rdf:resource="#item_7"/>
-        <link:link rdf:resource="#item_6"/>
+        <link:link rdf:resource="#item_16"/>
+        <link:link rdf:resource="#item_17"/>
+        <link:link rdf:resource="#item_18"/>
         <bib:pages>882–889</bib:pages>
         <dc:date>2003</dc:date>
         <z:libraryCatalog>Google Scholar</z:libraryCatalog>
         <dc:title>Simultaneous structure and texture image inpainting</dc:title>
     </bib:Article>
-    <z:Attachment rdf:about="#item_25">
+    <z:Attachment rdf:about="#item_16">
         <z:itemType>attachment</z:itemType>
-        <rdf:resource rdf:resource="files/25/bertalmio_2003"/>
+        <rdf:resource rdf:resource="files/16/bertalmio_2003"/>
         <dc:title>bertalmio_2003</dc:title>
-        <z:linkMode>2</z:linkMode>
         <link:type>text/plain</link:type>
     </z:Attachment>
-    <z:Attachment rdf:about="#item_7">
+    <z:Attachment rdf:about="#item_17">
         <z:itemType>attachment</z:itemType>
-        <rdf:resource rdf:resource="files/7/Bertalmio et al. - 2003 - Simultaneous structure and texture image inpaintin.pdf"/>
+        <rdf:resource rdf:resource="files/17/Bertalmio et al. - 2003 - Simultaneous structure and texture image inpaintin.pdf"/>
         <dc:identifier>
             <dcterms:URI>
                 <rdf:value>http://conservancy.umn.edu/bitstream/handle/11299/3807/1869.pdf?sequence=1&amp;isAllowed=y</rdf:value>
@@ -136,9 +473,9 @@
         <z:linkMode>1</z:linkMode>
         <link:type>application/pdf</link:type>
     </z:Attachment>
-    <z:Attachment rdf:about="#item_6">
+    <z:Attachment rdf:about="#item_18">
         <z:itemType>attachment</z:itemType>
-        <rdf:resource rdf:resource="files/6/1217265.html"/>
+        <rdf:resource rdf:resource="files/18/1217265.html"/>
         <dc:identifier>
             <dcterms:URI>
                 <rdf:value>http://ieeexplore.ieee.org.docelec.univ-lyon1.fr/abstract/document/1217265/</rdf:value>
@@ -149,7 +486,7 @@
         <z:linkMode>1</z:linkMode>
         <link:type>text/html</link:type>
     </z:Attachment>
-    <rdf:Description rdf:about="#item_8">
+    <rdf:Description rdf:about="#item_19">
         <z:itemType>conferencePaper</z:itemType>
         <dcterms:isPartOf>
             <bib:Journal>
@@ -189,24 +526,23 @@
                 </rdf:li>
             </rdf:Seq>
         </bib:authors>
+        <link:link rdf:resource="#item_20"/>
+        <link:link rdf:resource="#item_21"/>
         <link:link rdf:resource="#item_22"/>
-        <link:link rdf:resource="#item_10"/>
-        <link:link rdf:resource="#item_9"/>
         <bib:pages>417–424</bib:pages>
         <dc:date>2000</dc:date>
         <z:libraryCatalog>Google Scholar</z:libraryCatalog>
         <dc:title>Image inpainting</dc:title>
     </rdf:Description>
-    <z:Attachment rdf:about="#item_22">
+    <z:Attachment rdf:about="#item_20">
         <z:itemType>attachment</z:itemType>
-        <rdf:resource rdf:resource="files/22/bertalmio_2000"/>
+        <rdf:resource rdf:resource="files/20/bertalmio_2000"/>
         <dc:title>bertalmio_2000</dc:title>
-        <z:linkMode>2</z:linkMode>
         <link:type>text/plain</link:type>
     </z:Attachment>
-    <z:Attachment rdf:about="#item_10">
+    <z:Attachment rdf:about="#item_21">
         <z:itemType>attachment</z:itemType>
-        <rdf:resource rdf:resource="files/10/Bertalmio et al. - 2000 - Image inpainting.pdf"/>
+        <rdf:resource rdf:resource="files/21/Bertalmio et al. - 2000 - Image inpainting.pdf"/>
         <dc:identifier>
             <dcterms:URI>
                 <rdf:value>http://www.dtic.mil/get-tr-doc/pdf?AD=ADA437378</rdf:value>
@@ -217,9 +553,9 @@
         <z:linkMode>1</z:linkMode>
         <link:type>application/pdf</link:type>
     </z:Attachment>
-    <z:Attachment rdf:about="#item_9">
+    <z:Attachment rdf:about="#item_22">
         <z:itemType>attachment</z:itemType>
-        <rdf:resource rdf:resource="files/9/citation.html"/>
+        <rdf:resource rdf:resource="files/22/citation.html"/>
         <dc:identifier>
             <dcterms:URI>
                <rdf:value>https://dl.acm.org/citation.cfm?id=344972</rdf:value>
@@ -230,7 +566,7 @@
         <z:linkMode>1</z:linkMode>
         <link:type>text/html</link:type>
     </z:Attachment>
-    <rdf:Description rdf:about="#item_11">
+    <rdf:Description rdf:about="#item_23">
         <z:itemType>conferencePaper</z:itemType>
         <dcterms:isPartOf>
             <bib:Journal>
@@ -263,24 +599,23 @@
                 </rdf:li>
             </rdf:Seq>
         </bib:authors>
-        <link:link rdf:resource="#item_23"/>
-        <link:link rdf:resource="#item_13"/>
-        <link:link rdf:resource="#item_12"/>
+        <link:link rdf:resource="#item_24"/>
+        <link:link rdf:resource="#item_25"/>
+        <link:link rdf:resource="#item_26"/>
         <bib:pages>II–II</bib:pages>
         <dc:date>2003</dc:date>
         <z:libraryCatalog>Google Scholar</z:libraryCatalog>
         <dc:title>Object removal by exemplar-based inpainting</dc:title>
     </rdf:Description>
-    <z:Attachment rdf:about="#item_23">
+    <z:Attachment rdf:about="#item_24">
         <z:itemType>attachment</z:itemType>
-        <rdf:resource rdf:resource="files/23/Criminisi_2003"/>
+        <rdf:resource rdf:resource="files/24/Criminisi_2003"/>
         <dc:title>Criminisi_2003</dc:title>
-        <z:linkMode>2</z:linkMode>
         <link:type>text/plain</link:type>
     </z:Attachment>
-    <z:Attachment rdf:about="#item_13">
+    <z:Attachment rdf:about="#item_25">
         <z:itemType>attachment</z:itemType>
-        <rdf:resource rdf:resource="files/13/Criminisi et al. - 2003 - Object removal by exemplar-based inpainting.pdf"/>
+        <rdf:resource rdf:resource="files/25/Criminisi et al. - 2003 - Object removal by exemplar-based inpainting.pdf"/>
         <dc:identifier>
             <dcterms:URI>
                 <rdf:value>https://pdfs.semanticscholar.org/5f99/096f3a584c02397325b621199a94fcd81736.pdf</rdf:value>
@@ -291,9 +626,9 @@
         <z:linkMode>1</z:linkMode>
         <link:type>application/pdf</link:type>
     </z:Attachment>
-    <z:Attachment rdf:about="#item_12">
+    <z:Attachment rdf:about="#item_26">
         <z:itemType>attachment</z:itemType>
-        <rdf:resource rdf:resource="files/12/1211538.html"/>
+        <rdf:resource rdf:resource="files/26/1211538.html"/>
         <dc:identifier>
             <dcterms:URI>
                 <rdf:value>http://ieeexplore.ieee.org.docelec.univ-lyon1.fr/abstract/document/1211538/</rdf:value>
@@ -304,7 +639,7 @@
         <z:linkMode>1</z:linkMode>
         <link:type>text/html</link:type>
     </z:Attachment>
-    <bib:Article rdf:about="#item_14">
+    <bib:Article rdf:about="#item_27">
         <z:itemType>journalArticle</z:itemType>
         <dcterms:isPartOf>
             <bib:Journal>
@@ -335,24 +670,23 @@
                 </rdf:li>
             </rdf:Seq>
         </bib:authors>
-        <link:link rdf:resource="#item_24"/>
-        <link:link rdf:resource="#item_16"/>
-        <link:link rdf:resource="#item_15"/>
+        <link:link rdf:resource="#item_28"/>
+        <link:link rdf:resource="#item_29"/>
+        <link:link rdf:resource="#item_30"/>
         <bib:pages>1200–1212</bib:pages>
         <dc:date>2004</dc:date>
         <z:libraryCatalog>Google Scholar</z:libraryCatalog>
         <dc:title>Region filling and object removal by exemplar-based image inpainting</dc:title>
     </bib:Article>
-    <z:Attachment rdf:about="#item_24">
+    <z:Attachment rdf:about="#item_28">
         <z:itemType>attachment</z:itemType>
-        <rdf:resource rdf:resource="files/24/Criminisi_2004"/>
+        <rdf:resource rdf:resource="files/28/Criminisi_2004"/>
         <dc:title>Criminisi_2004</dc:title>
-        <z:linkMode>2</z:linkMode>
         <link:type>text/plain</link:type>
     </z:Attachment>
-    <z:Attachment rdf:about="#item_16">
+    <z:Attachment rdf:about="#item_29">
         <z:itemType>attachment</z:itemType>
-        <rdf:resource rdf:resource="files/16/Criminisi et al. - 2004 - Region filling and object removal by exemplar-base.pdf"/>
+        <rdf:resource rdf:resource="files/29/Criminisi et al. - 2004 - Region filling and object removal by exemplar-base.pdf"/>
         <dc:identifier>
             <dcterms:URI>
                 <rdf:value>https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/criminisi_tip2004.pdf</rdf:value>
@@ -363,9 +697,9 @@
         <z:linkMode>1</z:linkMode>
         <link:type>application/pdf</link:type>
     </z:Attachment>
-    <z:Attachment rdf:about="#item_15">
+    <z:Attachment rdf:about="#item_30">
         <z:itemType>attachment</z:itemType>
-        <rdf:resource rdf:resource="files/15/1323101.html"/>
+        <rdf:resource rdf:resource="files/30/1323101.html"/>
         <dc:identifier>
             <dcterms:URI>
                 <rdf:value>http://ieeexplore.ieee.org.docelec.univ-lyon1.fr/abstract/document/1323101/</rdf:value>
@@ -376,7 +710,7 @@
         <z:linkMode>1</z:linkMode>
         <link:type>text/html</link:type>
     </z:Attachment>
-    <bib:Article rdf:about="#item_17">
+    <bib:Article rdf:about="#item_31">
         <z:itemType>journalArticle</z:itemType>
         <dcterms:isPartOf>
             <bib:Journal>
@@ -395,24 +729,17 @@
                 </rdf:li>
             </rdf:Seq>
         </bib:authors>
-        <link:link rdf:resource="#item_20"/>
-        <link:link rdf:resource="#item_19"/>
-        <link:link rdf:resource="#item_18"/>
+        <link:link rdf:resource="#item_33"/>
+        <link:link rdf:resource="#item_34"/>
+        <link:link rdf:resource="#item_36"/>
         <bib:pages>23–34</bib:pages>
         <dc:date>2004</dc:date>
         <z:libraryCatalog>Google Scholar</z:libraryCatalog>
         <dc:title>An image inpainting technique based on the fast marching method</dc:title>
     </bib:Article>
-    <z:Attachment rdf:about="#item_20">
+    <z:Attachment rdf:about="#item_33">
         <z:itemType>attachment</z:itemType>
-        <rdf:resource rdf:resource="files/20/Criminisi_2003"/>
-        <dc:title>Criminisi_2003</dc:title>
-        <z:linkMode>2</z:linkMode>
-        <link:type>text/plain</link:type>
-    </z:Attachment>
-    <z:Attachment rdf:about="#item_19">
-        <z:itemType>attachment</z:itemType>
-        <rdf:resource rdf:resource="files/19/Telea - 2004 - An image inpainting technique based on the fast ma.pdf"/>
+        <rdf:resource rdf:resource="files/33/Telea - 2004 - An image inpainting technique based on the fast ma.pdf"/>
         <dc:identifier>
             <dcterms:URI>
                 <rdf:value>http://www.olivier-augereau.com/docs/2004JGraphToolsTelea.pdf</rdf:value>
@@ -423,9 +750,9 @@
         <z:linkMode>1</z:linkMode>
         <link:type>application/pdf</link:type>
     </z:Attachment>
-    <z:Attachment rdf:about="#item_18">
+    <z:Attachment rdf:about="#item_34">
         <z:itemType>attachment</z:itemType>
-        <rdf:resource rdf:resource="files/18/10867651.2004.html"/>
+        <rdf:resource rdf:resource="files/34/10867651.2004.html"/>
         <dc:identifier>
             <dcterms:URI>
                 <rdf:value>http://www.tandfonline.com.docelec.univ-lyon1.fr/doi/abs/10.1080/10867651.2004.10487596</rdf:value>
@@ -436,13 +763,37 @@
         <z:linkMode>1</z:linkMode>
         <link:type>text/html</link:type>
     </z:Attachment>
-    <z:Collection rdf:about="#collection_2">
-        <dc:title>Inpainting</dc:title>
-        <dcterms:hasPart rdf:resource="#item_2"/>
-        <dcterms:hasPart rdf:resource="#item_5"/>
-        <dcterms:hasPart rdf:resource="#item_8"/>
+    <z:Attachment rdf:about="#item_36">
+        <z:itemType>attachment</z:itemType>
+        <rdf:resource rdf:resource="files/36/telea_2004"/>
+        <dc:title>telea_2004</dc:title>
+        <link:type>text/plain</link:type>
+    </z:Attachment>
+    <z:Collection rdf:about="#collection_4">
+        <dc:title>Ma bibliothèque</dc:title>
+        <dcterms:hasPart rdf:resource="#collection_5"/>
         <dcterms:hasPart rdf:resource="#item_11"/>
-        <dcterms:hasPart rdf:resource="#item_14"/>
-        <dcterms:hasPart rdf:resource="#item_17"/>
+        <dcterms:hasPart rdf:resource="#item_15"/>
+        <dcterms:hasPart rdf:resource="#item_19"/>
+        <dcterms:hasPart rdf:resource="#item_23"/>
+        <dcterms:hasPart rdf:resource="#item_27"/>
+        <dcterms:hasPart rdf:resource="#item_31"/>
+    </z:Collection>
+    <z:Collection rdf:about="#collection_5">
+        <dc:title>Inpainting</dc:title>
+        <dcterms:hasPart rdf:resource="#item_11"/>
+        <dcterms:hasPart rdf:resource="#item_15"/>
+        <dcterms:hasPart rdf:resource="#item_19"/>
+        <dcterms:hasPart rdf:resource="#item_23"/>
+        <dcterms:hasPart rdf:resource="#item_27"/>
+        <dcterms:hasPart rdf:resource="#item_31"/>
+        <rdf:type rdf:resource="http://www.zotero.org/namespaces/export#Collection"/>
+        <dc:title>Inpainting</dc:title>
+        <dcterms:hasPart rdf:resource="#item_11"/>
+        <dcterms:hasPart rdf:resource="#item_15"/>
+        <dcterms:hasPart rdf:resource="#item_19"/>
+        <dcterms:hasPart rdf:resource="#item_23"/>
+        <dcterms:hasPart rdf:resource="#item_27"/>
+        <dcterms:hasPart rdf:resource="#item_31"/>
     </z:Collection>
 </rdf:RDF>

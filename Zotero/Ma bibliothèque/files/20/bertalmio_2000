@@ -1,0 +1,20 @@
+Auteur principal : Bertalmio et al 
+Année : 2000
+
+Titre : Image Inpainting
+
+Consiste a propager la couleur vers l'intérieur de la zone a inpainter, dans le sens des lignes de niveaux tout en lissant toutes les X itérations à l'aide d'un filtre anisotropique pour lisser les courbes de niveaux (dans leur prolongation à l'intéreieur de la zone a restorer) pour éviter les discontinuités. Le mask doit etre fournir, tout le reste est automatique
+Technique / Algo  : 
+
+Update I[n+1](i,j) = I[n](i,j) + dt*I[n]_t (i,j)
+avec : l'information à propager dans la direction N (normale à la frontière le long des lignes de niveaux) : 
+I[n]_t (i,j) = ... 
+
+
+Avantage de la méthode / Cas d'utilisation / Limitations : 
+
+Condition de convergence 
+Ne restaure pas les textures -> quelques pistes dans la conclusion 
+Utile pour la restoration d'image ou pour initilaiser une restauration manuelle 
+
+

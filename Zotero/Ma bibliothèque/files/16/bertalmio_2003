@@ -1,0 +1,23 @@
+Auteur principal :  Bertalmio et al 
+Année : 2003
+
+Titre : Simultaneous Structure and texture Image Inpainting
+
+Simultanoeous filling in of texture and structure in tegions of missing image information
+Decompose the image into the sum of two functions then reconstruct each one of these functions with separately with structure and texture filling--in algorithms. Then added back together.
+
+Technique / Algo  : 
+decomposition technique : 
+Decomposition by total variation minimization and the space of oscillationg functions
+Minimization problem in the space of functions of Bounded Variations BV
+
+Texture SYnthesis technique :
+ImageInpainting technique : solving PDE 
+
+
+Avantage de la méthode / Cas d'utilisation / Limitations : 
+Since a number of algorithms exists for each one of these three components, the combination that provides the best visual results is an interesting experimental and theoretical research topic
+
+Possible extension to video and 3D data. 
+
+
