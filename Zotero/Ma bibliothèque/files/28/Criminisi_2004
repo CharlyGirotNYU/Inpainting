@@ -1,0 +1,25 @@
+Auteur principal : 
+Année :
+
+Titre : 
+
+Technique / Algo  : 
+
+
+Extract the manually selected initial front δΩ 0 .
+• Repeat until done:
+1a. Identify the fill front δΩ t . If Ω t = ∅, exit.
+1b. Compute priorities P (p) ∀p ∈ δΩ t .
+2a. Find the patch Ψ p ˆ with the maximum priority,
+ˆ = arg max p∈δΩ t P (p).
+i.e., p
+2b. Find the exemplar Ψ q ˆ ∈ Φ that minimizes d(Ψ p ˆ , Ψ q ˆ ).
+2c. Copy image data from Ψ q ˆ to Ψ p ˆ ∀p ∈ Ψ p ˆ ∩ Ω.
+3. Update C(p) ∀p ∈ Ψ p ˆ ∩ Ω
+
+Avantage de la méthode / Cas d'utilisation / Limitations : 
+
+
+REmoving large objects 
+completing parnoramas
+Completing texts (but no sense out of it)

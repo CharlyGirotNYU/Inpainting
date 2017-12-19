@@ -1,4 +1,3 @@
-
 Loading [MathJax]/extensions/TeX/euler_ieee.js
 
 Skip to Main Content
@@ -78,26 +77,26 @@ Other Search Options
     Search Alerts
     Search History
 
-Browse Journals & Magazines > IEEE Transactions on Image Pr... > Volume: 12 Issue: 8
-Simultaneous structure and texture image inpainting
+Browse Journals & Magazines > IEEE Transactions on Image Pr... > Volume: 13 Issue: 9
+Region filling and object removal by exemplar-based image inpainting
 Sign In or Purchase
 to View Full Text
-369
+1013
 Paper
 Citations
-26
+50
 Patent
 Citations
-2673
+8408
 Full
 Text Views
 Related Articles
-Face recognition with radial basis function (RBF) neural networks
-A method to reduce the Gibbs ringing artifact in MRI scans while keeping tissue ...
+Mean shift: a robust approach toward feature space analysis
+Face detection in color images
 View All
-4
+3
 Author(s)
-M. Bertalmio ; L. Vese ; G. Sapiro ; S. Osher
+A. Criminisi ; P. Perez ; K. Toyama
 View All Authors
 
     Abstract
@@ -110,26 +109,19 @@ View All Authors
     Media
 
 Abstract:
-An algorithm for the simultaneous filling-in of texture and structure in regions of missing image information is presented in this paper. The basic idea is to first decompose the image into the sum of two functions with different basic characteristics, and then reconstruct each one of these functions separately with structure and texture filling-in algorithms. The first function used in the decomposition is of bounded variation, representing the underlying image structure, while the second function captures the texture and possible noise. The region of missing information in the bounded variation image is reconstructed using image inpainting algorithms, while the same region in the texture image is filled-in with texture synthesis techniques. The original image is then reconstructed adding back these two sub-images. The novel contribution of this paper is then in the combination of these three previously developed components, image decomposition with inpainting and texture synthesis, which permits the simultaneous use of filling-in algorithms that are suited for different image characteristics. Examples on real images show the advantages of this proposed approach.
-Published in: IEEE Transactions on Image Processing ( Volume: 12 , Issue: 8 , Aug. 2003 )
-Page(s): 882 - 889
-Date of Publication: 04 August 2003
+A new algorithm is proposed for removing large objects from digital images. The challenge is to fill in the hole that is left behind in a visually plausible way. In the past, this problem has been addressed by two classes of algorithms: 1) "texture synthesis" algorithms for generating large image regions from sample textures and 2) "inpainting" techniques for filling in small image gaps. The former has been demonstrated for "textures"-repeating two-dimensional patterns with some stochasticity; the latter focus on linear "structures" which can be thought of as one-dimensional patterns, such as lines and object contours. This paper presents a novel and efficient algorithm that combines the advantages of these two approaches. We first note that exemplar-based texture synthesis contains the essential process required to replicate both texture and structure; the success of structure propagation, however, is highly dependent on the order in which the filling proceeds. We propose a best-first algorithm in which the confidence in the synthesized pixel values is propagated in a manner similar to the propagation of information in inpainting. The actual color values are computed using exemplar-based synthesis. In this paper, the simultaneous propagation of texture and structure information is achieved by a single , efficient algorithm. Computational efficiency is achieved by a block-based sampling process. A number of examples on real and synthetic images demonstrate the effectiveness of our algorithm in removing large occluding objects, as well as thin scratches. Robustness with respect to the shape of the manually selected target region is also demonstrated. Our results compare favorably to those obtained by existing techniques.
+Published in: IEEE Transactions on Image Processing ( Volume: 13 , Issue: 9 , Sept. 2004 )
+Page(s): 1200 - 1212
+Date of Publication: 16 August 2004
 ISSN Information:
 Print ISSN: 1057-7149
 Electronic ISSN: 1941-0042
-INSPEC Accession Number: 7715584
-DOI: 10.1109/TIP.2003.815261
+PubMed ID: 15449582
+INSPEC Accession Number: 8079355
+DOI: 10.1109/TIP.2004.833105
 Publisher: IEEE
 Sponsored by: IEEE Signal Processing Society
 Advertisement
-Contents
-
-    I. Introduction
-    II. Image Decomposition
-    III. Texture Synthesis
-    IV. Image Inpainting
-    V. Experimental Results
-    VI. Conclusions and Future Directions
 
     Download PDF
     Download Citations

@@ -1,0 +1,30 @@
+Auteur principal : Oliveira Bowen McKenna Chang
+Année : 2001
+
+Titre : Fast Digital Image Inpainting
+
+Simple and fast inpainting algo based on an isotropic diffusion model extented with the notion of user-provided diffusion barriers
+
+Technique / Algo  : 
+Repeatedly convolving the region to be inpainted with a diffusion kernel
+
+Pseudo Code for the fast inpainting algorithm :
+- init region to be inpainted Sig
+- for (iter=0 ; iter < num_iter ; iter++)
+	convolve = masked regions with kernel;
+
+Two diffusion kernel with a = 0.073235, b =0.176765, c=0.125
+a b a     c c c 
+b 0 b     c 0 c 
+a b a     c c c 
+
+Avantage de la méthode / Cas d'utilisation / Limitations : 
+
+The regions to be inpainted must be locally small 
+Two or three times faster than previous work and comparable to previous results 
+Sig must be exactly the size of the region to be reconstructed 
+For larger inpainting domains a scale-space approach can be used to preserve the algorithm's speed at the expense of reconstruction quality
+
+Measures of execution times and MSE for RGB channels of the restored images provided 
+
+
