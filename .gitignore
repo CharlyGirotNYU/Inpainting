@@ -7,4 +7,5 @@ build
 # ignorer tout les .o
 *.o
 
-
+*.autosave
+*~

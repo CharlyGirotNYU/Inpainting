@@ -10,10 +10,7 @@
 
 enum
 {
-    OUT,
-    UPDATED,
-    BORDER,
-    IN
+    IN, BORDER, UPDATED, SOURCE
 };
 
 class Image : public cv::Mat
@@ -25,7 +22,7 @@ public:
     void imread(std::string image_path, std::string mask_path);
 
     /** Write an image */
-    void imwrite(std::string filepath);
+    void imwrite(std::string filename);
 
     /** Get Image */
     cv::Mat const& image() const;
@@ -41,8 +38,8 @@ public:
     /** Set Alpha value at pixel u,v */
     int& alpha(int u, int v);
 
-    /** Return if a pixel belong to the border */
-    bool is_border(int u, int v);
+    /** Return number of pixels surrounding the current pixel that are outside the region  */
+    int num_outside_mask(int u, int v);
 
 
 private:

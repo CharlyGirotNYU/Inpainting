@@ -14,19 +14,35 @@ void Image::imread(std::string image_path, std::string mask_path)
     int const Nu = image.cols;
     int const Nv = image.rows;
 
-    //Init mat alpha
+    //Init mat alpha IN, BORDER, SOURCE (Can't be UPDATED at this point)
     alpha_data.zeros(Nv,Nu,CV_8UC1);
-    for(int i=0; i<Nu; ++i)
-        for(int j=0; j<Nv; ++j)
+//    alpha_data.resize(size);
+    cv::resize(alpha_data,alpha_data,image.size());
+    std::cout << image.rows << std::endl;
+    for(int i=1; i<Nu; ++i)
+        for(int j=1; j<Nv; ++j)
         {
+            int nb_out = num_outside_mask(i,j);
+            std::cout << nb_out;
+            if(nb_out == 0)
+            {
+                std::cout << i << std::endl;
+                alpha(i,j) = 0;
 
+            }
+//            else if(nb_out >0 && nb_out<8)
+//                alpha(i,j) = BORDER;
+//            else
+//                alpha(i,j) = SOURCE;
         }
 }
 
 
-void Image::imwrite(std::string filepath)
+void Image::imwrite(std::string filename)
 {
 
+    cv::imwrite(filename,image_data);
+    cv::imwrite("alpha.png",alpha_data);
 }
 
 
@@ -43,6 +59,7 @@ cv::Mat const& Image::alpha() const
 int const& Image::image(int u, int v) const
 {
     return image_data.at<int>(u,v);
+
 }
 
 int const& Image::alpha(int u, int v) const
@@ -53,24 +70,26 @@ int const& Image::alpha(int u, int v) const
 int& Image::image(int u, int v)
 {
     return alpha_data.at<int>(u,v);
+
 }
 
 int& Image::alpha(int u, int v)
 {
-    return alpha_data.at<int>(u,v);
+       alpha_data.at<int>(u,v);
 }
 
 
-bool Image::is_border(int u, int v)
+int Image::num_outside_mask(int u, int v)
 {
-    int nb_out = 0;
-    for(int i=-1; i<=1 ; ++i)
-        for(int j=-1; j<=1; ++j)
-        {
-            if(image(u+i,v+j))
-            {
-                return true;
-            }
-        }
-    return false;
+    //TODO : Gestion des bordures de l'image ...
+//    int nb_out = 0;
+//    for(int i=-1; i<=1 ; ++i)
+//        for(int j=-1; j<=1; ++j)
+//        {
+//            if(image(u+i,v+j) != 0)
+//            {
+//                nb_out++;
+//            }
+//        }
+    return 0;
 }
