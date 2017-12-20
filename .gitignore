@@ -1,0 +1,10 @@
+# ignorer tout les fichiers ou repertoires build
+build
+
+# ignorer tout les fichiers ayant l'extension .user 
+*.user
+
+# ignorer tout les .o
+*.o
+
+
