@@ -23,7 +23,7 @@ public:
 private:
     /** Store the image to fill/restore */
     cv::Mat image;
-    /** Store the alphas : 0->regoin to fill 1-> border of the region 2->OK Region */
+    /** Store the alphas : 0->region to fill 1->border of the region 2->region already filled 3-> image source */
     cv::Mat alpha;
 
 };
