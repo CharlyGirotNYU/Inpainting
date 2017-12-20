@@ -16,7 +16,6 @@ void Image::imread(std::string image_path, std::string mask_path)
 
     //Init mat alpha IN, BORDER, SOURCE (Can't be UPDATED at this point)
     alpha_data.zeros(Nv,Nu,CV_8UC1);
-//    alpha_data.resize(size);
     cv::resize(alpha_data,alpha_data,image.size());
     std::cout << image.rows << std::endl;
     for(int i=1; i<Nu; ++i)
