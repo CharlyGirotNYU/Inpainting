@@ -32,18 +32,18 @@ public:
     /** Get alpha Map */
     cv::Mat const& alpha() const;
     /** Get Image value at pixel u,v */
-    int const& image(int u, int v) const;
+    uchar const& image(int u, int v) const;
     /** Get Mask value at pixel u,v */
-    int const& mask(int u, int v) const;
+     uchar const& mask(int u, int v) const;
     /** Get alpha value at pixel u,v */
-    int const& alpha(int u, int v) const;
+    uchar const& alpha(int u, int v) const;
 
     /** Set Image value at pixel u,v */
-    int& image(int u, int v);
+    uchar& image(int u, int v);
     /** Set Alpha value at pixel u,v */
-    int& alpha(int u, int v);
+    uchar& alpha(int u, int v);
 
-    /** Return number of pixels surrounding the current pixel that are outside the region  */
+    /** Return number of pixels surrounding the current pixel that are outside the mask  */
     int num_outside_mask(int u, int v);
 
 
