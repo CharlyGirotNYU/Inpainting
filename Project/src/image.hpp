@@ -18,6 +18,7 @@ class Image : public cv::Mat
 public:
     Image();
 
+
     /** Read original image and mask then compute alphas <==> Set Image and Set Alpha */
     void imread(std::string image_path, std::string mask_path);
 
@@ -26,10 +27,14 @@ public:
 
     /** Get Image */
     cv::Mat const& image() const;
+    /** Get Masj */
+    cv::Mat const& mask() const;
     /** Get alpha Map */
     cv::Mat const& alpha() const;
     /** Get Image value at pixel u,v */
     int const& image(int u, int v) const;
+    /** Get Mask value at pixel u,v */
+    int const& mask(int u, int v) const;
     /** Get alpha value at pixel u,v */
     int const& alpha(int u, int v) const;
 
@@ -45,8 +50,15 @@ public:
 private:
     /** Store the image to fill/restore */
     cv::Mat image_data;
+    /** Store the mash */
+    cv::Mat mask_data;
     /** Store the alphas : 0->region to fill 1->border of the region 2->region already filled 3-> image source */
     cv::Mat alpha_data;
+
+    /** Image length */
+    int Nu;
+    /** Image width */
+    int Nv;
 };
 
 
