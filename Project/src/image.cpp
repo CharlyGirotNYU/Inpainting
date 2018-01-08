@@ -89,6 +89,16 @@ uchar &Image::alpha(int u, int v)
     return alpha_data.at<uchar>(u,v);
 }
 
+const int& Image::get_rows() const
+{
+    return Nv;
+}
+
+const int& Image::get_cols() const
+{
+    return Nu;
+}
+
 
 int Image::num_outside_mask(int u, int v)
 {
