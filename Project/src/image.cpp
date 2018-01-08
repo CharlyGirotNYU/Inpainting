@@ -16,6 +16,7 @@ void Image::imread(std::string image_path, std::string mask_path)
         exit(0);
     }
     // READ MASK
+
     cv::Mat mask_read  = cv::imread(mask_path);
     cvtColor( mask_read, mask_data, CV_RGB2GRAY );
     if (!mask_read.data  ) {
@@ -24,8 +25,8 @@ void Image::imread(std::string image_path, std::string mask_path)
     }
 
     //Set Image size
-    Nu = image_read.rows;
-    Nv = image_read.cols;
+    Nv = image_read.rows;
+    Nu = image_read.cols;
 
     //Init & Set mat alpha IN, BORDER, SOURCE (Can't be UPDATED at this point)
     alpha_data = Mat::zeros(Nv, Nu, CV_8UC1);
