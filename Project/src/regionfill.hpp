@@ -69,13 +69,11 @@ private:
     cv::Mat isophotes_data_magnitude;
     cv::Mat isophotes_data_orientation;
 
-//    /** Storage of the region to fill */
-    //cv::Mat region;
+    /** Size of a patch (width=height)(9*9 in Creiminisi)*/
+    int patch_size;
 
-//    /** Offset on x axis of the region */
-//    int offset_x;
-//    /** Offset on y axis of the region */
-//    int offset_y;
+    /** Patch */
+    cv::Mat patch;
 
 
     // definiton de alpha ici ?
