@@ -24,8 +24,8 @@ void Image::imread(std::string image_path, std::string mask_path)
     }
 
     //Set Image size
-    Nu = image_read.rows;
-    Nv = image_read.cols;
+    Nv = image_read.rows;
+    Nu = image_read.cols;
 
     //Init & Set mat alpha IN, BORDER, SOURCE (Can't be UPDATED at this point)
     alpha_data = Mat::zeros(Nv, Nu, CV_8UC1);
@@ -87,6 +87,16 @@ uchar& Image::image(int u, int v)
 uchar &Image::alpha(int u, int v)
 {
     return alpha_data.at<uchar>(u,v);
+}
+
+const int& Image::get_rows() const
+{
+    return Nv;
+}
+
+const int& Image::get_cols() const
+{
+    return Nu;
 }
 
 

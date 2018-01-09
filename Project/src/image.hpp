@@ -38,6 +38,11 @@ public:
     /** Get alpha value at pixel u,v */
     uchar const& alpha(int u, int v) const;
 
+    /** Get image rows */
+    int const& get_rows() const;
+    /** GEt image cols */
+    int const& get_cols() const;
+
     /** Set Image value at pixel u,v */
     uchar& image(int u, int v);
     /** Set Alpha value at pixel u,v */
@@ -45,6 +50,7 @@ public:
 
     /** Return number of pixels surrounding the current pixel that are outside the mask  */
     int num_outside_mask(int u, int v);
+
 
 
 private:
