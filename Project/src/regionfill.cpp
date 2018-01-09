@@ -93,8 +93,8 @@ void RegionFill::update_alpha(border_point bp)
 bool RegionFill::is_new_border(int u, int v)
 {
     //A remplacer avec le get quand merge avec Charly
-    int Nu= 371;
-    int Nv= 432;
+    int Nu = im->get_cols();
+    int Nv= im->get_rows();
 
     int nb_out = 0;
     //Compute the number of points UPDATED or SOURCE around the neighborhoods

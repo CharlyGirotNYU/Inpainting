@@ -16,5 +16,10 @@ int main()
     region.set_image(&image);
     region.compute_isophotes(0.8);
 
+
+    //TEST DIF
+
+
+
     return 0;
 }

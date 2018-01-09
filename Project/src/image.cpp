@@ -87,10 +87,6 @@ uchar& Image::image(int u, int v)
     return alpha_data.at<uchar>(u,v);
 }
 
-uchar& Image::image(int u, int v)
-{
-    return alpha_data.at<uchar>(u,v);
-}
 
 uchar &Image::alpha(int u, int v)
 {
