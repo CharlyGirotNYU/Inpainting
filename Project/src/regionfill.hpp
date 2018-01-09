@@ -6,6 +6,7 @@
 #include "opencv2/opencv.hpp"
 #include <opencv2/core/core.hpp>
 
+#define PATCH_SIZE 9
 
 struct border_point
 {
@@ -24,8 +25,18 @@ public:
     Image get_image() const;
     /** Get current border */
     std::vector<border_point> get_border() const;
-    /** update the border */
-    void update_border();
+
+    /** Get current border by index */
+    border_point get_border(unsigned int i) const;
+    /** Get size of the border */
+    int get_border_size() const;
+
+    /** Update alpha  after a patch copy centered at bp */
+    void update_alpha(border_point bp);
+    /** Update the border */
+    void update_border(border_point point, int status);
+    /** Return true if the point if a new border, else false */
+    bool is_new_border(int u, int v);
 
     /** Set the pointer to the parent Image */
     void set_image(Image* image);
@@ -34,11 +45,11 @@ public:
 
 
 
+
     /** Compute Isophote of the image
     *   -L : Luminance of the input image
     *   -alpha : Threshold of isophotes */
     void compute_isophotes(float alpha);
-
 
     //    /** Fill the region / Get the region */
         //cv::Mat fill_region();

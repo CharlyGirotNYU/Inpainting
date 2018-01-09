@@ -16,6 +16,8 @@ void Image::imread(std::string image_path, std::string mask_path)
         exit(0);
     }
     // READ MASK
+
+
     cv::Mat mask_read  = cv::imread(mask_path);
     cvtColor( mask_read, mask_data, CV_RGB2GRAY );
     if (!mask_read.data  ) {
@@ -69,6 +71,7 @@ const uchar &Image::image(int u, int v) const
 {
     return image_data.at<uchar>(u,v);
 }
+
 const uchar &Image::mask(int u, int v) const
 {
     return mask_data.at<uchar>(u,v);
@@ -83,6 +86,7 @@ uchar& Image::image(int u, int v)
 {
     return alpha_data.at<uchar>(u,v);
 }
+
 
 uchar &Image::alpha(int u, int v)
 {
