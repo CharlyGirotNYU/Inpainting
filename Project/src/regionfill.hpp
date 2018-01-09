@@ -10,7 +10,8 @@
 struct border_point
 {
     cv::Point2i  coord;
-//    float        confidence;
+    //    float        confidence;
+    float  data_term;
 };
 
 class RegionFill
@@ -56,21 +57,24 @@ public:
     /** Compute confidence term */
     float compute_confidence(cv::Point2i p);
 
+    /** Compute data_term */
+    float compute_data_term();
+
     //    /** Fill the region / Get the region */
-        //cv::Mat fill_region();
+    //cv::Mat fill_region();
 
     //    /** Get current region */
     //    cv::Mat region() const;
-//    /** Get offset on x of the box of the region */
-//    int offset_x() const;
-//    /** Get offset on y of the box of the region */
-//    int offset_y() const;
-//    /** Set the current region  */
-//    cv::Mat& region();
-//    /** Set the offset on x of the box of the region */
-//    int& offset_x();
-//    /** Set the offset on y of the box of the region */
-//    int& offset_y();
+    //    /** Get offset on x of the box of the region */
+    //    int offset_x() const;
+    //    /** Get offset on y of the box of the region */
+    //    int offset_y() const;
+    //    /** Set the current region  */
+    //    cv::Mat& region();
+    //    /** Set the offset on x of the box of the region */
+    //    int& offset_x();
+    //    /** Set the offset on y of the box of the region */
+    //    int& offset_y();
 
 
 

@@ -2,7 +2,7 @@
 
 RegionFill::RegionFill()
 {
-    patch_size=51; //has to be impaired
+    patch_size=9; //has to be impaired
 }
 
 
@@ -16,7 +16,7 @@ void RegionFill::fill_border()
             if(im->alpha(i,j) == 1)
             {
                 border_point point;
-//                point.confidence = 0.f;
+                //                point.confidence = 0.f;
                 point.coord = cv::Point2i(i,j);
                 border.push_back(point);
             }
@@ -110,7 +110,7 @@ bool RegionFill::is_new_border(int u, int v)
 
     if(nb_out >0 && nb_out<8)
         return true;
-    else if(nb_out == 9)
+    else if(nb_out == 8)
         std::cout << "The point has not been updated whereas all the neighboors have been" << std::endl;
     else return false;
     return false; //TODO : Add for default but we need to Check
@@ -187,75 +187,22 @@ void RegionFill::set_border(std::vector<border_point>& b)
 }
 
 
-void RegionFill::compute_isophotes( float alpha)
+void RegionFill::compute_isophotes(float alpha)
 {
-    //    cv::Mat theta = cv::Mat::zeros(im->get_rows(),im->get_cols(), CV_8UC1);
+    cv::Mat I;
+    cvtColor( im->image(), I, CV_RGB2GRAY );
 
-        cv::Mat I;// / 255;
-        cvtColor( im->image(), I, CV_RGB2GRAY );
-    //    I = I /255;
-
-
-    //    cv::Mat grad_x, grad_y;
-    //    cv::Mat abs_grad_x, abs_grad_y;
-    //    cv::Mat grad;
-    //    cv::Mat grad_x_p2, grad_y_p2, grad_p2;
-    //    cv::Mat newgradp2;
-    //    cv::Mat norme_grad;
-    //    cv::Mat T;
-    //    cv::Mat magnitude;
-
-    std::string window_name = "Sobel Demo - Simple Edge Detector";
     int scale = 1;
     int delta = 0;
     int ddepth = CV_32F;
     int ddepthC1 = CV_32SC1;
 
-    //    /// Gradient X
-    //    cv::Sobel( I, grad_x, ddepth, 1, 0, 3, scale, delta, cv::BORDER_DEFAULT );
-    //    /// Gradient Y
-    //    cv::Sobel( I, grad_y, ddepth, 0, 1, 3, scale, delta, cv::BORDER_DEFAULT );
-
-    //    cv::convertScaleAbs( grad_x, abs_grad_x );
-    //    cv::convertScaleAbs( grad_y, abs_grad_y );
-
-    //    cv::pow(abs_grad_x,2, grad_x_p2);
-    //    cv::pow(abs_grad_y,2, grad_y_p2);
-
-    //    cv::addWeighted( grad_x_p2, 0.5, grad_y_p2, 0.5, 1, grad_p2 );
-
-
-    //    grad_p2.convertTo(newgradp2, CV_32F);
-    //    cv::pow(newgradp2,0.5,grad);
-
-
-
-    //    norme_grad = grad/max;
-
-    //    //std::cerr << norme_grad.type() << " " << norme_grad.channels() << " " << norme_grad.size() << std::endl;
-    //    cv::threshold( norme_grad, T,0.90, 255,0 );
-
-    ////    cv::minMaxLoc(T, &min, &max);
-    ////    std::cout << "Min T :" << max << std::endl;
-    ////    cv::imshow( window_name, T );
-    ////     cv::waitKey(0);
-
-    //     cv::threshold( norme_grad, magnitude,0.90, 255,1 );
-
-    //     cv::Mat mask = T>1;
-
-    //     std::cerr << grad_y.type() << " " <<mask.type() <<std::endl;
-
-    //     cv::Mat LyT,LxT;
-    //     LyT.setTo(grad_y,mask);
-    //     LxT.setTo(grad_x,mask);
-
     double min, max;
     cv::minMaxLoc(I, &min, &max);
 
     cv::Mat grad_x,grad_y;
-//    cv::Sobel( I/max, grad_x, CV_32F, 1, 0, 3,scale, delta, cv::BORDER_DEFAULT);
-//    cv::Sobel( I/max, grad_y, CV_32F, 0, 1, 3,scale, delta, cv::BORDER_DEFAULT);
+    //    cv::Sobel( I/max, grad_x, CV_32F, 1, 0, 3,scale, delta, cv::BORDER_DEFAULT);
+    //    cv::Sobel( I/max, grad_y, CV_32F, 0, 1, 3,scale, delta, cv::BORDER_DEFAULT);
     cv::Scharr(I/max,grad_x,ddepth,1,0,scale,delta,cv::BORDER_DEFAULT);
     cv::Scharr(I/max,grad_y,ddepth,0,1,scale,delta,cv::BORDER_DEFAULT);
     cv::Mat orientation(im->get_rows(), im->get_cols(), ddepthC1);
@@ -267,18 +214,15 @@ void RegionFill::compute_isophotes( float alpha)
             magnitude.at<float>(i,j)= sqrt(grad_x.at<float>(i,j)*grad_x.at<float>(i,j)+grad_y.at<float>(i,j)*grad_y.at<float>(i,j));
         }
 
-//    cv::imshow(window_name,magnitude);
-//    cv::waitKey(0);
-
     isophotes_data_magnitude = magnitude;
     isophotes_data_orientation = orientation;
 }
 
 void RegionFill::init_confidence()
 {
-    confidence = (im->mask()==0);
-//    cv::imshow("window_name",confidence);
-//    cv::waitKey(0);
+    double min, max;
+    cv::minMaxLoc(im->mask(), &min, &max);
+    confidence = (im->mask()==0)/255;
 }
 
 float RegionFill::compute_confidence(cv::Point2i p)
@@ -286,17 +230,63 @@ float RegionFill::compute_confidence(cv::Point2i p)
     cv::Mat patch = cv::Mat::zeros(patch_size,patch_size,im->image().type());
 
     int step = floor(patch_size/2);
+    float conf=0.0f;
 
     for(int i=-step; i<=step; ++i)
         for(int j=-step; j<=step; ++j)
         {
-            std::cout << "i " << i << " i + step " << i + step << std::endl;
-            std::cout << "j " << j << " j + step " << j + step << std::endl;
-            patch.at<cv::Vec3b>(i+step,j+step) = im->image(i+p.y,j+p.x);
-            std::cout << (int)im->image(i+p.y,j+p.x) << std::endl;
+            patch.at<cv::Vec3b>(i+step,j+step) = im->get_image(i+p.y,j+p.x); //why just im->image(i,j) doesn't work ?? we changed the prototype in image.hc
+
+            if(im->get_alpha(i+p.y,j+p.x) ==  SOURCE)
+                conf += confidence.at<uchar>(i+p.y,j+p.x);
         }
-        cv::imshow("window_name",patch);
-        cv::waitKey(0);
-    //return 0.0f;
+    conf = conf/(patch_size*patch_size);
+
+    return conf;
+}
+
+float RegionFill::compute_data_term()
+{
+    //    for(auto &point : border_point)
+    //    {
+    cv::Point2i p(249,109);
+    float conf=0.0f;
+
+
+    float data =0.0f;
+    cv::Mat gauss_x = cv::getGaussianKernel(3, 1 , CV_32F);
+    cv::Mat gauss_y = cv::getGaussianKernel(3, 1, CV_32F);
+
+    cv::Mat p_neighbors = cv::Mat::zeros(3,3,gauss_x.type());
+    int step = floor(3/2);
+
+    cv::Mat gauss = gauss_x*gauss_y.t();
+    for(int i=-step; i<=step; ++i)
+        for(int j=-step; j<=step; ++j)
+        {
+
+            if(im->alpha(i+p.y,j+p.x) == BORDER)
+            {
+                std::cout << "alpha : " << (int)im->alpha(i+p.y,j+p.x)  <<" ";
+                std::cout << "gauss : " << (float)gauss.at<float>(i+step,j+step)  << std::endl;
+                p_neighbors.at<float>(i+step,j+step) = gauss.at<float>(i+step,j+step);//1;
+            }
+        }
+
+
+    cv::Point min_loc, max_loc;
+    double max,min;
+    cv::minMaxLoc(p_neighbors, &min, &max, &min_loc, &max_loc);
+    p_neighbors.at<float>(1,1) = 0.0f;
+    cv::minMaxLoc(p_neighbors,&min,&max,&min_loc,&max_loc);
+    std::cout << "Max " << max << " Min " << max_loc;
+    cv::Point previous = max_loc;
+    p_neighbors.at<float>(max_loc) = 0.0f;
+    cv::minMaxLoc(p_neighbors,&min,&max,&min_loc,&max_loc);
+    std::cout << "Max " << max << " Min " << max_loc;
+    cv::Point successive = max_loc;
+
+
+   float T = (successive.y - previous.y) / (successive.x - previous.x);
 
 }
