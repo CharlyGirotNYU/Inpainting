@@ -57,8 +57,6 @@ void RegionFill::set_border(std::vector<border_point>& b)
 
 void RegionFill::compute_isophotes( float alpha)
 {
-
-
     //    cv::Mat theta = cv::Mat::zeros(im->get_rows(),im->get_cols(), CV_8UC1);
 
         cv::Mat I;// / 255;
