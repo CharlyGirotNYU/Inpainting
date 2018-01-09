@@ -57,80 +57,86 @@ void RegionFill::set_border(std::vector<border_point>& b)
 
 void RegionFill::compute_isophotes( float alpha)
 {
-    std::cout << im->get_cols() << std::endl;
-    isophotes_data = cv::Mat::zeros(im->get_rows(),im->get_cols(), CV_8UC2);
-    cv::Mat I = im->image();// / 255;
-    cvtColor( im->image(), I, CV_RGB2GRAY );
-    cv::Mat theta = cv::Mat::zeros(im->get_rows(),im->get_cols(), CV_8UC1);
 
-    cv::Mat grad_x, grad_y;
-    cv::Mat abs_grad_x, abs_grad_y;
-    cv::Mat grad;
+
+    //    cv::Mat theta = cv::Mat::zeros(im->get_rows(),im->get_cols(), CV_8UC1);
+
+        cv::Mat I;// / 255;
+        cvtColor( im->image(), I, CV_RGB2GRAY );
+    //    I = I /255;
+
+
+    //    cv::Mat grad_x, grad_y;
+    //    cv::Mat abs_grad_x, abs_grad_y;
+    //    cv::Mat grad;
+    //    cv::Mat grad_x_p2, grad_y_p2, grad_p2;
+    //    cv::Mat newgradp2;
+    //    cv::Mat norme_grad;
+    //    cv::Mat T;
+    //    cv::Mat magnitude;
 
     char* window_name = "Sobel Demo - Simple Edge Detector";
-      int scale = 1;
-      int delta = 0;
-      int ddepth = CV_16S;
+    int scale = 1;
+    int delta = 0;
+    int ddepth = CV_16S;
 
-    /// Gradient X
-    cv::Sobel( I, grad_x, ddepth, 1, 0, 3, scale, delta, cv::BORDER_DEFAULT );
-    /// Gradient Y
-    cv::Sobel( I, grad_y, ddepth, 0, 1, 3, scale, delta, cv::BORDER_DEFAULT );
+    //    /// Gradient X
+    //    cv::Sobel( I, grad_x, ddepth, 1, 0, 3, scale, delta, cv::BORDER_DEFAULT );
+    //    /// Gradient Y
+    //    cv::Sobel( I, grad_y, ddepth, 0, 1, 3, scale, delta, cv::BORDER_DEFAULT );
 
-    cv::convertScaleAbs( grad_x, abs_grad_x );
-    cv::convertScaleAbs( grad_y, abs_grad_y );
+    //    cv::convertScaleAbs( grad_x, abs_grad_x );
+    //    cv::convertScaleAbs( grad_y, abs_grad_y );
 
-    cv::Mat grad_x_p2, grad_y_p2, grad_p2;
-    cv::pow(abs_grad_x,2, grad_x_p2);
-    cv::pow(abs_grad_y,2, grad_y_p2);
+    //    cv::pow(abs_grad_x,2, grad_x_p2);
+    //    cv::pow(abs_grad_y,2, grad_y_p2);
 
-    cv::addWeighted( grad_x_p2, 0.5, grad_y_p2, 0.5, 1, grad_p2 );
+    //    cv::addWeighted( grad_x_p2, 0.5, grad_y_p2, 0.5, 1, grad_p2 );
 
-    cv::Mat newgradp2;
-    grad_p2.convertTo(newgradp2, CV_64F);
-//    grad.convertTo(grad,CV_64F);
-    cv::pow(newgradp2,0.5,grad);
-//    cv::sqrt(grad_p2,grad_p2);
 
-    //cv::addWeighted( abs_grad_x, 0.5, abs_grad_y, 0.5, 0, grad );
+    //    grad_p2.convertTo(newgradp2, CV_32F);
+    //    cv::pow(newgradp2,0.5,grad);
+
+
+
+    //    norme_grad = grad/max;
+
+    //    //std::cerr << norme_grad.type() << " " << norme_grad.channels() << " " << norme_grad.size() << std::endl;
+    //    cv::threshold( norme_grad, T,0.90, 255,0 );
+
+    ////    cv::minMaxLoc(T, &min, &max);
+    ////    std::cout << "Min T :" << max << std::endl;
+    ////    cv::imshow( window_name, T );
+    ////     cv::waitKey(0);
+
+    //     cv::threshold( norme_grad, magnitude,0.90, 255,1 );
+
+    //     cv::Mat mask = T>1;
+
+    //     std::cerr << grad_y.type() << " " <<mask.type() <<std::endl;
+
+    //     cv::Mat LyT,LxT;
+    //     LyT.setTo(grad_y,mask);
+    //     LxT.setTo(grad_x,mask);
 
     double min, max;
-    cv::minMaxLoc(grad, &min, &max);
+    cv::minMaxLoc(I, &min, &max);
 
-    cv::Mat norme_grad = grad/max;
-    std::cout<< max << std::endl;
-    cv::Mat T;
-    std::cerr << norme_grad.type() << " " << norme_grad.channels() << " " << norme_grad.size() << std::endl;
-    cv::threshold( norme_grad, T, max, 255,0 );
+    cv::Mat grad_x,grad_y;
+    cv::Sobel( I/max, grad_x, CV_32F, 1, 0, 3,scale, delta, cv::BORDER_DEFAULT);
+    cv::Sobel( I/max, grad_y, CV_32F, 0, 1, 3,scale, delta, cv::BORDER_DEFAULT);
+    cv::Mat orientation(im->get_rows(), im->get_cols(), CV_32FC1);
+    cv::Mat magnitude(im->get_rows(), im->get_cols(), CV_32FC1);
+    for(int i = 0; i < grad_y.rows; ++i)
+        for(int j= 0; j< grad_y.cols; ++j)
+        {
+            orientation.at<float>(i,j) = atan2(grad_y.at<float>(i,j),grad_x.at<float>(i,j) ) * 180/M_PI ;
+            magnitude.at<float>(i,j)= sqrt(grad_x.at<float>(i,j)*grad_x.at<float>(i,j)+grad_y.at<float>(i,j)*grad_y.at<float>(i,j));
+        }
 
-//    cv::imshow( window_name, T );
-//     cv::waitKey(0);
+    cv::imshow(window_name,magnitude);
+    cv::waitKey(0);
 
-
-
-    //MATLAB
-//    %
-//    % Usage:  [ I, theta ] = isophote( L, alpha );
-//    %
-//    % Argument:   L     -  Luminance of the input image [0 255]
-//    %             alpha -  Threshold of isophotes       [0 1]
-//    %
-//    % Returns:    I     -  Magnitude of the isophotes   [0 1]
-//    %             theta -  Angle of the isophotes   [-pi/2 +pi/2]
-
-//    % Vahid. K. Alilou
-//    % Department of Computer Engineering
-//    % The University of Semnan
-//    %
-//    % December 2014
-
-//    function [ I, theta ] = isophote( L, alpha )
-//        L = double(L)/255; theta=zeros(size(L));
-//        [Lx,Ly] = gradient(L);
-//        I = sqrt(Lx.^2+Ly.^2);
-//        I = I./max(max(I));
-//        T = I>=alpha;
-//        theta(T) = atan(Ly(T)./Lx(T));
-//        I(I<alpha)=0;
-//    end
+    isophotes_data_magnitude = magnitude;
+    isophotes_data_orientation = orientation;
 }

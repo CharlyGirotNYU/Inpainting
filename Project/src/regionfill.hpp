@@ -66,7 +66,8 @@ private:
     std::vector<border_point> border;
 
     /** Storage of the isophotes */
-    cv::Mat isophotes_data; //8UC2 image with Intenisy on first channel and orientation on 2
+    cv::Mat isophotes_data_magnitude;
+    cv::Mat isophotes_data_orientation;
 
 //    /** Storage of the region to fill */
     //cv::Mat region;
