@@ -10,7 +10,11 @@
 
 enum
 {
-    IN, BORDER, UPDATED, SOURCE
+//    IN, BORDER, UPDATED, SOURCE
+    SOURCE,
+    UPDATED,
+    BORDER,
+    IN,
 };
 
 class Image : public cv::Mat
@@ -26,18 +30,23 @@ public:
     void imwrite(std::string filename);
 
     /** Get Image */
-    cv::Mat const& image() const;
+    cv::Mat  image() const;
     /** Get Masj */
-    cv::Mat const& mask() const;
+    cv::Mat  mask() const;
     /** Get alpha Map */
-    cv::Mat const& alpha() const;
-    /** Get Image value at pixel u,v */
-    cv::Vec3b const image(int u, int v) const;
-    /** Get Mask value at pixel u,v */
-     uchar const mask(int u, int v) const;
-    /** Get alpha value at pixel u,v */
-    uchar const alpha(int u, int v) const;
+    cv::Mat  alpha() const;
 
+    /** Get Image value at pixel u,v */
+    cv::Vec3b get_image(int u, int v) const;
+    /** Get Mask value at pixel u,v */
+     uchar mask(int u, int v) const;
+    /** Get alpha value at pixel u,v */
+    uchar get_alpha(int u, int v) const;
+
+    /** Set Image value at pixel u,v */
+    uchar& image(int u, int v);
+    /** Set Alpha value at pixel u,v */
+    uchar& alpha(int u, int v);
 
     /** Get image rows */
     int const& get_rows() const;
@@ -45,10 +54,7 @@ public:
     int const& get_cols() const;
 
 
-    /** Set Image value at pixel u,v */
-    uchar& image(int u, int v);
-    /** Set Alpha value at pixel u,v */
-    uchar& alpha(int u, int v);
+
 
     /** Return number of pixels surrounding the current pixel that are outside the mask  */
     int num_outside_mask(int u, int v);
