@@ -184,3 +184,9 @@ void RegionFill::set_border(std::vector<border_point>& b)
 {
     border = b;
 }
+
+
+void RegionFill::compute_isophotes( float alpha)
+{
+
+}

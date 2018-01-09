@@ -44,6 +44,12 @@ public:
 
 
 
+
+    /** Compute Isophote of the image
+    *   -L : Luminance of the input image
+    *   -alpha : Threshold of isophotes */
+    void compute_isophotes(float alpha);
+
     //    /** Fill the region / Get the region */
         //cv::Mat fill_region();
 
@@ -69,6 +75,8 @@ private:
     /** Storage of the border */
     std::vector<border_point> border;
 
+    /** Storage of the isophotes */
+    cv::Mat isophotes_data; //8UC2 image with Intenisy on first channel and orientation on 2
 
 //    /** Storage of the region to fill */
     //cv::Mat region;

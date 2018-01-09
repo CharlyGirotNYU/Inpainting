@@ -12,14 +12,9 @@ int main()
 
     image.imwrite("test.jpg");
 
-    RegionFill region;
-
+    RegionFill region = RegionFill();
     region.set_image(&image);
-    region.fill_border();
-
-
-    for(int r = 0 ; r < region.get_border_size(); ++r)
-        std::cout<<region.get_border(r).coord<<std::endl;
+    region.compute_isophotes(0.8);
 
     return 0;
 }
