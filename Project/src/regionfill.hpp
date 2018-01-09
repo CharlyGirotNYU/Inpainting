@@ -19,13 +19,13 @@ public:
     /** Empty Constructor */
     RegionFill();
     /** get and fill the border */
-    std::vector<border_point> fill_border();
+    void fill_border();
     /** Get Original Image */
     Image get_image() const;
     /** Get current border */
     std::vector<border_point> get_border() const;
     /** update the border */
-    std::vector<border_point> update_border();
+    void update_border();
 
     /** Set the pointer to the parent Image */
     void set_image(Image* image);

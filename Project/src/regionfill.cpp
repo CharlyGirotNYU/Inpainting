@@ -6,7 +6,7 @@ RegionFill::RegionFill()
 
 
 /** get and fill the border */
-std::vector<border_point> RegionFill::fill_border()
+void RegionFill::fill_border()
 {
     for(int i=0; i<im->rows; ++i)
     {
@@ -24,7 +24,7 @@ std::vector<border_point> RegionFill::fill_border()
 }
 
 /** update the border */
-std::vector<border_point> RegionFill::update_border()
+void RegionFill::update_border()
 {
     //TO DO
 }
@@ -75,7 +75,7 @@ void RegionFill::compute_isophotes( float alpha)
     //    cv::Mat T;
     //    cv::Mat magnitude;
 
-    char* window_name = "Sobel Demo - Simple Edge Detector";
+    std::string window_name = "Sobel Demo - Simple Edge Detector";
     int scale = 1;
     int delta = 0;
     int ddepth = CV_16S;
