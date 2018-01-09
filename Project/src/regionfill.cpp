@@ -2,6 +2,7 @@
 
 RegionFill::RegionFill()
 {
+    patch_size=51; //has to be impaired
 }
 
 
@@ -15,7 +16,7 @@ void RegionFill::fill_border()
             if(im->alpha(i,j) == 1)
             {
                 border_point point;
-                point.confidence = 0.f;
+//                point.confidence = 0.f;
                 point.coord = cv::Point2i(i,j);
                 border.push_back(point);
             }
@@ -26,7 +27,7 @@ void RegionFill::fill_border()
 /** Update alpha  after a patch copy centered at bp */
 void RegionFill::update_alpha(border_point bp)
 {
-    int step = floor(PATCH_SIZE/2);
+    int step = floor(patch_size/2);
     // Update alpha of the points belonging to the patch
     for(int i=-step; i<=step; ++i)
         for(int j=-step; j<=step; ++j)
@@ -92,7 +93,6 @@ void RegionFill::update_alpha(border_point bp)
 /** Return true if the point if a new border, else false */
 bool RegionFill::is_new_border(int u, int v)
 {
-    //A remplacer avec le get quand merge avec Charly
     int Nu = im->get_cols();
     int Nv= im->get_rows();
 
@@ -113,6 +113,7 @@ bool RegionFill::is_new_border(int u, int v)
     else if(nb_out == 9)
         std::cout << "The point has not been updated whereas all the neighboors have been" << std::endl;
     else return false;
+    return false; //TODO : Add for default but we need to Check
 }
 
 
@@ -207,7 +208,8 @@ void RegionFill::compute_isophotes( float alpha)
     std::string window_name = "Sobel Demo - Simple Edge Detector";
     int scale = 1;
     int delta = 0;
-    int ddepth = CV_16S;
+    int ddepth = CV_32F;
+    int ddepthC1 = CV_32SC1;
 
     //    /// Gradient X
     //    cv::Sobel( I, grad_x, ddepth, 1, 0, 3, scale, delta, cv::BORDER_DEFAULT );
@@ -252,10 +254,12 @@ void RegionFill::compute_isophotes( float alpha)
     cv::minMaxLoc(I, &min, &max);
 
     cv::Mat grad_x,grad_y;
-    cv::Sobel( I/max, grad_x, CV_32F, 1, 0, 3,scale, delta, cv::BORDER_DEFAULT);
-    cv::Sobel( I/max, grad_y, CV_32F, 0, 1, 3,scale, delta, cv::BORDER_DEFAULT);
-    cv::Mat orientation(im->get_rows(), im->get_cols(), CV_32FC1);
-    cv::Mat magnitude(im->get_rows(), im->get_cols(), CV_32FC1);
+//    cv::Sobel( I/max, grad_x, CV_32F, 1, 0, 3,scale, delta, cv::BORDER_DEFAULT);
+//    cv::Sobel( I/max, grad_y, CV_32F, 0, 1, 3,scale, delta, cv::BORDER_DEFAULT);
+    cv::Scharr(I/max,grad_x,ddepth,1,0,scale,delta,cv::BORDER_DEFAULT);
+    cv::Scharr(I/max,grad_y,ddepth,0,1,scale,delta,cv::BORDER_DEFAULT);
+    cv::Mat orientation(im->get_rows(), im->get_cols(), ddepthC1);
+    cv::Mat magnitude(im->get_rows(), im->get_cols(), ddepthC1);
     for(int i = 0; i < grad_y.rows; ++i)
         for(int j= 0; j< grad_y.cols; ++j)
         {
@@ -263,9 +267,36 @@ void RegionFill::compute_isophotes( float alpha)
             magnitude.at<float>(i,j)= sqrt(grad_x.at<float>(i,j)*grad_x.at<float>(i,j)+grad_y.at<float>(i,j)*grad_y.at<float>(i,j));
         }
 
-    cv::imshow(window_name,magnitude);
-    cv::waitKey(0);
+//    cv::imshow(window_name,magnitude);
+//    cv::waitKey(0);
 
     isophotes_data_magnitude = magnitude;
     isophotes_data_orientation = orientation;
+}
+
+void RegionFill::init_confidence()
+{
+    confidence = (im->mask()==0);
+//    cv::imshow("window_name",confidence);
+//    cv::waitKey(0);
+}
+
+float RegionFill::compute_confidence(cv::Point2i p)
+{
+    cv::Mat patch = cv::Mat::zeros(patch_size,patch_size,im->image().type());
+
+    int step = floor(patch_size/2);
+
+    for(int i=-step; i<=step; ++i)
+        for(int j=-step; j<=step; ++j)
+        {
+            std::cout << "i " << i << " i + step " << i + step << std::endl;
+            std::cout << "j " << j << " j + step " << j + step << std::endl;
+            patch.at<cv::Vec3b>(i+step,j+step) = im->image(i+p.y,j+p.x);
+            std::cout << (int)im->image(i+p.y,j+p.x) << std::endl;
+        }
+        cv::imshow("window_name",patch);
+        cv::waitKey(0);
+    //return 0.0f;
+
 }

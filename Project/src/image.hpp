@@ -32,11 +32,11 @@ public:
     /** Get alpha Map */
     cv::Mat const& alpha() const;
     /** Get Image value at pixel u,v */
-    uchar const& image(int u, int v) const;
+    cv::Vec3b const image(int u, int v) const;
     /** Get Mask value at pixel u,v */
-     uchar const& mask(int u, int v) const;
+     uchar const mask(int u, int v) const;
     /** Get alpha value at pixel u,v */
-    uchar const& alpha(int u, int v) const;
+    uchar const alpha(int u, int v) const;
 
 
     /** Get image rows */

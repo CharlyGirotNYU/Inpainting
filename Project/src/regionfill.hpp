@@ -6,12 +6,11 @@
 #include "opencv2/opencv.hpp"
 #include <opencv2/core/core.hpp>
 
-#define PATCH_SIZE 9
 
 struct border_point
 {
     cv::Point2i  coord;
-    float        confidence;
+//    float        confidence;
 };
 
 class RegionFill
@@ -51,6 +50,12 @@ public:
     *   -alpha : Threshold of isophotes */
     void compute_isophotes(float alpha);
 
+    /** Init confidence term Mat*/
+    void init_confidence();
+
+    /** Compute confidence term */
+    float compute_confidence(cv::Point2i p);
+
     //    /** Fill the region / Get the region */
         //cv::Mat fill_region();
 
@@ -75,6 +80,9 @@ private:
     Image *im;
     /** Storage of the border */
     std::vector<border_point> border;
+
+    /** Storage of the confidence */
+    cv::Mat confidence;
 
     /** Storage of the isophotes */
     cv::Mat isophotes_data_magnitude;

@@ -67,24 +67,26 @@ cv::Mat const& Image::alpha() const
     return alpha_data;
 }
 
-const uchar &Image::image(int u, int v) const
+const cv::Vec3b Image::image(int u, int v) const
 {
-    return image_data.at<uchar>(u,v);
+    std::cout << "get "<< std::endl;
+    return image_data.at<cv::Vec3b>(u,v);
 }
 
-const uchar &Image::mask(int u, int v) const
+const uchar Image::mask(int u, int v) const
 {
     return mask_data.at<uchar>(u,v);
 }
 
-const uchar &Image::alpha(int u, int v) const
+const uchar Image::alpha(int u, int v) const
 {
     return alpha_data.at<uchar>(u,v);
 }
 
 uchar& Image::image(int u, int v)
 {
-    return alpha_data.at<uchar>(u,v);
+    std::cout << "set"<<std::endl;
+    return image_data.at<uchar>(u,v);
 }
 
 
