@@ -17,12 +17,13 @@ int main()
     region.set_image(&image);
     region.compute_isophotes(0.8);
     region.init_confidence();
+    region.fill_border();
     region.compute_confidence(cv::Point2i(258,112));
     region.compute_data_term();
-    std::cout << "SOURCE " << SOURCE << std::endl ;
-    std::cout << "UPDATED " << UPDATED << std::endl ;
-    std::cout << "BORDER " << BORDER << std::endl ;
-    std::cout << "IN " << IN << std::endl ;
+//    std::cout << "SOURCE " << SOURCE << std::endl ;
+//    std::cout << "UPDATED " << UPDATED << std::endl ;
+//    std::cout << "BORDER " << BORDER << std::endl ;
+//    std::cout << "IN " << IN << std::endl ;
 
     //TEST DIF
 

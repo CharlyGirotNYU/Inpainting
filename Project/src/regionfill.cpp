@@ -13,10 +13,10 @@ void RegionFill::fill_border()
     {
         for(int j=0; j<im->alpha().cols; ++j)
         {
-            if(im->alpha(i,j) == 1)
+            if(im->alpha(i,j) == 2)
             {
                 border_point point;
-                //                point.confidence = 0.f;
+                point.data_term = 0.0f;
                 point.coord = cv::Point2i(i,j);
                 border.push_back(point);
             }
@@ -245,48 +245,128 @@ float RegionFill::compute_confidence(cv::Point2i p)
     return conf;
 }
 
-float RegionFill::compute_data_term()
+void RegionFill::compute_data_term()
 {
-    //    for(auto &point : border_point)
-    //    {
-    cv::Point2i p(249,109);
-    float conf=0.0f;
+
+    for(border_point point : border)
+    {
+        cv::Point p(point.coord.x,point.coord.y);
 
 
-    float data =0.0f;
-    cv::Mat gauss_x = cv::getGaussianKernel(3, 1 , CV_32F);
-    cv::Mat gauss_y = cv::getGaussianKernel(3, 1, CV_32F);
+        cv::Mat gauss_x = cv::getGaussianKernel(3, 1 , CV_32F);
+        cv::Mat gauss_y = cv::getGaussianKernel(3, 1, CV_32F);
 
-    cv::Mat p_neighbors = cv::Mat::zeros(3,3,gauss_x.type());
-    int step = floor(3/2);
+        cv::Mat p_neighbors = cv::Mat::zeros(3,3,gauss_x.type());
+        int step = floor(3/2);
 
-    cv::Mat gauss = gauss_x*gauss_y.t();
-    for(int i=-step; i<=step; ++i)
-        for(int j=-step; j<=step; ++j)
-        {
+        cv::Mat gauss = gauss_x*gauss_y.t();
+        int size_x =  im->get_cols();
+        int size_y =  im->get_rows();
+        //std::cout << "size : " << size_x  <<" " << size_y;
 
-            if(im->alpha(i+p.y,j+p.x) == BORDER)
+        for(int i=-step; i<=step; ++i)
+            for(int j=-step; j<=step; ++j)
             {
-                std::cout << "alpha : " << (int)im->alpha(i+p.y,j+p.x)  <<" ";
-                std::cout << "gauss : " << (float)gauss.at<float>(i+step,j+step)  << std::endl;
-                p_neighbors.at<float>(i+step,j+step) = gauss.at<float>(i+step,j+step);//1;
+
+                if(((i+p.y)>0 && (i+p.y)<size_y)  && ((j+p.x)>0 && (j+p.x)<size_x) )
+                {
+                    if(im->alpha(i+p.y,j+p.x) == BORDER)
+                    {
+                        std::cout << "alpha : " << (int)im->alpha(i+p.y,j+p.x)  <<" ";
+                        std::cout << "gauss : " << (float)gauss.at<float>(i+step,j+step)  << std::endl;
+                        p_neighbors.at<float>(i+step,j+step) = gauss.at<float>(i+step,j+step);//1;
+                    }
+                }
             }
-        }
 
 
-    cv::Point min_loc, max_loc;
-    double max,min;
-    cv::minMaxLoc(p_neighbors, &min, &max, &min_loc, &max_loc);
-    p_neighbors.at<float>(1,1) = 0.0f;
-    cv::minMaxLoc(p_neighbors,&min,&max,&min_loc,&max_loc);
-    std::cout << "Max " << max << " Min " << max_loc;
-    cv::Point previous = max_loc;
-    p_neighbors.at<float>(max_loc) = 0.0f;
-    cv::minMaxLoc(p_neighbors,&min,&max,&min_loc,&max_loc);
-    std::cout << "Max " << max << " Min " << max_loc;
-    cv::Point successive = max_loc;
+        //                cv::Point2f n_p =  compute_vector_normal(p,p_neighbors);
+        //Verification de la direction de la normale
+        //                int x,y;
+        //                if(n_p.x < 0 )
+        //                    x = (int)(floor(n_p.x)) + p.x;
+        //                else
+        //                    x = (int)(floor(n_p.x)) + p.x;
+        //                if(n_p.y < 0 )
+        //                    y = (int)(ceil(n_p.y)) + p.y;
+        //                else
+        //                    y = (int)(ceil(n_p.y)) + p.y;
 
+        //                if(im->alpha(x,y) == SOURCE || im->alpha(x,y)== UPDATED)
+        //                {
+        //                    std::cout<< "Alpha " << (int)im->alpha(x,y) << std::endl;
+        //                    std::cout<< "/*n_p*/.x" << x << "n_p.y" << y<< std::endl;
+        //                    n_p = -n_p;
+        //                }
+        //                else if(im->alpha(x,y) == BORDER)
+        //                    std::cout<<"Erreur dans la direction de la normale"<<std::endl;
 
-   float T = (successive.y - previous.y) / (successive.x - previous.x);
+        //                float mag = isophotes_data_magnitude.at<float>(p.x,p.y);
+        //                float orien = isophotes_data_orientation.at<float>(p.x,p.y);
+        //                cv::Point Ip(mag*cos(orien), mag*sin(orien));
+
+        //                point.data_term = Ip.x * n_p.y - Ip.y * n_p.x;
+        //                std::cout<<"Data term : " << point.data_term<<std::endl;
+
+    }
 
 }
+
+/** Compute the vector n_p from the point p and his nieghbors */
+cv::Point2f RegionFill::compute_vector_normal(cv::Point p,  cv::Mat p_neighbors)
+{
+    for(int i=0; i<3; ++i)
+    {
+        for(int j=0; j<3; ++j)
+        {
+            std::cout<<" " << (float)p_neighbors.at<float>(i,j) << " ";
+
+        }
+        std::cout<<std::endl;
+    }
+
+
+    p_neighbors.at<float>(1,1) = 0.0f;
+    cv::Point max_loc1,max_loc2;
+    double max;
+
+    cv::minMaxLoc(p_neighbors,NULL,&max,NULL,&max_loc1);
+    cv::Point previous = max_loc1;
+    //        std::cout << "Max " << max << " Min " << max_loc;
+    p_neighbors.at<float>(max_loc1) = 0.0f;
+    cv::minMaxLoc(p_neighbors,NULL,&max,NULL,&max_loc2);
+    //        std::cout << "Max " << max << " Min " << max_loc;
+    cv::Point successive = max_loc2;
+
+
+    //  Equation de la droite passant par le point successif et précédent forme ax+b
+    float a = (successive.y - previous.y) / (successive.x - previous.x);
+    float b = successive.y - a * successive.x;
+
+    //    std::cout << "a " << a << " b " << b<<std::endl;
+    //Equation de la normale y = n_a * x + n_b
+    float n_a = -b;
+    float n_b = a;
+    //Calcul d'un deuxième point apparenant à la normale
+    cv::Point point_n;
+    point_n.x = 1.0;
+    point_n.y = n_a * point_n.x + n_b;
+    //    std::cout << "point_n.x " << point_n.x << " point_n.y " << point_n.y<<std::endl;
+    //Calcul du vecteur normale
+    cv:: Point2f n_p = p - point_n;
+    //    std::cout << "n_p.x " << n_p.x << " n_p.y " << n_p.y<<std::endl;
+    //Normalisation du vecteur
+    float norm = cv::norm(n_p);
+    std::cout<< "norm : "<< norm <<std::endl;
+    n_p.x = (float)n_p.x / norm;
+    n_p.y = (float)n_p.y / norm;
+    //    std::cout << "n_p.x " << n_p.x << " n_p.y " << n_p.y<<std::endl;
+
+
+    return n_p;
+}
+
+
+
+
+

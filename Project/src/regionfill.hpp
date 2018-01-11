@@ -58,7 +58,11 @@ public:
     float compute_confidence(cv::Point2i p);
 
     /** Compute data_term */
-    float compute_data_term();
+    void compute_data_term();
+
+    /** Compute the vector n_p from the point p and his nieghbors */
+    cv::Point2f compute_vector_normal(cv::Point p,  cv::Mat p_neighbors);
+
 
     //    /** Fill the region / Get the region */
     //cv::Mat fill_region();
@@ -98,8 +102,6 @@ private:
     /** Patch */
     cv::Mat patch;
 
-
-    // definiton de alpha ici ?
 
 };
 
