@@ -1,4 +1,5 @@
 #include "regionfill.hpp"
+#include <iomanip>
 
 RegionFill::RegionFill()
 {
@@ -245,14 +246,11 @@ float RegionFill::compute_confidence(cv::Point2i p)
     return conf;
 }
 
-void RegionFill::compute_data_term()
+void RegionFill::compute_data_term(cv::Point p)
 {
 
-    for(border_point point : border)
+    if(im->alpha(p.y,p.x) == BORDER)
     {
-        cv::Point p(point.coord.x,point.coord.y);
-
-
         cv::Mat gauss_x = cv::getGaussianKernel(3, 1 , CV_32F);
         cv::Mat gauss_y = cv::getGaussianKernel(3, 1, CV_32F);
 
@@ -272,41 +270,50 @@ void RegionFill::compute_data_term()
                 {
                     if(im->alpha(i+p.y,j+p.x) == BORDER)
                     {
-                        std::cout << "alpha : " << (int)im->alpha(i+p.y,j+p.x)  <<" ";
-                        std::cout << "gauss : " << (float)gauss.at<float>(i+step,j+step)  << std::endl;
+                        //                    std::cout << "alpha : " << (int)im->alpha(i+p.y,j+p.x)  <<" ";
+                        //                    std::cout << "gauss : " << (float)gauss.at<float>(i+step,j+step)  << std::endl;
                         p_neighbors.at<float>(i+step,j+step) = gauss.at<float>(i+step,j+step);//1;
                     }
                 }
             }
 
+        cv::Point2f n_p =  compute_vector_normal(p,p_neighbors);
+        // Verification de la direction de la normale
+        int x,y;
+        if(n_p.x < 0 )
+            x = (int)(floor(n_p.x)) + p.x;
+        else
+            x = (int)(floor(n_p.x)) + p.x;
+        if(n_p.y < 0 )
+            y = (int)(ceil(n_p.y)) + p.y;
+        else
+            y = (int)(ceil(n_p.y)) + p.y;
 
-        //                cv::Point2f n_p =  compute_vector_normal(p,p_neighbors);
-        //Verification de la direction de la normale
-        //                int x,y;
-        //                if(n_p.x < 0 )
-        //                    x = (int)(floor(n_p.x)) + p.x;
-        //                else
-        //                    x = (int)(floor(n_p.x)) + p.x;
-        //                if(n_p.y < 0 )
-        //                    y = (int)(ceil(n_p.y)) + p.y;
-        //                else
-        //                    y = (int)(ceil(n_p.y)) + p.y;
+        std::cout<<"x :"<< p.x - x <<"y : "<< p.y - y<<std::endl;
+        std::cout<<"x :"<< x <<"y : "<< y<<std::endl;
 
-        //                if(im->alpha(x,y) == SOURCE || im->alpha(x,y)== UPDATED)
-        //                {
-        //                    std::cout<< "Alpha " << (int)im->alpha(x,y) << std::endl;
-        //                    std::cout<< "/*n_p*/.x" << x << "n_p.y" << y<< std::endl;
-        //                    n_p = -n_p;
-        //                }
-        //                else if(im->alpha(x,y) == BORDER)
-        //                    std::cout<<"Erreur dans la direction de la normale"<<std::endl;
+        if(y>0 && y<size_y  && x>0 && x<size_x)
+        {
+            std::cout<<"Alpha :"<< (int)im->alpha(y,x)<<std::endl;
+            if(im->alpha(y,x) == SOURCE || im->alpha(y,x)== UPDATED)
+            {
+                std::cout<<"Source ou UPDATED"<<std::endl;
+                n_p = -n_p;
+            }
+            else if(im->alpha(x,y) == BORDER)
+                std::cout<<"Erreur dans la direction de la normale"<<std::endl;
+            else ;
+        }
 
-        //                float mag = isophotes_data_magnitude.at<float>(p.x,p.y);
-        //                float orien = isophotes_data_orientation.at<float>(p.x,p.y);
-        //                cv::Point Ip(mag*cos(orien), mag*sin(orien));
+        std::cout << std::setprecision(3)<< "n_p = [" << n_p.x <<","<< n_p.y<<"];" <<std::endl;
 
-        //                point.data_term = Ip.x * n_p.y - Ip.y * n_p.x;
-        //                std::cout<<"Data term : " << point.data_term<<std::endl;
+
+        float mag = isophotes_data_magnitude.at<float>(p.x,p.y);
+        float orien = isophotes_data_orientation.at<float>(p.x,p.y);
+        cv::Point Ip(mag*cos(orien), mag*sin(orien));
+
+        float data_term = Ip.x * n_p.y - Ip.y * n_p.x;
+        std::cout<<"Data term : " << data_term<<std::endl;
 
     }
 
@@ -315,58 +322,97 @@ void RegionFill::compute_data_term()
 /** Compute the vector n_p from the point p and his nieghbors */
 cv::Point2f RegionFill::compute_vector_normal(cv::Point p,  cv::Mat p_neighbors)
 {
-    for(int i=0; i<3; ++i)
-    {
-        for(int j=0; j<3; ++j)
-        {
-            std::cout<<" " << (float)p_neighbors.at<float>(i,j) << " ";
 
-        }
-        std::cout<<std::endl;
-    }
-
-
-    p_neighbors.at<float>(1,1) = 0.0f;
+    p_neighbors.at<float>(1,1) = -1.0f;
     cv::Point max_loc1,max_loc2;
     double max;
 
     cv::minMaxLoc(p_neighbors,NULL,&max,NULL,&max_loc1);
-    cv::Point previous = max_loc1;
+    cv::Point pre = max_loc1;
     //        std::cout << "Max " << max << " Min " << max_loc;
-    p_neighbors.at<float>(max_loc1) = 0.0f;
+    p_neighbors.at<float>(max_loc1) = -1.0f;
     cv::minMaxLoc(p_neighbors,NULL,&max,NULL,&max_loc2);
     //        std::cout << "Max " << max << " Min " << max_loc;
-    cv::Point successive = max_loc2;
+    cv::Point suc = max_loc2;
+    p_neighbors.at<float>(max_loc2) = -1.0f;
+
+//    std::cout<< "P_neighbors" << std::endl;
+//    for(int i=0; i<3; ++i)
+//    {
+//        for(int j=0; j<3; ++j)
+//        {
+//            std::cout<<std::setprecision(1)<<" " << (float)p_neighbors.at<float>(i,j) << " ";
+//        }
+//        std::cout<<std::endl;
+//    }
+
+    //Compute the middle of line between previous and successive
+    cv::Point2f milieu;
+    milieu.x  = (suc.x+pre.x)/2.0f-1.0f;
+    milieu.y = (suc.y+pre.y)/2.0f-1.0f;
+    //Compute the distance between the middle and p
+    float distance = sqrt((milieu.x)*(milieu.x)+(milieu.y)*(milieu.y));
+
+    cv::Point2f n_p;
+
+    // If the distance between p and the middle is close to 0 => horizontal case or vertical case
+    if(distance <= 0.1)
+    {
+        cv::Point point = p ;
+
+        if(abs(suc.x-1)>0.5)
+            point.y +=1 ;//If horizontal case
+        else
+            point.x +=1; //Vertical case
+        n_p=p-point;
+    }
+    else
+    {
+        n_p= milieu;
+        std::cout<<"n_p.x "<< n_p.x<<"n_p.y"<<n_p.y<<std::endl;
+
+    }
 
 
-    //  Equation de la droite passant par le point successif et précédent forme ax+b
-    float a = (successive.y - previous.y) / (successive.x - previous.x);
-    float b = successive.y - a * successive.x;
-
-    //    std::cout << "a " << a << " b " << b<<std::endl;
-    //Equation de la normale y = n_a * x + n_b
-    float n_a = -b;
-    float n_b = a;
-    //Calcul d'un deuxième point apparenant à la normale
-    cv::Point point_n;
-    point_n.x = 1.0;
-    point_n.y = n_a * point_n.x + n_b;
-    //    std::cout << "point_n.x " << point_n.x << " point_n.y " << point_n.y<<std::endl;
-    //Calcul du vecteur normale
-    cv:: Point2f n_p = p - point_n;
-    //    std::cout << "n_p.x " << n_p.x << " n_p.y " << n_p.y<<std::endl;
     //Normalisation du vecteur
     float norm = cv::norm(n_p);
-    std::cout<< "norm : "<< norm <<std::endl;
     n_p.x = (float)n_p.x / norm;
     n_p.y = (float)n_p.y / norm;
-    //    std::cout << "n_p.x " << n_p.x << " n_p.y " << n_p.y<<std::endl;
-
-
     return n_p;
 }
 
+void RegionFill::test_compute_data_term()
+{
+    // Cas 0 : 187,101 // Cas 0 inverse : 190,122
+    cv::Point cas_0(187,101);
+    cv::Point cas_0_inv(190,122);
 
+    // Cas 1 : 91, 117 // Cas 1 :inverse 69 112
+    cv::Point cas_1(91,117);
+    cv::Point cas_1_inv(69,112);
 
+    // Cas 2 : 93 , 80  // Cas 2 inverse 70 115
+    cv::Point cas_2(93,80);
+    cv::Point cas_2_inv(70,115);
+    // Cas 3 :  347 90 //  Cas 3 inverse 367 159
+    cv::Point cas_3(347,90);
+    cv::Point cas_3_inv(367,159);
 
+    // Cas 4 : 351 ,  100 // Cas 4 inverse 171 101
+    cv::Point cas_4(351,100);
+    cv::Point cas_4_inv(171,101);
+
+    // Cas 5 : 365 , 99   Cas 5 inverse 70,102
+    cv::Point cas_5(365,99);
+    cv::Point cas_5_inv(70,102);
+
+    std::cout<<"Debut cas NORMAL"<<std::endl;
+    compute_data_term(cas_5);
+    std::cout<<std::endl;
+    std::cout<<"Debut cas INVERS"<<std::endl;
+    compute_data_term(cas_5_inv);
+
+    //Cas 0 et Cas 1 fonctionne ma gueule
+
+}
 

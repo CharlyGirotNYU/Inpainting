@@ -19,7 +19,7 @@ int main()
     region.init_confidence();
     region.fill_border();
     region.compute_confidence(cv::Point2i(258,112));
-    region.compute_data_term();
+    region.test_compute_data_term();
 //    std::cout << "SOURCE " << SOURCE << std::endl ;
 //    std::cout << "UPDATED " << UPDATED << std::endl ;
 //    std::cout << "BORDER " << BORDER << std::endl ;

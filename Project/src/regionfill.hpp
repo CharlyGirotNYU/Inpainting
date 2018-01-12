@@ -58,10 +58,14 @@ public:
     float compute_confidence(cv::Point2i p);
 
     /** Compute data_term */
-    void compute_data_term();
+    void compute_data_term(cv::Point p);
 
     /** Compute the vector n_p from the point p and his nieghbors */
     cv::Point2f compute_vector_normal(cv::Point p,  cv::Mat p_neighbors);
+
+
+    /** Test de la fonction compute data term */
+    void test_compute_data_term();
 
 
     //    /** Fill the region / Get the region */
