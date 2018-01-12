@@ -58,7 +58,16 @@ public:
     float compute_confidence(cv::Point2i p);
 
     /** Compute data_term */
-    float compute_data_term();
+    float compute_data_term(cv::Point2i p);
+
+    /** Compute priority of a border point */
+    float compute_priority(cv::Point2i p);
+
+    /** Running through the patches */
+    cv::Point2i running_trhough_patches();
+
+    /** Run the algo */
+    void run();
 
     //    /** Fill the region / Get the region */
     //cv::Mat fill_region();

@@ -18,7 +18,7 @@ int main()
     region.compute_isophotes(0.8);
     region.init_confidence();
     region.compute_confidence(cv::Point2i(258,112));
-    region.compute_data_term();
+    region.compute_data_term(cv::Point2i(258,112));
     std::cout << "SOURCE " << SOURCE << std::endl ;
     std::cout << "UPDATED " << UPDATED << std::endl ;
     std::cout << "BORDER " << BORDER << std::endl ;

@@ -90,7 +90,7 @@ void RegionFill::update_alpha(border_point bp)
     }
 }
 
-/** Return true if the point if a new border, else false */
+/** Return true if the point is a new border, else false */
 bool RegionFill::is_new_border(int u, int v)
 {
     int Nu = im->get_cols();
@@ -186,7 +186,6 @@ void RegionFill::set_border(std::vector<border_point>& b)
     border = b;
 }
 
-
 void RegionFill::compute_isophotes(float alpha)
 {
     cv::Mat I;
@@ -245,11 +244,10 @@ float RegionFill::compute_confidence(cv::Point2i p)
     return conf;
 }
 
-float RegionFill::compute_data_term()
+float RegionFill::compute_data_term(cv::Point2i p)
 {
     //    for(auto &point : border_point)
     //    {
-    cv::Point2i p(249,109);
     float conf=0.0f;
 
 
@@ -288,5 +286,37 @@ float RegionFill::compute_data_term()
 
 
    float T = (successive.y - previous.y) / (successive.x - previous.x);
+
+   return 0.1f; //debug
+}
+
+float RegionFill::compute_priority(cv::Point2i p)
+{
+    return compute_confidence(p)*compute_data_term(p);
+}
+
+cv::Point2i RegionFill::running_trhough_patches()
+{
+    float priority = 0.0f;
+    cv::Point2i coord_priority;
+    for( auto bPoint : border)
+    {
+        if(compute_priority(bPoint.coord) > priority)
+            coord_priority = bPoint.coord;
+    }
+    return coord_priority;
+}
+
+void RegionFill::run()
+{
+    // While there are 1 in alpha
+    {
+        //compute isophotes ==> useful for priority (it's true than just a compute priority would have been more logical)
+        //compute priority
+        //fill patch
+        //update border ==> update alpha
+        //
+    }
+
 
 }
