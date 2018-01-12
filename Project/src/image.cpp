@@ -41,7 +41,7 @@ void Image::imread(std::string image_path, std::string mask_path)
             else if(nb_out >0 && nb_out<8)
                 alpha(i,j) = mask(i,j)!=0 ? BORDER : SOURCE;
             else
-                alpha(i,j) = IN  ;// if mask(i,j)!=0
+                alpha(i,j) = IN;
         }
 }
 

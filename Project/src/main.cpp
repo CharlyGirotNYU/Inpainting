@@ -26,6 +26,8 @@ int main()
 
     //TEST DIF
 
+    //Charly
+    std::cout << region.whole_image_processed() << std::endl;
 
 
     return 0;

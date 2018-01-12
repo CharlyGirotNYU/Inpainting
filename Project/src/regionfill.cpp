@@ -186,7 +186,7 @@ void RegionFill::set_border(std::vector<border_point>& b)
     border = b;
 }
 
-void RegionFill::compute_isophotes(float alpha)
+void RegionFill::compute_isophotes(float alpha) //alpha useles ?
 {
     cv::Mat I;
     cvtColor( im->image(), I, CV_RGB2GRAY );
@@ -295,6 +295,8 @@ float RegionFill::compute_priority(cv::Point2i p)
     return compute_confidence(p)*compute_data_term(p);
 }
 
+/** Running through patches along the border
+* Maybe we shall return a border point and not a cv::Point2i */
 cv::Point2i RegionFill::running_trhough_patches()
 {
     float priority = 0.0f;
@@ -307,16 +309,45 @@ cv::Point2i RegionFill::running_trhough_patches()
     return coord_priority;
 }
 
+/** Check if the whole image has been processed
+ * Takes a lot of time , mabe use iterator to gain efficiency
+ * */
+bool RegionFill::whole_image_processed()
+{
+    for(int i ; i < im->get_cols(); ++i)
+        for(int j; j < im->get_rows(); ++j)
+        {
+            if(im->get_alpha(i,j) == IN)
+            {
+                std::cout << "Euh y a un 1 la " << std::endl;
+                return false;
+            }
+        }
+    return true;
+}
+
+/** Perform the algorithm needed to propagate structure and texture
+ * */
 void RegionFill::run()
 {
-    // While there are 1 in alpha
+    //init confidence
+    init_confidence();
+    // While there are IN in alpha (all the mask hasn't been updated)
+    while(!whole_image_processed())
     {
         //compute isophotes ==> useful for priority (it's true than just a compute priority would have been more logical)
-        //compute priority
-        //fill patch
+        //OR
+        //update isophotes (with a compute above? Time consuming, maybe not the priority right now)
+        compute_isophotes(0.0f);
+        //Chose the border point (center of a patch)
+        cv::Point2i p = running_trhough_patches();
+        //fill patch / propagate texture
+
+        //update confidence
+
         //update border ==> update alpha
-        //
+        //get the
+        //update_alpha(p);
+
     }
-
-
 }

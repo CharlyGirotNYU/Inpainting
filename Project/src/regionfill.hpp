@@ -66,6 +66,9 @@ public:
     /** Running through the patches */
     cv::Point2i running_trhough_patches();
 
+    /** Check if the whole image has been processed */
+    bool whole_image_processed();
+
     /** Run the algo */
     void run();
 
