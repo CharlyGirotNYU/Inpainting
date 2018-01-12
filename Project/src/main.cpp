@@ -6,19 +6,16 @@
 
 int main()
 {
-//TEST CHARLY
+    //TEST CHARLY
     Image image = Image();
     image.imread("../../images/lincoln.jpg","../../images/mask_lincoln.png");
-//    image.imread("../../images/oval.png","../../images/masked_oval.png");
+    //    image.imread("../../images/oval.png","../../images/masked_oval.png");
 
     image.imwrite("test.jpg");
 
     RegionFill region = RegionFill();
     region.set_image(&image);
-    region.compute_isophotes(0.8);
-    region.init_confidence();
-    region.compute_confidence(cv::Point2i(258,112));
-    region.compute_data_term(cv::Point2i(258,112));
+    region.run();
     std::cout << "SOURCE " << SOURCE << std::endl ;
     std::cout << "UPDATED " << UPDATED << std::endl ;
     std::cout << "BORDER " << BORDER << std::endl ;
@@ -29,6 +26,10 @@ int main()
     //Charly
     std::cout << region.whole_image_processed() << std::endl;
 
+    //tester copute priority
+    //tester running through patches
+    //tester find exemplar patch
+    //tester propagate texture
 
     return 0;
 }

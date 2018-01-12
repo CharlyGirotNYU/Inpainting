@@ -7,7 +7,7 @@ RegionFill::RegionFill()
 
 
 /** get and fill the border */
-void RegionFill::fill_border()
+void RegionFill::init_border()
 {
     for(int i=0; i<im->alpha().rows; ++i)
     {
@@ -16,8 +16,10 @@ void RegionFill::fill_border()
             if(im->alpha(i,j) == 1)
             {
                 border_point point;
-                //                point.confidence = 0.f;
                 point.coord = cv::Point2i(i,j);
+                point.data_term = compute_data_term(point.coord);
+                //Check first if confidence has been computed
+                point.priority = 0.0f;
                 border.push_back(point);
             }
         }
@@ -25,67 +27,70 @@ void RegionFill::fill_border()
 }
 
 /** Update alpha  after a patch copy centered at bp */
-void RegionFill::update_alpha(border_point bp)
+void RegionFill::update_alpha()
 {
     int step = floor(patch_size/2);
-    // Update alpha of the points belonging to the patch
-    for(int i=-step; i<=step; ++i)
-        for(int j=-step; j<=step; ++j)
-        {
-            int x = bp.coord.x+i; int y = bp.coord.y+j;
-            if(im->alpha(x,y) != SOURCE)
+    for(border_point& bp : border)
+    {
+        // Update alpha of the points belonging to the patch
+        for(int i=-step; i<=step; ++i)
+            for(int j=-step; j<=step; ++j)
             {
-                im->alpha(x,y) = UPDATED;
+                int x = bp.coord.x+i; int y = bp.coord.y+j;
+                if(im->alpha(x,y) != SOURCE)
+                {
+                    im->alpha(x,y) = UPDATED;
+                    border_point new_bp;
+                    new_bp.coord = cv::Point2i(x,y);
+                    update_border(new_bp,UPDATED);
+                }
+            }
+
+        // Update the possible border around the new patch. Only the points that
+        //were in the mask can become a border
+
+        //Taking care of the angles
+        for (int i=-step-1; i<=step+1; ++i)
+        {
+            //The line under the patch
+            int x = bp.coord.x+i; int y = bp.coord.y-step-1;
+            if(im->alpha(x,y) == IN && is_new_border(x,y))
+            {
                 border_point new_bp;
                 new_bp.coord = cv::Point2i(x,y);
-                update_border(new_bp,UPDATED);
+                update_border(new_bp,BORDER);
+            }
+
+            //The line over the patch
+            y = bp.coord.y+step+1;
+            if(im->alpha(x,y) == IN && is_new_border(x,y))
+            {
+                border_point new_bp;
+                new_bp.coord = cv::Point2i(x,y);
+                update_border(new_bp,BORDER);
             }
         }
 
-    // Update the possible border around the new patch. Only the points that
-    //were in the mask can become a border
-
-    //Taking care of the angles
-    for (int i=-step-1; i<=step+1; ++i)
-    {
-        //The line under the patch
-        int x = bp.coord.x+i; int y = bp.coord.y-step-1;
-        if(im->alpha(x,y) == IN && is_new_border(x,y))
+        //No need to take care of the angles
+        for (int j=-step; j<=step; ++j)
         {
-            border_point new_bp;
-            new_bp.coord = cv::Point2i(x,y);
-            update_border(new_bp,BORDER);
-        }
+            //The line on the left of the patch
+            int x = bp.coord.x-step-1; int y = bp.coord.y+j;
+            if(im->alpha(x,y) == IN && is_new_border(x,y))
+            {
+                border_point new_bp;
+                new_bp.coord = cv::Point2i(x,y);
+                update_border(new_bp,BORDER);
+            }
 
-        //The line over the patch
-        y = bp.coord.y+step+1;
-        if(im->alpha(x,y) == IN && is_new_border(x,y))
-        {
-            border_point new_bp;
-            new_bp.coord = cv::Point2i(x,y);
-            update_border(new_bp,BORDER);
-        }
-    }
-
-    //No need to take care of the angles
-    for (int j=-step; j<=step; ++j)
-    {
-        //The line on the left of the patch
-        int x = bp.coord.x-step-1; int y = bp.coord.y+j;
-        if(im->alpha(x,y) == IN && is_new_border(x,y))
-        {
-            border_point new_bp;
-            new_bp.coord = cv::Point2i(x,y);
-            update_border(new_bp,BORDER);
-        }
-
-        //The line on the right of the patch
-        x = bp.coord.x+step+1;
-        if(im->alpha(x,y) == IN && is_new_border(x,y))
-        {
-            border_point new_bp;
-            new_bp.coord = cv::Point2i(x,y);
-            update_border(new_bp,BORDER);
+            //The line on the right of the patch
+            x = bp.coord.x+step+1;
+            if(im->alpha(x,y) == IN && is_new_border(x,y))
+            {
+                border_point new_bp;
+                new_bp.coord = cv::Point2i(x,y);
+                update_border(new_bp,BORDER);
+            }
         }
     }
 }
@@ -186,7 +191,7 @@ void RegionFill::set_border(std::vector<border_point>& b)
     border = b;
 }
 
-void RegionFill::compute_isophotes(float alpha) //alpha useles ?
+void RegionFill::compute_isophotes()
 {
     cv::Mat I;
     cvtColor( im->image(), I, CV_RGB2GRAY );
@@ -285,14 +290,15 @@ float RegionFill::compute_data_term(cv::Point2i p)
     cv::Point successive = max_loc;
 
 
-   float T = (successive.y - previous.y) / (successive.x - previous.x);
+    float T = (successive.y - previous.y) / (successive.x - previous.x);
 
-   return 0.1f; //debug
+    return 0.1f; //debug
 }
 
-float RegionFill::compute_priority(cv::Point2i p)
+void RegionFill::compute_priority()
 {
-    return compute_confidence(p)*compute_data_term(p);
+    for(border_point& bp : border)
+        bp.priority = compute_confidence(bp.coord)*compute_data_term(bp.coord);
 }
 
 /** Running through patches along the border
@@ -301,9 +307,9 @@ cv::Point2i RegionFill::running_trhough_patches()
 {
     float priority = 0.0f;
     cv::Point2i coord_priority;
-    for( auto bPoint : border)
+    for( border_point& bPoint : border)
     {
-        if(compute_priority(bPoint.coord) > priority)
+        if(bPoint.priority > priority)
             coord_priority = bPoint.coord;
     }
     return coord_priority;
@@ -314,40 +320,104 @@ cv::Point2i RegionFill::running_trhough_patches()
  * */
 bool RegionFill::whole_image_processed()
 {
-    for(int i ; i < im->get_cols(); ++i)
-        for(int j; j < im->get_rows(); ++j)
+    if(get_border_size() == 0)
+        return true;
+    return false;
+}
+
+
+/** find exemplar patch :
+ * We search in the source region for the patch which is most similar to Pp.
+ * d(Pp,Pq) is the sum of squaerd differences SSD of the ALREADY filled pixels in the two patches
+ * We use the CIE Lab colour space because of its property of perceptual information
+ * Receive : center point of the reference patch P
+ * Return : the center point of the exemplar patch Q
+ * */
+cv::Point2i RegionFill::find_exemplar_patch(cv::Point2i p)
+{
+    cv::Mat patchP,patchQ;
+    patchP= cv::Mat::zeros(patch_size,patch_size,im->image().type());
+    patchQ =cv::Mat::zeros(patch_size,patch_size,im->image().type());
+    cv::Point2i coord_center_patchQ;
+
+    float distance=0.0f;
+    float distance_max = 0.1f;
+
+    int step = floor(patch_size/2);
+
+    //Store patchP
+    for(int i=-step; i<=step; ++i)
+        for(int j=-step; j<=step; ++j)
+            patchP.at<cv::Vec3b>(i+step,j+step) = im->get_image(i+p.y,j+p.x);
+    //Run trhough all patch of the image
+    for(int u=step; u < im->get_rows() -step; ++u)
+        for(int v=step; v < im->get_cols() - step; ++v)
         {
-            if(im->get_alpha(i,j) == IN)
+            //compute SSD of the two patches
+            for(int i=-step; i<=step; ++i)
+                for(int j=-step; j<=step; ++j)
+                {
+                    //Get pixel (i,j) of both patch
+                    cv::Vec3b pixP = patchP.at<uchar>(i+step,j+step);
+                    cv::Vec3b pixQ = im->get_image(u+i+step,v+j+step);
+                    //Convert them to CIE Lab (L,a,b)
+                    cv::Vec3b pixPLab, pixQLab;
+                    cvtColor(pixP,pixPLab,cv::COLOR_RGB2Lab);
+                    cvtColor(pixQ,pixQLab,cv::COLOR_RGB2Lab);
+                    //Compute distance //Formula for CIE 76 // Update to CIE 94 (look wikipedia) if not working
+                    float dL = pixPLab.val[0] - pixQLab.val[0];
+                    float da = pixPLab.val[1] - pixQLab.val[1];
+                    float db = pixPLab.val[2] - pixQLab.val[2];
+                    distance += cv::sqrt(dL*dL + da*da + db*db);
+                }
+            if(distance < 1/distance_max) //minimise la distance
             {
-                std::cout << "Euh y a un 1 la " << std::endl;
-                return false;
+                distance_max = 1/distance;
+                coord_center_patchQ = cv::Point2i(u,v);
             }
         }
-    return true;
+    return coord_center_patchQ;
+}
+
+void RegionFill::propagate_texture(cv::Point2i p, cv::Point2i q)
+{
+
+    int step = floor(patch_size/2);
+    for(int i=-step; i<=step; ++i)
+        for(int j=-step; j<=step; ++j)
+        {
+            im->image(i+p.x+step,j+p.y+step) = im->image(i+q.x+step,j+q.y+step);
+        }
 }
 
 /** Perform the algorithm needed to propagate structure and texture
  * */
 void RegionFill::run()
 {
+
     //init confidence
     init_confidence();
+    //Compute priorities of the border points
+    init_border();
     // While there are IN in alpha (all the mask hasn't been updated)
     while(!whole_image_processed())
     {
-        //compute isophotes ==> useful for priority (it's true than just a compute priority would have been more logical)
-        //OR
-        //update isophotes (with a compute above? Time consuming, maybe not the priority right now)
-        compute_isophotes(0.0f);
-        //Chose the border point (center of a patch)
-        cv::Point2i p = running_trhough_patches();
-        //fill patch / propagate texture
 
+        /** 1.a */
+        //Done with init_border then next by updatealpoha which update border stored in "border"
+        /** 1.b */
+        compute_isophotes(); //Compute isophotes
+        compute_priority();
+        /** 2.a */
+        cv::Point2i point_priority = running_trhough_patches();
+        /** 2.b */
+        //find_exemplar_patch (minimizing d(Pp,Pq)
+        cv::Point2i point_exemplar = find_exemplar_patch(point_priority);
+        /** 2.c */
+        //propagate_texture
+        propagate_texture(point_priority, point_exemplar);
+        /** 3 */
+        update_alpha(); //Verif que ca change rien la premiere iteration a faire
         //update confidence
-
-        //update border ==> update alpha
-        //get the
-        //update_alpha(p);
-
     }
 }

@@ -12,6 +12,7 @@ struct border_point
     cv::Point2i  coord;
     //    float        confidence;
     float  data_term;
+    float priority;
 };
 
 class RegionFill
@@ -20,36 +21,39 @@ public:
     /** Empty Constructor */
     RegionFill();
     /** get and fill the border */
-    void fill_border();
-    /** Get Original Image */
-    Image get_image() const;
+    void init_border();
+
+
     /** Get current border */
     std::vector<border_point> get_border() const;
+    /** Set the current border */
+    void set_border(std::vector<border_point>& b);
 
     /** Get current border by index */
     border_point get_border(unsigned int i) const;
+    /** Get border point by coordinates */
+    border_point get_border(cv::Point2i p);
+
+    /** Set the pointer to the parent Image */
+    void set_image(Image* image);
+    /** Get Original Image */
+    Image get_image() const;
+
     /** Get size of the border */
     int get_border_size() const;
 
     /** Update alpha  after a patch copy centered at bp */
-    void update_alpha(border_point bp);
+    void update_alpha();
     /** Update the border */
     void update_border(border_point point, int status);
     /** Return true if the point if a new border, else false */
     bool is_new_border(int u, int v);
 
-    /** Set the pointer to the parent Image */
-    void set_image(Image* image);
-    /** Set the current border */
-    void set_border(std::vector<border_point>& b);
-
-
-
 
     /** Compute Isophote of the image
     *   -L : Luminance of the input image
     *   -alpha : Threshold of isophotes */
-    void compute_isophotes(float alpha);
+    void compute_isophotes();
 
     /** Init confidence term Mat*/
     void init_confidence();
@@ -61,7 +65,7 @@ public:
     float compute_data_term(cv::Point2i p);
 
     /** Compute priority of a border point */
-    float compute_priority(cv::Point2i p);
+    void compute_priority();
 
     /** Running through the patches */
     cv::Point2i running_trhough_patches();
@@ -69,26 +73,19 @@ public:
     /** Check if the whole image has been processed */
     bool whole_image_processed();
 
+    /** find exemplar patch :
+     * We search in the source region for the patch which is most similar to Pp.
+     * d(Pp,Pq) is the sum of squaerd differences SSD of the ALREADY filled pixels in the two patches
+     * We use the CIE Lab colour space because of its property of perceptual information
+     * Receive : center point of the reference patch P
+     * Return : the center point of the exemplar patch Q */
+    cv::Point2i find_exemplar_patch(cv::Point2i p);
+
+    /** Propagate texture from exemplar Patch to patch on the border */
+    void propagate_texture(cv::Point2i p, cv::Point2i q);
+
     /** Run the algo */
     void run();
-
-    //    /** Fill the region / Get the region */
-    //cv::Mat fill_region();
-
-    //    /** Get current region */
-    //    cv::Mat region() const;
-    //    /** Get offset on x of the box of the region */
-    //    int offset_x() const;
-    //    /** Get offset on y of the box of the region */
-    //    int offset_y() const;
-    //    /** Set the current region  */
-    //    cv::Mat& region();
-    //    /** Set the offset on x of the box of the region */
-    //    int& offset_x();
-    //    /** Set the offset on y of the box of the region */
-    //    int& offset_y();
-
-
 
 
 private:
@@ -108,7 +105,7 @@ private:
     int patch_size;
 
     /** Patch */
-    cv::Mat patch;
+    //    cv::Mat patch; !! attention aux conflits de noms
 
 
     // definiton de alpha ici ?
