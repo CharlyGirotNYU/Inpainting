@@ -37,11 +37,11 @@ void Image::imread(std::string image_path, std::string mask_path)
             int nb_out = num_outside_mask(i,j);
 
             if(nb_out == 0)
-                alpha(i,j) = IN;
-            else if(nb_out >0 && nb_out<8)
-                alpha(i,j) = BORDER;
-            else
                 alpha(i,j) = SOURCE;
+            else if(nb_out >0 && nb_out<8)
+                alpha(i,j) = mask(i,j)!=0 ? BORDER : SOURCE;
+            else
+                alpha(i,j) = IN;
         }
 }
 
@@ -53,45 +53,49 @@ void Image::imwrite(std::string filename)
 }
 
 
-cv::Mat const& Image::image() const
+cv::Mat Image::image() const
 {
     return image_data;
 }
-cv::Mat const& Image::mask() const
+cv::Mat Image::mask() const
 {
     return mask_data;
 }
 
-cv::Mat const& Image::alpha() const
+cv::Mat Image::alpha() const
 {
     return alpha_data;
 }
 
-const uchar &Image::image(int u, int v) const
+cv::Vec3b Image::get_image(int u, int v) const
 {
-    return image_data.at<uchar>(u,v);
+//    std::cout << "get "<< std::endl;
+    return image_data.at<cv::Vec3b>(u,v);
 }
 
-const uchar &Image::mask(int u, int v) const
+uchar Image::mask(int u, int v) const
 {
     return mask_data.at<uchar>(u,v);
 }
 
-const uchar &Image::alpha(int u, int v) const
+uchar Image::get_alpha(int u, int v) const
 {
+//    std::cout << "get "<< std::endl;
     return alpha_data.at<uchar>(u,v);
 }
 
-uchar& Image::image(int u, int v)
+uchar &Image::image(int u, int v)
 {
-    return alpha_data.at<uchar>(u,v);
+//    std::cout << "set"<<std::endl;
+    return image_data.at<uchar>(u,v);
 }
-
 
 uchar &Image::alpha(int u, int v)
 {
+//    std::cout << "set"<<std::endl;
     return alpha_data.at<uchar>(u,v);
 }
+
 
 const int& Image::get_rows() const
 {
