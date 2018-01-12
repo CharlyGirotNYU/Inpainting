@@ -68,7 +68,7 @@ public:
     void compute_priority();
 
     /** Running through the patches */
-    cv::Point2i running_trhough_patches();
+    cv::Point2i running_through_patches();
 
     /** Check if the whole image has been processed */
     bool whole_image_processed();

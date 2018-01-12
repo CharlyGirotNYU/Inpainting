@@ -303,7 +303,7 @@ void RegionFill::compute_priority()
 
 /** Running through patches along the border
 * Maybe we shall return a border point and not a cv::Point2i */
-cv::Point2i RegionFill::running_trhough_patches()
+cv::Point2i RegionFill::running_through_patches()
 {
     float priority = 0.0f;
     cv::Point2i coord_priority;
@@ -333,6 +333,8 @@ bool RegionFill::whole_image_processed()
  * Receive : center point of the reference patch P
  * Return : the center point of the exemplar patch Q
  * */
+//TODO : CHECK THAT THE WHOLE TESTED PATCH IS IN THE SOURCE
+//todo : CHECK ALREADY FILLED PIXELS
 cv::Point2i RegionFill::find_exemplar_patch(cv::Point2i p)
 {
     cv::Mat patchP,patchQ;
@@ -349,7 +351,7 @@ cv::Point2i RegionFill::find_exemplar_patch(cv::Point2i p)
     for(int i=-step; i<=step; ++i)
         for(int j=-step; j<=step; ++j)
             patchP.at<cv::Vec3b>(i+step,j+step) = im->get_image(i+p.y,j+p.x);
-    //Run trhough all patch of the image
+    //Run through all patch of the image
     for(int u=step; u < im->get_rows() -step; ++u)
         for(int v=step; v < im->get_cols() - step; ++v)
         {
@@ -395,6 +397,8 @@ void RegionFill::propagate_texture(cv::Point2i p, cv::Point2i q)
 void RegionFill::run()
 {
 
+    //verif que l'image n'est pas nulle à faire avant de pouvoir lancer l'algo ...
+
     //init confidence
     init_confidence();
     //Compute priorities of the border points
@@ -403,12 +407,12 @@ void RegionFill::run()
     while(!whole_image_processed())
     {
         /** 1.a */
-        //Done with init_border then next by updatealpoha which update border stored in "border"
+        //Done with init_border then next by update alpha which update border stored in "border"
         /** 1.b */
         compute_isophotes(); //Compute isophotes
         compute_priority();
         /** 2.a */
-        cv::Point2i point_priority = running_trhough_patches();
+        cv::Point2i point_priority = running_through_patches();
         /** 2.b */
         //find_exemplar_patch (minimizing d(Pp,Pq)
         cv::Point2i point_exemplar = find_exemplar_patch(point_priority);
