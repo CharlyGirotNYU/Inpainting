@@ -17,8 +17,7 @@ void RegionFill::init_border()
             {
                 border_point point;
                 point.coord = cv::Point2i(i,j);
-                point.data_term = compute_data_term(point.coord);
-                //Check first if confidence has been computed
+                point.data_term = 0.0f;
                 point.priority = 0.0f;
                 border.push_back(point);
             }
@@ -43,11 +42,13 @@ void RegionFill::update_alpha()
                     border_point new_bp;
                     new_bp.coord = cv::Point2i(x,y);
                     update_border(new_bp,UPDATED);
+                    //update confidence
+                    confidence = compute_confidence(bp.coord);
                 }
             }
 
         // Update the possible border around the new patch. Only the points that
-        //were in the mask can become a border
+        //were in the mask can become a border (in the mask like not in the patch ? )
 
         //Taking care of the angles
         for (int i=-step-1; i<=step+1; ++i)
@@ -276,7 +277,6 @@ float RegionFill::compute_data_term(cv::Point2i p)
             }
         }
 
-
     cv::Point min_loc, max_loc;
     double max,min;
     cv::minMaxLoc(p_neighbors, &min, &max, &min_loc, &max_loc);
@@ -390,7 +390,7 @@ void RegionFill::propagate_texture(cv::Point2i p, cv::Point2i q)
         }
 }
 
-/** Perform the algorithm needed to propagate structure and texture
+/** Perform the algorithm needed to copy texture
  * */
 void RegionFill::run()
 {
@@ -402,7 +402,6 @@ void RegionFill::run()
     // While there are IN in alpha (all the mask hasn't been updated)
     while(!whole_image_processed())
     {
-
         /** 1.a */
         //Done with init_border then next by updatealpoha which update border stored in "border"
         /** 1.b */
@@ -417,7 +416,6 @@ void RegionFill::run()
         //propagate_texture
         propagate_texture(point_priority, point_exemplar);
         /** 3 */
-        update_alpha(); //Verif que ca change rien la premiere iteration a faire
-        //update confidence
+        update_alpha(); //Actually : update alpha, border, confidence
     }
 }
