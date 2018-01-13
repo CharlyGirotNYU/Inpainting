@@ -18,8 +18,14 @@ int main()
     region.compute_isophotes(0.8);
     region.init_confidence();
     region.fill_border();
-    region.compute_confidence(cv::Point2i(258,112));
-    region.test_compute_data_term();
+
+
+
+    // Point ou data term non nul
+//    (199, 122) (200, 122) (201, 122) (242, 129) (243, 129)  (369, 140) (370, 140) (370, 146)
+    region.compute_data_term(cv::Point2i(67,330));
+
+//    region.test_compute_data_term();
 //    std::cout << "SOURCE " << SOURCE << std::endl ;
 //    std::cout << "UPDATED " << UPDATED << std::endl ;
 //    std::cout << "BORDER " << BORDER << std::endl ;

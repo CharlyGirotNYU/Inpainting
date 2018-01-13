@@ -249,6 +249,7 @@ float RegionFill::compute_confidence(cv::Point2i p)
 void RegionFill::compute_data_term(cv::Point p)
 {
 
+    //Need to change y and x because of at in im->alpha(i,j)
     if(im->alpha(p.y,p.x) == BORDER)
     {
         cv::Mat gauss_x = cv::getGaussianKernel(3, 1 , CV_32F);
@@ -280,24 +281,15 @@ void RegionFill::compute_data_term(cv::Point p)
         cv::Point2f n_p =  compute_vector_normal(p,p_neighbors);
         // Verification de la direction de la normale
         int x,y;
-        if(n_p.x < 0 )
-            x = (int)(floor(n_p.x)) + p.x;
-        else
-            x = (int)(floor(n_p.x)) + p.x;
-        if(n_p.y < 0 )
-            y = (int)(ceil(n_p.y)) + p.y;
-        else
-            y = (int)(ceil(n_p.y)) + p.y;
 
-        std::cout<<"x :"<< p.x - x <<"y : "<< p.y - y<<std::endl;
-        std::cout<<"x :"<< x <<"y : "<< y<<std::endl;
+         x = (int)(round(n_p.x)) + p.x;
+         y = (int)(round(n_p.y)) + p.y;
 
         if(y>0 && y<size_y  && x>0 && x<size_x)
         {
-            std::cout<<"Alpha :"<< (int)im->alpha(y,x)<<std::endl;
             if(im->alpha(y,x) == SOURCE || im->alpha(y,x)== UPDATED)
             {
-                std::cout<<"Source ou UPDATED"<<std::endl;
+//                std::cout<<"Source ou UPDATED"<<std::endl;
                 n_p = -n_p;
             }
             else if(im->alpha(x,y) == BORDER)
@@ -305,12 +297,17 @@ void RegionFill::compute_data_term(cv::Point p)
             else ;
         }
 
-        std::cout << std::setprecision(3)<< "n_p = [" << n_p.x <<","<< n_p.y<<"];" <<std::endl;
+       std::cout << std::setprecision(3)<< "n_p = [" << n_p.x <<","<< n_p.y<<"];" <<std::endl;
 
 
-        float mag = isophotes_data_magnitude.at<float>(p.x,p.y);
-        float orien = isophotes_data_orientation.at<float>(p.x,p.y);
-        cv::Point Ip(mag*cos(orien), mag*sin(orien));
+        float mag = isophotes_data_magnitude.at<float>(p.y,p.x);
+        float orien = isophotes_data_orientation.at<float>(p.y,p.x);
+        cv::Point2f Ip(mag*cos(orien), mag*sin(orien));
+
+        std::cout << "Magnitude : "<<mag<<std::endl;
+        std::cout <<"Orientation : "<< orien << std::endl;
+
+         std::cout << "Ip = [" << Ip.x <<","<< Ip.y<<"];" <<std::endl;
 
         float data_term = Ip.x * n_p.y - Ip.y * n_p.x;
         std::cout<<"Data term : " << data_term<<std::endl;
@@ -336,15 +333,6 @@ cv::Point2f RegionFill::compute_vector_normal(cv::Point p,  cv::Mat p_neighbors)
     cv::Point suc = max_loc2;
     p_neighbors.at<float>(max_loc2) = -1.0f;
 
-//    std::cout<< "P_neighbors" << std::endl;
-//    for(int i=0; i<3; ++i)
-//    {
-//        for(int j=0; j<3; ++j)
-//        {
-//            std::cout<<std::setprecision(1)<<" " << (float)p_neighbors.at<float>(i,j) << " ";
-//        }
-//        std::cout<<std::endl;
-//    }
 
     //Compute the middle of line between previous and successive
     cv::Point2f milieu;
@@ -367,12 +355,7 @@ cv::Point2f RegionFill::compute_vector_normal(cv::Point p,  cv::Mat p_neighbors)
         n_p=p-point;
     }
     else
-    {
         n_p= milieu;
-        std::cout<<"n_p.x "<< n_p.x<<"n_p.y"<<n_p.y<<std::endl;
-
-    }
-
 
     //Normalisation du vecteur
     float norm = cv::norm(n_p);
@@ -385,34 +368,34 @@ void RegionFill::test_compute_data_term()
 {
     // Cas 0 : 187,101 // Cas 0 inverse : 190,122
     cv::Point cas_0(187,101);
-    cv::Point cas_0_inv(190,122);
+    cv::Point cas_inv_0(190,122);
 
     // Cas 1 : 91, 117 // Cas 1 :inverse 69 112
     cv::Point cas_1(91,117);
-    cv::Point cas_1_inv(69,112);
+    cv::Point cas_inv_1(69,112);
 
     // Cas 2 : 93 , 80  // Cas 2 inverse 70 115
     cv::Point cas_2(93,80);
-    cv::Point cas_2_inv(70,115);
+    cv::Point cas_inv_2(70,115);
     // Cas 3 :  347 90 //  Cas 3 inverse 367 159
     cv::Point cas_3(347,90);
-    cv::Point cas_3_inv(367,159);
+    cv::Point cas_inv_3(367,159);
 
     // Cas 4 : 351 ,  100 // Cas 4 inverse 171 101
     cv::Point cas_4(351,100);
-    cv::Point cas_4_inv(171,101);
+    cv::Point cas_inv_4(171,101);
 
     // Cas 5 : 365 , 99   Cas 5 inverse 70,102
     cv::Point cas_5(365,99);
-    cv::Point cas_5_inv(70,102);
+    cv::Point cas_inv_5(70,102);
 
-    std::cout<<"Debut cas NORMAL"<<std::endl;
-    compute_data_term(cas_5);
+
+
+//    std::cout<<"Debut cas NORMAL"<<std::endl;
+    compute_data_term(cas_0);
     std::cout<<std::endl;
-    std::cout<<"Debut cas INVERS"<<std::endl;
-    compute_data_term(cas_5_inv);
-
-    //Cas 0 et Cas 1 fonctionne ma gueule
+//    std::cout<<"Debut cas INVERS"<<std::endl;
+    compute_data_term(cas_inv_0);
 
 }
 
