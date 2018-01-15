@@ -86,10 +86,10 @@ uchar Image::get_alpha(int u, int v) const
     return alpha_data.at<uchar>(u,v);
 }
 
-uchar &Image::image(int u, int v)
+cv::Vec3b &Image::image(int u, int v)
 {
 //    std::cout << "set"<<std::endl;
-    return image_data.at<uchar>(u,v);
+    return image_data.at<cv::Vec3b>(u,v);
 }
 
 uchar &Image::alpha(int u, int v)

@@ -44,7 +44,7 @@ public:
     uchar get_alpha(int u, int v) const;
 
     /** Set Image value at pixel u,v */
-    uchar& image(int u, int v);
+    cv::Vec3b& image(int u, int v);
     /** Set Alpha value at pixel u,v */
     uchar& alpha(int u, int v);
 

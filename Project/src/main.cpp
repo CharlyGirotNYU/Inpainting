@@ -9,7 +9,7 @@ int main()
     //TEST CHARLY
     Image image = Image();
 //    image.imread("../../images/lincoln.jpg","../../images/mask_lincoln.png");
-        image.imread("../../images/oval.png","../../images/masked_oval.png");
+        image.imread("../../images/mask_oval.png","../../images/masked_oval.png");
 
     image.imwrite("test.jpg");
 
