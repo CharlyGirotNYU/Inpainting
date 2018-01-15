@@ -15,12 +15,15 @@ int main()
 
     RegionFill region = RegionFill();
     region.set_image(&image);
+
+
     region.run();
 
     std::cout << "SOURCE " << SOURCE << std::endl ;
     std::cout << "UPDATED " << UPDATED << std::endl ;
     std::cout << "BORDER " << BORDER << std::endl ;
     std::cout << "IN " << IN << std::endl ;
+
 
     //TEST DIF
 
