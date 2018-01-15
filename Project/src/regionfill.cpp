@@ -34,6 +34,7 @@ void RegionFill::init_border()
 /** Update alpha  after a patch copy centered at bp */
 void RegionFill::update_alpha(cv::Point2i bp)
 {
+    //TODO check
     int step = floor(patch_size/2);
     //for each  point of the border
    // for(border_point& bp : border)
@@ -624,7 +625,7 @@ void RegionFill::run()
         propagate_texture(point_priority, point_exemplar);
 //        /** 3 */
         std::cout << get_border_size() << std::endl;
-        update_alpha(point_priority); //Actually : update alpha, border, confidence
+//        update_alpha(point_priority); //Actually : update alpha, border, confidence
     }
     std::cout << get_border_size() << std::endl;
     im->imwrite("result.png");
