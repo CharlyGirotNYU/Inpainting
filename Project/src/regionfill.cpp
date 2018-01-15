@@ -20,7 +20,6 @@ void RegionFill::init_border()
         {
             if(im->alpha(i,j) == BORDER)
             {
-                //                std::cout <<(int) im->alpha(i,j) << " i " << i << " j " << j << std::endl;
                 border_point point;
                 point.coord = cv::Point2i(i,j);
                 point.data_term = 0.0f;
@@ -36,8 +35,6 @@ void RegionFill::update_alpha(cv::Point2i bp)
 {
     //TODO check
     int step = floor(patch_size/2);
-    //for each  point of the border
-   // for(border_point& bp : border)
     {
         // Update alpha of the points belonging to the patch arround the border point
 
@@ -155,16 +152,12 @@ void RegionFill::update_border(border_point point, int status)
         //Update the alpha value
         im->alpha(point.coord.x,point.coord.y) = UPDATED;
 
-        std::vector<border_point>::iterator it;
-        it=border.begin();
-        for(; it!=border.end(); ++it)
+        int i=0;
+        for(auto bp : border)
         {
-            if((*it).coord == point.coord)
-            {
-//                std::cout << (*it).coord << std::endl;
-                border.erase(it);
-//                std::cout << border(it).coord << std::endl;
-            }
+            if(bp.coord == point.coord)
+                border.erase(border.begin()+i);
+            i++;
         }
     }
 
@@ -270,7 +263,7 @@ float RegionFill::compute_data_term(cv::Point p)
 
     float data_term;
     //Need to change y and x because of at in im->alpha(i,j)
-    if(im->alpha(p.y,p.x) == BORDER)
+    if(im->alpha(p.x,p.y) == BORDER)
     {
         cv::Mat gauss_x = cv::getGaussianKernel(3, 1 , CV_32F);
         cv::Mat gauss_y = cv::getGaussianKernel(3, 1, CV_32F);
@@ -291,8 +284,6 @@ float RegionFill::compute_data_term(cv::Point p)
                 {
                     if(im->alpha(i+p.x,j+p.y) == BORDER)
                     {
-                        //                    std::cout << "alpha : " << (int)im->alpha(i+p.y,j+p.x)  <<" ";
-                        //                    std::cout << "gauss : " << (float)gauss.at<float>(i+step,j+step)  << std::endl;
                         p_neighbors.at<float>(i+step,j+step) = gauss.at<float>(i+step,j+step);//1;
                     }
                 }
@@ -398,9 +389,6 @@ cv::Point2i RegionFill::find_exemplar_patch(cv::Point2i p)
     //Each patch tested must be completely in the source
     //Do we test only pixels of the patch corresponding to the source's pixels that were in the source ?
 
-
-
-
     for(int v=step; v < im->get_cols() - step; ++v)
         for(int u=step; u < im->get_rows() -step; ++u)
         {
@@ -424,124 +412,10 @@ cv::Point2i RegionFill::find_exemplar_patch(cv::Point2i p)
             }
         }
 
-//        cv::Mat patchP,patchQ;
-//        patchP= cv::Mat::zeros(patch_size,patch_size,im->image().type());
-//        patchQ =cv::Mat::zeros(patch_size,patch_size,im->image().type());
-//        //    patchP= cv::Mat::zeros(patch_size,patch_size,CV_32F);
-//        //    patchQ =cv::Mat::zeros(patch_size,patch_size,CV_32F);
-////        cv::Point2i coord_center_patchQ;
-
-//        //    float distance=0.0f;
-////        float distance_max = 10e-7;
-
-////        int step = floor(patch_size/2);
-
-
-//        //Store patchP //only pixels in the source
-//        for(int i=-step; i<=step; ++i)
-//            for(int j=-step; j<=step; ++j)
-//            {
-//                if(im->get_alpha(i+p.y,j+p.x) == SOURCE)
-//                    patchP.at<cv::Vec3b>(i+step,j+step) = im->get_image(i+p.y,j+p.x);
-//                else
-//                {
-//                    cv::Vec3b n; n.val[0]=0; n.val[1] = 0; n.val[2] = 0;
-//                    patchP.at<cv::Vec3b>(i+step,j+step) = cv::Vec3b(0,0,0);
-//                }
-
-//            }
-
-//        //Run through all patch of the image
-//        //Each patch tested must be completely in the source
-//        //Do we test only pixels of the patch corresponding to the source's pixels that were in the source ?
-
-//            for(int u=step; u < im->get_rows() -step; ++u)
-//                for(int v=step; v < im->get_cols() - step; ++v)
-//                {
-
-
-//                if( u!=p.y && v!=p.x) // if the exemplar patch is not the current patch
-//                {
-//                    bool compute_distance = true;
-//                    //Store patchQ (temporarly) // if all the points are in the source
-//                    for(int i=-step; i<=step; ++i)
-//                        for(int j=-step; j<=step; ++j)
-//                        {
-//                            if(im->get_alpha(u+i+step,j+v+step) == SOURCE)//all points in the source
-//                            {
-//                                if(im->get_alpha(i+p.y,j+p.x) == SOURCE) //only points corresponding to points of the patch tested which are also in the source (as not in the mask)
-//                                    patchQ.at<cv::Vec3b>(i+step,j+step) = im->get_image(u+i+step,v+j+step);
-//                            }
-//                            else
-//                            {
-//                                patchQ =cv::Mat::zeros(patch_size,patch_size,im->image().type());
-//                                compute_distance = false; //This patch can't be used to propagate texture cause is not full
-//                                break;
-//                            }
-
-//                        }
-//                    if(compute_distance)
-//                    {
-//                        float distance = compute_patch_SSD_LAB(patchP,patchQ);
-
-//                            if(distance < 1/distance_max && distance != 0) //minimise la distance
-//                            {
-//                                distance_max = 1/distance;
-//                                coord_center_patchQ = cv::Point2i(u,v);
-//                                //std::cout << distance << std::endl;
-//                            }
-
-//                    }
-
-//                }
-
-
-//            }
-
-
-
-
-
     return coord_center_patchQ;
-
-//        for(int u=step; u < im->get_rows() -step; ++u)
-//            for(int v=step; v < im->get_cols() - step; ++v)
-//            {
-//                distance = 0.0f;
-//                if(u != p.x && v != p.y)
-//                {
-//                    //compute SSD of the two patches
-//                    for(int i=-step; i<=step; ++i)
-//                        for(int j=-step; j<=step; ++j)
-//                        {
-//                            //Get pixel (i,j) of both patch
-//                            cv::Mat3b pixP (patchP.at<cv::Vec3b>(i+step,j+step));
-//                            cv::Mat3b pixQ (im->get_image(u+i+step,v+j+step));
-
-//                            //Convert them to CIE Lab (L,a,b)
-//                            cv::Mat3b pixPLab, pixQLab;
-//                            cvtColor(pixP,pixPLab,cv::COLOR_RGB2Lab);
-//                            cvtColor(pixQ,pixQLab,cv::COLOR_RGB2Lab);
-//                            //Compute distance //Formula for CIE 76 // Update to CIE 94 (look wikipedia) if not working
-//                            float dL = pixPLab[0][0][0] - pixQLab[0][0][0];
-//                            float da = pixPLab[0][0][1] - pixQLab[0][0][1];
-//                            float db = pixPLab[0][0][2] - pixQLab[0][0][2];
-//                            distance += cv::sqrt(dL*dL + da*da + db*db);
-//                        }
-
-
-//                        if(distance < 1/distance_max && distance != 0) //minimise la distance
-//                        {
-//                            distance_max = 1/distance;
-//                            coord_center_patchQ = cv::Point2i(u,v);
-//                            std::cout << distance << std::endl;
-//                        }
-
-//                }
-
-//            }
-//        return coord_center_patchQ;
 }
+
+/** Reimpmeneted in Patch but need to check its really working */
 
 //float RegionFill::compute_patch_SSD_LAB(cv::Mat A,cv::Mat B)
 //{
@@ -571,65 +445,19 @@ cv::Point2i RegionFill::find_exemplar_patch(cv::Point2i p)
 void RegionFill::propagate_texture(cv::Point2i p, cv::Point2i q)
 {
 
-    cv::Mat P = cv::Mat(im->image(),cv::Rect(p.x,p.y,patch_size,patch_size));
+//    cv::Mat P = cv::Mat(im->image(),cv::Rect(p.x,p.y,patch_size,patch_size));
     cv::Mat Q = cv::Mat(im->image(),cv::Rect(q.x,q.y,patch_size,patch_size));
 //    cv::Mat Q = cv::Mat::zeros(patch_size,patch_size,im->image().type());
-    P=Q;
+//    P=Q;
     int step = floor(patch_size/2);
     for(int i=-step; i<=step; ++i)
         for(int j=-step; j<=step; ++j)
         {
             if(im->get_alpha(i+p.x+step,j+p.y+step) != SOURCE) // DO NOT replace pixels from the source
-            {
-//                std::cout << "i+p.x " << i+p.x << std::endl;
-                im->image(i+p.x+step,j+p.y+step) = P.at<cv::Vec3b>(i+step,j+step);//im->image(i+q.x+step,j+q.y+step);
-
-//                std::cout << im->image(i+p.x+step,j+p.y+step) << " " << im->image(i+q.x+step,j+q.y+step) <<std::endl;
-            }
+                im->image(i+p.x+step,j+p.y+step) = Q.at<cv::Vec3b>(i+step,j+step);//im->image(i+q.x+step,j+q.y+step);
         }
 }
 
-/** Perform the algorithm needed to copy texture
- * */
-void RegionFill::run()
-{
-
-    //verif que l'image n'est pas nulle à faire avant de pouvoir lancer l'algo ...
-
-    //init confidence
-    init_confidence();
-    //Compute priorities of the border points
-    init_border();
-//    for(auto b : border)
-//    std::cout << b.coord << " " << std::endl;
-    // While there are IN in alpha (all the mask hasn't been updated)
-    //    while(!whole_image_processed())
-
-    for(int k=0; k< 1; k++)
-    {
-//        /** 1.a */
-//        //Done with init_border then next by update alpha which update border stored in "border"
-//        /** 1.b */
-        compute_isophotes(); //Compute isophotes
-        compute_priority();
-//        /** 2.a */
-        cv::Point2i point_priority = running_through_patches();
-//        /** 2.b */
-//        //find_exemplar_patch (minimizing d(Pp,Pq)
-        std::cout << "point priority " << point_priority << std::endl;
-        cv::Point2i point_exemplar = find_exemplar_patch(point_priority);
-//        //        std::cout <<"point priority " << point_priority << std::endl;
-        std::cout <<"point exemplar " << point_exemplar << std::endl;
-//        /** 2.c */
-//        //propagate_texture
-        propagate_texture(point_priority, point_exemplar);
-//        /** 3 */
-        std::cout << get_border_size() << std::endl;
-//        update_alpha(point_priority); //Actually : update alpha, border, confidence
-    }
-    std::cout << get_border_size() << std::endl;
-    im->imwrite("result.png");
-}
 
 /** Compute the vector n_p from the point p and his nieghbors */
 cv::Point2f RegionFill::compute_vector_normal(cv::Point p,  cv::Mat p_neighbors)
@@ -712,5 +540,46 @@ void RegionFill::test_compute_data_term()
     //    std::cout<<"Debut cas INVERS"<<std::endl;
     compute_data_term(cas_inv_0);
 
+}
+
+
+/** Perform the algorithm needed to copy texture
+ * */
+void RegionFill::run()
+{
+
+    //verif que l'image n'est pas nulle à faire avant de pouvoir lancer l'algo ...
+
+    //init confidence
+    init_confidence();
+    //Compute priorities of the border points
+    init_border();
+
+    // While there are IN in alpha (all the mask hasn't been updated)
+    //    while(!whole_image_processed())
+    for(int k=0; k< 6; k++)
+    {
+//        /** 1.a */
+//        //Done with init_border then next by update alpha which update border stored in "border"
+//        /** 1.b */
+        compute_isophotes(); //Compute isophotes
+        compute_priority();
+//        /** 2.a */
+        cv::Point2i point_priority = running_through_patches();
+//        /** 2.b */
+//        //find_exemplar_patch (minimizing d(Pp,Pq)
+        std::cout << "point priority " << point_priority << std::endl;
+        cv::Point2i point_exemplar = find_exemplar_patch(point_priority);
+        std::cout <<"point exemplar " << point_exemplar << std::endl;
+//        /** 2.c */
+//        //propagate_texture
+        propagate_texture(point_priority, point_exemplar);
+//        /** 3 */
+//        std::cout << get_border_size() << std::endl;
+        /** Update alpha, border, and confidence in the patch arround the border_point computed */
+        update_alpha(point_priority); //Actually : update alpha, border, confidence
+    }
+    std::cout << get_border_size() << std::endl;
+    im->imwrite("result.png");
 }
 

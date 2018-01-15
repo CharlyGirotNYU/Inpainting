@@ -47,7 +47,6 @@ void patch::set_center_and_fill(cv::Point2i center, bool source)
     for(int i=-step; i<=step; ++i)
         for(int j=-step; j<=step; ++j)
         {
-//            std::cout << j+step+center.y << " " << j+ step<< " " << std::endl;
             patch_data.at<cv::Vec3b>(i+step,j+step) = image_data->get_image(i+center.x,j+center.y);
             cv::Vec3b a = image_data->get_image(i+center.x,j+center.y);
             if(source)
