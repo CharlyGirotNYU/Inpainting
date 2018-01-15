@@ -90,6 +90,9 @@ public:
      * Return : the center point of the exemplar patch Q */
     cv::Point2i find_exemplar_patch(cv::Point2i p);
 
+    /** Compute distance (SSD) between 2 RGB patch of size_patch in the CIELab Color Space */
+    float compute_patch_SSD_LAB(cv::Mat A, cv::Mat B);
+
     /** Propagate texture from exemplar Patch to patch on the border */
     void propagate_texture(cv::Point2i p, cv::Point2i q);
 

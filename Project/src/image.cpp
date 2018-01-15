@@ -26,13 +26,13 @@ void Image::imread(std::string image_path, std::string mask_path)
     }
 
     //Set Image size
-    Nv = image_read.rows;
-    Nu = image_read.cols;
+    Nu = image_read.rows;
+    Nv = image_read.cols;
 
     //Init & Set mat alpha IN, BORDER, SOURCE (Can't be UPDATED at this point)
-    alpha_data = Mat::zeros(Nv, Nu, CV_8UC1);
-    for(int j=0; j<Nu; ++j) //colonne
-        for(int i=0; i<Nv; ++i) //ligne
+    alpha_data = Mat::zeros(Nu, Nv, CV_8UC1);
+    for(int j=0; j<Nv; ++j) //colonne
+        for(int i=0; i<Nu; ++i) //ligne
         {
             int nb_out = num_outside_mask(i,j);
 
@@ -43,6 +43,8 @@ void Image::imread(std::string image_path, std::string mask_path)
             else
                 alpha(i,j) = IN;
         }
+//    cv::imshow("alpha dans image.cpp" , alpha()*100);
+//    cv::waitKey(0);
 }
 
 
@@ -99,12 +101,12 @@ uchar &Image::alpha(int u, int v)
 
 const int& Image::get_rows() const
 {
-    return Nv;
+    return Nu;
 }
 
 const int& Image::get_cols() const
 {
-    return Nu;
+    return Nv;
 }
 
 
