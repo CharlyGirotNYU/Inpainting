@@ -557,9 +557,9 @@ void RegionFill::run()
 //        std::cout <<"point exemplar " << point_exemplar << std::endl;
         /** 2.c */
         //propagate_texture
-        propagate_texture(point_priority, point_exemplar);
+//        propagate_texture(point_priority, point_exemplar);
         /** 3 */
-        update_alpha(); //Actually : update alpha, border, confidence
+//        update_alpha(); //Actually : update alpha, border, confidence
     }
     im->imwrite("result.png");
 }
