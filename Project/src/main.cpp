@@ -2,14 +2,14 @@
 #include "regionfill.hpp"
 #include<iostream>
 #include<stdlib.h>
-
+#include "patch.hpp"
 
 int main()
 {
     //TEST CHARLY
     Image image = Image();
-//    image.imread("../../images/lincoln.jpg","../../images/mask_lincoln.png");
-        image.imread("../../images/mask_oval.png","../../images/masked_oval.png");
+    image.imread("../../images/lincoln.jpg","../../images/mask_lincoln.png");
+//        image.imread("../../images/mask_oval.png","../../images/masked_oval.png");
 
     image.imwrite("test.jpg");
 
@@ -28,7 +28,8 @@ int main()
     //TEST DIF
 
     //Charly
-    std::cout << region.whole_image_processed() << std::endl;
+//    patch p(image.get_image());
+//    std::cout << region.whole_image_processed() << std::endl;
 
     //tester copute priority
     //tester running through patches

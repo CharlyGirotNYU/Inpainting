@@ -43,7 +43,7 @@ public:
     int get_border_size() const;
 
     /** Update alpha  after a patch copy centered at bp */
-    void update_alpha();
+    void update_alpha(cv::Point2i bp);
     /** Update the border */
     void update_border(border_point point, int status); // Can we rename it : update_alpha_status ? cause it's not only updating the border points
     /** Return true if the point if a new border, else false */
@@ -91,7 +91,7 @@ public:
     cv::Point2i find_exemplar_patch(cv::Point2i p);
 
     /** Compute distance (SSD) between 2 RGB patch of size_patch in the CIELab Color Space */
-    float compute_patch_SSD_LAB(cv::Mat A, cv::Mat B);
+//    float compute_patch_SSD_LAB(cv::Mat A, cv::Mat B);
 
     /** Propagate texture from exemplar Patch to patch on the border */
     void propagate_texture(cv::Point2i p, cv::Point2i q);

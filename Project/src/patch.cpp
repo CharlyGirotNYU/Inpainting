@@ -8,6 +8,7 @@ patch::patch()
 
 patch::patch(Image* im, int size, cv::Point2i center, bool source)
 {
+    image_data = im;
     patch_size = size;
     center_data = center;
     patch_data = cv::Mat::zeros(patch_size,patch_size,im->image().type());
@@ -28,6 +29,7 @@ patch::patch(Image* im, int size, cv::Point2i center, bool source)
 
 patch::patch(Image* im, int size)
 {
+    image_data = im;
     patch_size = size;
     patch_data = cv::Mat::zeros(patch_size,patch_size,im->image().type());
     image_data = im;
@@ -80,6 +82,7 @@ float patch::compute_distance_SSD_LAB(patch B)
            // Get pixel (i,j) of both patch
             cv::Mat3b pixP (this->patch_data.at<cv::Vec3b>(i+step,j+step));
             cv::Mat3b pixQ (B.patch_data.at<cv::Vec3b>(i+step,j+step));
+//            std::cout << (int)pixP.at<uchar>(0,0) << " " << (int)pixP.at<uchar>(0,1) << " "<< (int)pixP.at<uchar>(0,2) << std::endl;
 //            std::cout << (int)pixQ[0][0][1] << std::endl;
             //Convert them to CIE Lab (L,a,b)
             cv::Mat3b pixPLab, pixQLab;
@@ -87,12 +90,13 @@ float patch::compute_distance_SSD_LAB(patch B)
             cvtColor(pixQ,pixQLab,cv::COLOR_RGB2Lab);
             //Compute distance //Formula for CIE 76 // Update to CIE 94 (look wikipedia) if not working
             float dL = pixPLab.at<uchar>(0,0) - pixQLab.at<uchar>(0,0);
-            float da = pixPLab.at<uchar>(0,0) - pixQLab.at<uchar>(0,0);
-            float db = pixPLab.at<uchar>(0,0) - pixQLab.at<uchar>(0,0);
+            float da = pixPLab.at<uchar>(0,1) - pixQLab.at<uchar>(0,1);
+            float db = pixPLab.at<uchar>(0,2) - pixQLab.at<uchar>(0,2);
 //            std::cout << pixPLab << std::endl;
 //            std::cout << "dL " << dL << " da " << da << " db " << db <<std::endl;
             dist += std::sqrt(dL*dL + da*da + db*db);
         }
+//    std::cout << dist << std::endl;
     return dist;
 
 }

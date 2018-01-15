@@ -32,74 +32,78 @@ void RegionFill::init_border()
 }
 
 /** Update alpha  after a patch copy centered at bp */
-void RegionFill::update_alpha()
+void RegionFill::update_alpha(cv::Point2i bp)
 {
     int step = floor(patch_size/2);
-    for(border_point& bp : border)
+    //for each  point of the border
+   // for(border_point& bp : border)
     {
-        // Update alpha of the points belonging to the patch
+        // Update alpha of the points belonging to the patch arround the border point
 
         for(int j=-step; j<=step; ++j)
             for(int i=-step; i<=step; ++i)
             {
-                int x = bp.coord.x+i; int y = bp.coord.y+j;
-                if(im->alpha(x,y) != SOURCE)
+                //int x = bp.coord.x+i; int y = bp.coord.y+j;
+                int x = bp.x+i; int y = bp.y +j;
+                if(im->get_alpha(x,y) != SOURCE)
                 {
                     im->alpha(x,y) = UPDATED;
                     border_point new_bp;
                     new_bp.coord = cv::Point2i(x,y);
-                    update_border(new_bp,UPDATED);
-                    //update confidence
-                    confidence = compute_confidence(bp.coord);
+                    new_bp.data_term=0.0f;
+                    new_bp.priority=0.0f;
+                    update_border(new_bp,UPDATED); //PB
+//                    //update confidence
+//                    confidence = compute_confidence(bp.coord);
                 }
             }
 
         // Update the possible border around the new patch. Only the points that
         //were in the mask can become a border (in the mask like not in the patch ? )
 
-        //Taking care of the angles
-        for (int i=-step-1; i<=step+1; ++i)
-        {
-            //The line under the patch
-            int x = bp.coord.x+i; int y = bp.coord.y-step-1;
-            if(im->alpha(x,y) == IN && is_new_border(x,y))
-            {
-                border_point new_bp;
-                new_bp.coord = cv::Point2i(x,y);
-                update_border(new_bp,BORDER);
-            }
+//        //Taking care of the angles
+//        for (int i=-step-1; i<=step+1; ++i)
+//        {
+//            //The line under the patch
+//            int x = bp.coord.x+i; int y = bp.coord.y-step-1;
+//            if(im->alpha(x,y) == IN && is_new_border(x,y))
+//            {
+//                border_point new_bp;
+//                new_bp.coord = cv::Point2i(x,y);
+//                update_border(new_bp,BORDER);
+//            }
 
-            //The line over the patch
-            y = bp.coord.y+step+1;
-            if(im->alpha(x,y) == IN && is_new_border(x,y))
-            {
-                border_point new_bp;
-                new_bp.coord = cv::Point2i(x,y);
-                update_border(new_bp,BORDER);
-            }
-        }
+//            //The line over the patch
+//            y = bp.coord.y+step+1;
+//            if(im->alpha(x,y) == IN && is_new_border(x,y))
+//            {
+//                border_point new_bp;
+//                new_bp.coord = cv::Point2i(x,y);
+//                update_border(new_bp,BORDER);
+//            }
+//        }
 
-        //No need to take care of the angles
-        for (int j=-step; j<=step; ++j)
-        {
-            //The line on the left of the patch
-            int x = bp.coord.x-step-1; int y = bp.coord.y+j;
-            if(im->alpha(x,y) == IN && is_new_border(x,y))
-            {
-                border_point new_bp;
-                new_bp.coord = cv::Point2i(x,y);
-                update_border(new_bp,BORDER);
-            }
+//        //No need to take care of the angles
+//        for (int j=-step; j<=step; ++j)
+//        {
+//            //The line on the left of the patch
+//            int x = bp.coord.x-step-1; int y = bp.coord.y+j;
+//            if(im->alpha(x,y) == IN && is_new_border(x,y))
+//            {
+//                border_point new_bp;
+//                new_bp.coord = cv::Point2i(x,y);
+//                update_border(new_bp,BORDER);
+//            }
 
-            //The line on the right of the patch
-            x = bp.coord.x+step+1;
-            if(im->alpha(x,y) == IN && is_new_border(x,y))
-            {
-                border_point new_bp;
-                new_bp.coord = cv::Point2i(x,y);
-                update_border(new_bp,BORDER);
-            }
-        }
+//            //The line on the right of the patch
+//            x = bp.coord.x+step+1;
+//            if(im->alpha(x,y) == IN && is_new_border(x,y))
+//            {
+//                border_point new_bp;
+//                new_bp.coord = cv::Point2i(x,y);
+//                update_border(new_bp,BORDER);
+//            }
+//        }
     }
 }
 
@@ -156,7 +160,9 @@ void RegionFill::update_border(border_point point, int status)
         {
             if((*it).coord == point.coord)
             {
+//                std::cout << (*it).coord << std::endl;
                 border.erase(it);
+//                std::cout << border(it).coord << std::endl;
             }
         }
     }
@@ -261,6 +267,7 @@ float RegionFill::compute_confidence(cv::Point2i p)
 float RegionFill::compute_data_term(cv::Point p)
 {
 
+    float data_term;
     //Need to change y and x because of at in im->alpha(i,j)
     if(im->alpha(p.y,p.x) == BORDER)
     {
@@ -304,9 +311,9 @@ float RegionFill::compute_data_term(cv::Point p)
                 //                std::cout<<"Source ou UPDATED"<<std::endl;
                 n_p = -n_p;
             }
-            else if(im->alpha(x,y) == BORDER)
-                std::cout<<"Erreur dans la direction de la normale"<<std::endl;
-            else ;
+//            else if(im->alpha(x,y) == BORDER)
+//                std::cout<<"Erreur dans la direction de la normale"<<std::endl;
+//            else ;
         }
 
 
@@ -324,14 +331,14 @@ float RegionFill::compute_data_term(cv::Point p)
         //        std::cout << "Ip = [" << Ip.x <<","<< Ip.y<<"];" <<std::endl;
 
 
-        float data_term = Ip.x * n_p.y - Ip.y * n_p.x;
+         data_term = Ip.x * n_p.y - Ip.y * n_p.x;
         //        std::cout<<"Data term : " << data_term<<std::endl;
 
     }
 
     //float T = (successive.y - previous.y) / (successive.x - previous.x);
 
-    return 0.1f; //debug
+    return data_term; //debug
 }
 
 void RegionFill::compute_priority()
@@ -535,46 +542,47 @@ cv::Point2i RegionFill::find_exemplar_patch(cv::Point2i p)
 //        return coord_center_patchQ;
 }
 
-float RegionFill::compute_patch_SSD_LAB(cv::Mat A,cv::Mat B)
-{
-    float dist = 0.0f;
-    int step = floor(patch_size/2);
-    for(int i=-step; i<=step; ++i)
-        for(int j=-step; j<=step; ++j)
-        {
-            //Get pixel (i,j) of both patch
-            cv::Mat3b pixP (A.at<cv::Vec3b>(i+step,j+step));
-            cv::Mat3b pixQ (B.at<cv::Vec3b>(i+step,j+step));
-            //            cv::Mat3b pixQ (im->get_image(u+i+step,v+j+step));
+//float RegionFill::compute_patch_SSD_LAB(cv::Mat A,cv::Mat B)
+//{
+//    float dist = 0.0f;
+//    int step = floor(patch_size/2);
+//    for(int i=-step; i<=step; ++i)
+//        for(int j=-step; j<=step; ++j)
+//        {
+//            //Get pixel (i,j) of both patch
+//            cv::Mat3b pixP (A.at<cv::Vec3b>(i+step,j+step));
+//            cv::Mat3b pixQ (B.at<cv::Vec3b>(i+step,j+step));
+//            //            cv::Mat3b pixQ (im->get_image(u+i+step,v+j+step));
 
-            //Convert them to CIE Lab (L,a,b)
-            cv::Mat3b pixPLab, pixQLab;
-            cvtColor(pixP,pixPLab,cv::COLOR_RGB2Lab);
-            cvtColor(pixQ,pixQLab,cv::COLOR_RGB2Lab);
-            //Compute distance //Formula for CIE 76 // Update to CIE 94 (look wikipedia) if not working
-            float dL = pixPLab[0][0][0] - pixQLab[0][0][0];
-            float da = pixPLab[0][0][1] - pixQLab[0][0][1];
-            float db = pixPLab[0][0][2] - pixQLab[0][0][2];
-            dist += cv::sqrt(dL*dL + da*da + db*db);
-        }
-    return dist;
-}
+//            //Convert them to CIE Lab (L,a,b)
+//            cv::Mat3b pixPLab, pixQLab;
+//            cvtColor(pixP,pixPLab,cv::COLOR_RGB2Lab);
+//            cvtColor(pixQ,pixQLab,cv::COLOR_RGB2Lab);
+//            //Compute distance //Formula for CIE 76 // Update to CIE 94 (look wikipedia) if not working
+//            float dL = pixPLab[0][0][0] - pixQLab[0][0][0];
+//            float da = pixPLab[0][0][1] - pixQLab[0][0][1];
+//            float db = pixPLab[0][0][2] - pixQLab[0][0][2];
+//            dist += cv::sqrt(dL*dL + da*da + db*db);
+//        }
+//    return dist;
+//}
 
 void RegionFill::propagate_texture(cv::Point2i p, cv::Point2i q)
 {
 
     cv::Mat P = cv::Mat(im->image(),cv::Rect(p.x,p.y,patch_size,patch_size));
-//    cv::Mat Q = cv::Mat(im->image(),cv::Rect(q.x,q.y,patch_size,patch_size));
-    cv::Mat Q = cv::Mat::zeros(patch_size,patch_size,im->image().type());
+    cv::Mat Q = cv::Mat(im->image(),cv::Rect(q.x,q.y,patch_size,patch_size));
+//    cv::Mat Q = cv::Mat::zeros(patch_size,patch_size,im->image().type());
     P=Q;
     int step = floor(patch_size/2);
     for(int i=-step; i<=step; ++i)
         for(int j=-step; j<=step; ++j)
         {
-//            if(im->get_alpha(i+p.x+step,j+p.y+step) != SOURCE) // DO NOT replace pixels from the source
+            if(im->get_alpha(i+p.x+step,j+p.y+step) != SOURCE) // DO NOT replace pixels from the source
             {
 //                std::cout << "i+p.x " << i+p.x << std::endl;
                 im->image(i+p.x+step,j+p.y+step) = P.at<cv::Vec3b>(i+step,j+step);//im->image(i+q.x+step,j+q.y+step);
+
 //                std::cout << im->image(i+p.x+step,j+p.y+step) << " " << im->image(i+q.x+step,j+q.y+step) <<std::endl;
             }
         }
@@ -595,7 +603,8 @@ void RegionFill::run()
 //    std::cout << b.coord << " " << std::endl;
     // While there are IN in alpha (all the mask hasn't been updated)
     //    while(!whole_image_processed())
-    for(int k=0; k< 1 ; k++)
+
+    for(int k=0; k< 1; k++)
     {
 //        /** 1.a */
 //        //Done with init_border then next by update alpha which update border stored in "border"
@@ -614,8 +623,10 @@ void RegionFill::run()
 //        //propagate_texture
         propagate_texture(point_priority, point_exemplar);
 //        /** 3 */
-//        //                update_alpha(); //Actually : update alpha, border, confidence
+        std::cout << get_border_size() << std::endl;
+        update_alpha(point_priority); //Actually : update alpha, border, confidence
     }
+    std::cout << get_border_size() << std::endl;
     im->imwrite("result.png");
 }
 
