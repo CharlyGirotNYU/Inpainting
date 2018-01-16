@@ -53,7 +53,7 @@ public:
     /** Compute Isophote of the image
     *   -L : Luminance of the input image
     *   -alpha : Threshold of isophotes */
-    void compute_isophotes();
+    cv::Point compute_isophotes(cv::Point2i p);
 
     /** Init confidence term Mat*/
     void init_confidence();
