@@ -263,9 +263,9 @@ void RegionFill::propagate_texture(cv::Point2i p, cv::Point2i q,int sizex,int si
     if(p.x+stepx >= im->get_rows())  { x1= im->get_rows()-1; } else { x1= p.x+stepx; }
     if(p.y-stepy < 0)                { y0=0; }                 else { y0= p.y-stepy; }
     if(p.y+stepy >= im->get_cols())  { y1= im->get_cols()-1; } else { y1= p.y+stepy; }
-    std::cout << "x0 x1 y0 y1 :" << x0 << " "<< x1 << " " << y0 << " " << y1 << std::endl;
-    std::cout << im->get_rows() << " " << im->get_cols() << std::endl;
-    std::cout << "" << std::endl ;
+//    std::cout << "x0 x1 y0 y1 :" << x0 << " "<< x1 << " " << y0 << " " << y1 << std::endl;
+//    std::cout << im->get_rows() << " " << im->get_cols() << std::endl;
+//    std::cout << "" << std::endl ;
 
     //TODO : MASK q01
 
@@ -379,11 +379,10 @@ void RegionFill::update_alpha(cv::Point2i bp, int sizex, int sizey)
     if(bp.x+stepx >= im->get_rows())  { x1= im->get_rows()-1; } else { x1= bp.x+stepx; }
     if(bp.y-stepy < 0)                { y0=0; }                 else { y0= bp.y-stepy; }
     if(bp.y+stepy >= im->get_cols())  { y1= im->get_cols()-1; } else { y1= bp.y+stepy; }
-    std::cout << "x0 x1 y0 y1 :" << x0 << " "<< x1 << " " << y0 << " " << y1 << std::endl;
+//    std::cout << "x0 x1 y0 y1 :" << x0 << " "<< x1 << " " << y0 << " " << y1 << std::endl;
 
     // Update alpha of the points belonging to the patch arround the border point
 
-    // ON PASSE PAS LA
     for(int j=y0; j<=y1; ++j)
         for(int i=x0; i<=x1; ++i)
         {
@@ -457,13 +456,13 @@ void RegionFill::update_border(cv::Point2i point, int status)
     {
         //Update the alpha value
         im->set_alpha_pixel(b.coord.x,b.coord.y) = UPDATED;
-        std::cout << "border point to erase : " << b.coord << std::endl;
+//        std::cout << "border point to erase : " << b.coord << std::endl;
         int i=0;
         for(auto bp : border)
         {
             if(bp.coord == b.coord)
             {
-                std::cout << " border coord to erase : " << b.coord << std::endl;
+//                std::cout << " border coord to erase : " << b.coord << std::endl;
                 border.erase(border.begin()+i);
             }
             i++;
