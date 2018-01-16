@@ -17,9 +17,9 @@ patch::patch(Image* im, int size, cv::Point2i center, bool source)
     for(int i=-step; i<=step; ++i)
         for(int j=-step; j<=step; ++j)
         {
-            patch_data.at<cv::Vec3b>(i+step,j+step) = im->get_image(i+center.x,j+center.y);
+            patch_data.at<cv::Vec3b>(i+step,j+step) = im->get_image_pixel(i+center.x,j+center.y);
             if(source)
-                if(! (im->get_alpha(i+center.x,j+center.y) == SOURCE))
+                if(! (im->get_alpha_pixel(i+center.x,j+center.y) == SOURCE))
                 {
                     patch_data.at<cv::Vec3b>(i+step,j+step) = cv::Vec3b(-1,-1,-1);
                 }
@@ -47,10 +47,10 @@ void patch::set_center_and_fill(cv::Point2i center, bool source)
     for(int i=-step; i<=step; ++i)
         for(int j=-step; j<=step; ++j)
         {
-            patch_data.at<cv::Vec3b>(i+step,j+step) = image_data->get_image(i+center.x,j+center.y);
-            cv::Vec3b a = image_data->get_image(i+center.x,j+center.y);
+            patch_data.at<cv::Vec3b>(i+step,j+step) = image_data->get_image_pixel(i+center.x,j+center.y);
+            cv::Vec3b a = image_data->get_image_pixel(i+center.x,j+center.y);
             if(source)
-                if(! image_data->get_alpha(i+center.x,j+center.y) == SOURCE)
+                if(! image_data->get_alpha_pixel(i+center.x,j+center.y) == SOURCE)
                 {
                     patch_data.at<cv::Vec3b>(i+step,j+step) = cv::Vec3b(-1,-1,-1);
                 }
@@ -64,7 +64,7 @@ bool patch::is_whole_patch_source()
     for(int i=-step; i<=step; ++i)
         for(int j=-step; j<=step; ++j)
         {
-            if(! image_data->get_alpha(i+center_data.x,j+center_data.y) == SOURCE)
+            if(! image_data->get_alpha_pixel(i+center_data.x,j+center_data.y) == SOURCE)
                 return false;
         }
     return true;
