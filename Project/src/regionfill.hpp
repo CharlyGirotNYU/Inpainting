@@ -43,7 +43,7 @@ public:
     int get_border_size() const;
 
     /** Update alpha  after a patch copy centered at bp */
-    void update_alpha(cv::Point2i bp);
+    void update_alpha(cv::Point2i bp,int sizex,int sizey);
     /** Update the border */
     void update_border(cv::Point2i point, int status); // Can we rename it : update_alpha_status ? cause it's not only updating the border points
     /** Return true if the point if a new border, else false */
@@ -94,7 +94,7 @@ public:
 //    float compute_patch_SSD_LAB(cv::Mat A, cv::Mat B);
 
     /** Propagate texture from exemplar Patch to patch on the border */
-    void propagate_texture(cv::Point2i p, cv::Point2i q);
+    void propagate_texture(cv::Point2i p, cv::Point2i q, int sizex, int sizey);
 
     /** Run the algo */
     void run();
@@ -114,7 +114,8 @@ private:
     cv::Mat isophotes_data_orientation;
 
     /** Size of a patch (width=height)(9*9 in Creiminisi)*/
-    int patch_size;
+    int patch_size_x;
+    int patch_size_y;
 
     /** Patch */
     //    cv::Mat patch; !! attention aux conflits de noms
