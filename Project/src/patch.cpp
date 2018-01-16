@@ -13,21 +13,21 @@ patch::patch(Image* im, int x,int y, cv::Point2i center, bool source)
     sizey = y;
     center_data = center;
     patch_data = cv::Mat::zeros(sizex,sizey,im->image().type());
+//    std::cout << "taille patch pendant definition : " << sizex << " " << sizey << std::endl;
 
     int stepx = floor(sizex/2);
     int stepy = floor(sizey/2);
 
-        int x0=0,y0=0,x1=0,y1=0;
-        if(center_data.x-stepx < 0)                { x0=0; }                 else { x0= center_data.x-stepx; }
-        if(center_data.x+stepx >= image_data->get_rows())  { x1= image_data->get_rows()-1; } else { x1= center_data.x+stepx; }
-        if(center_data.y-stepy < 0)                { y0=0; }                 else { y0= center_data.y-stepy; }
-        if(center_data.y+stepy >= image_data->get_cols())  { y1= image_data->get_cols()-1; } else { y1= center_data.y+stepy; }
+    int x0=0,y0=0,x1=0,y1=0;
+    if(center_data.x-stepx < 0)                { x0=0; }                 else { x0= center_data.x-stepx; }
+    if(center_data.x+stepx >= image_data->get_rows())  { x1= image_data->get_rows()-1; } else { x1= center_data.x+stepx; }
+    if(center_data.y-stepy < 0)                { y0=0; }                 else { y0= center_data.y-stepy; }
+    if(center_data.y+stepy >= image_data->get_cols())  { y1= image_data->get_cols()-1; } else { y1= center_data.y+stepy; }
 
-        sizex = x1-x0-1;
-        sizey = y1-y0-1;
-        std::cout << "sizex "<< sizex << "sizey" << sizey << std::endl;
-        std::cout << "center " << center.x << " " << center.y << std::endl;
-        patch_data = cv::Mat(im->image(),cv::Rect(center.x,center.y,sizex,sizey));
+    sizex = x1-x0+1;
+    sizey = y1-y0+1;
+//    std::cout << "taille patch apres definition : " << sizex << " " << sizey << std::endl;
+    patch_data = cv::Mat(im->image(),cv::Rect(center.x,center.y,sizex,sizey));
 }
 
 patch::patch(Image* im, int x, int y)
@@ -106,11 +106,14 @@ float patch::compute_distance_SSD_LAB(patch B)
 
 }
 
-void patch::mask(patch P)
+void patch::mask(patch P, bool src)
 {
 
     int stepx = floor(sizex/2);
     int stepy = floor(sizey/2);
+
+//    std::cout << "Fonction MASK " << std::endl;
+//    std::cout << "step " << stepx << " " << stepy << std::endl;
 
     int x0=0,y0=0,x1=0,y1=0;
     if(P.center_data.x-stepx < 0)                { x0=0; }                 else { x0= P.center_data.x-stepx; }
@@ -118,16 +121,21 @@ void patch::mask(patch P)
     if(P.center_data.y-stepy < 0)                { y0=0; }                 else { y0= P.center_data.y-stepy; }
     if(P.center_data.y+stepy >= image_data->get_cols())  { y1= image_data->get_cols()-1; } else { y1= P.center_data.y+stepy; }
 
-    cv::Mat alpha_Q;
+    sizex = x1-x0 + 1;
+    sizey = y1-y0+1;
+//    std::cout << "size apres verif : " << sizex << " " << sizey << std::endl;
+
+    cv::Mat alpha_Q = cv::Mat::zeros(sizex,sizey,get_alpha().type());;
     cv::Mat mask_a = cv::Mat::zeros(sizex,sizey,get_alpha().type());
-    cv::Mat mask_alpha = cv::Mat(P.get_alpha(),cv::Rect(x0,y0,x1-x0+3,y1-y0+3));
-    mask_a = (mask_alpha == SOURCE);
+    cv::Mat mask_alpha = cv::Mat(P.get_alpha(),cv::Rect(x0,y0,sizex,sizey));
+
+    if(src)
+        mask_a = (mask_alpha == SOURCE);
+    else
+        mask_a = (mask_alpha == BORDER + mask_alpha == IN ); //if updated ?
     patch_data.copyTo(alpha_Q,mask_a);
     patch_data = alpha_Q;
-    //     std::cout << "alpha P bord" << (int)alpha_P.at<uchar>(0,25) << std::endl;
-    //     std::cout <<"alpha p in" <<(int)alpha_P.at<uchar>(5,25) << std::endl;
-    //     std::cout << "mask alpha bord" <<(int)mask_alpha.at<uchar>(0,25) << std::endl;
-    //     std::cout << "mask alpha in "<<(int)mask_alpha.at<uchar>(5,25) << std::endl;
+
     //    cv::imshow("alphaP", alpha_Q);
     //    cv::waitKey(0);
 }

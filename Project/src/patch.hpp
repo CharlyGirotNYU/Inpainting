@@ -14,7 +14,7 @@ public:
     void set_center_and_fill(cv::Point2i center,bool source);
 
 
-    void mask(patch P);
+    void mask(patch P, bool src);
 
     bool is_whole_patch_source();
 

@@ -6,37 +6,46 @@
 
 int main()
 {
-    //TEST CHARLY
+    /** Disable Output */
+//    // get underlying buffer
+//    std::streambuf* orig_buf = std::cout.rdbuf();
+//    // set null
+//    std::cout.rdbuf(NULL);
+//    // restore buffer
+//    std::cout.rdbuf(orig_buf);
+
+    /** Read Image */
     Image image = Image();
-    image.imread("../../images/lincoln.jpg","../../images/mask_lincoln.png");
-//        image.imread("../../images/mask_oval.png","../../images/masked_oval.png");
+    //    image.imread("../../images/lincoln.jpg","../../images/mask_lincoln.png");
+    image.imread("../../images/mask_oval.png","../../images/masked_oval.png");
+
 
     image.imwrite("test.jpg");
 
+    /** Create the instance for the algorithm */
     RegionFill region = RegionFill();
+    /** Furnish the Image containing image and mask to the algorithm */
     region.set_image(&image);
-    std::cout << "main " << image.get_cols() << std::endl;
-
-//    cv::Point a = region.compute_isophotes(cv::Point2i(101,187));
-//    std::cout<< a.x << " "<<a.y<<std::endl;
+    /** Run the algorithm */
     region.run();
 
-    std::cout << "SOURCE " << SOURCE << std::endl ;
-    std::cout << "UPDATED " << UPDATED << std::endl ;
-    std::cout << "BORDER " << BORDER << std::endl ;
-    std::cout << "IN " << IN << std::endl ;
 
-
-    //TEST DIF
-
-    //Charly
-//    patch p(image.get_image());
-//    std::cout << region.whole_image_processed() << std::endl;
-
-    //tester copute priority
-    //tester running through patches
-    //tester find exemplar patch
-    //tester propagate texture
 
     return 0;
 }
+
+
+/// Initialize arguments for the padding filter
+//       cv::Mat src = image.image();
+//      cv::Mat dst = image.image();
+//     int top, bottom, left, right;
+//     top = (int) (0.05*src.rows); bottom = (int) (0.05*src.rows);
+//     left = (int) (0.05*src.cols); right = (int) (0.05*src.cols);
+//    top =10; bottom = 10; left = 10; right = 10;
+//     cv::Scalar value;
+//     cv::RNG rng(12345);
+//    value = cv::Scalar( rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255) );
+//    cv::copyMakeBorder( image.image(), dst, top, bottom, left, right, cv::BORDER_REPLICATE, value );
+
+//    cv::imshow("A",dst);
+//    cv::waitKey(0);

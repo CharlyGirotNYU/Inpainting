@@ -24,23 +24,7 @@ public:
     void init_border();
 
 
-    /** Get current border */
-    std::vector<border_point> get_border() const;
-    /** Set the current border */
-    void set_border(std::vector<border_point>& b);
 
-    /** Get current border by index */
-    border_point get_border(unsigned int i) const;
-    /** Get border point by coordinates */
-    border_point get_border(cv::Point2i p);
-
-    /** Set the pointer to the parent Image */
-    void set_image(Image* image);
-    /** Get Original Image */
-    Image get_image() const;
-
-    /** Get size of the border */
-    int get_border_size() const;
 
     /** Update alpha  after a patch copy centered at bp */
     void update_alpha(cv::Point2i bp,int sizex,int sizey);
@@ -98,6 +82,29 @@ public:
 
     /** Run the algo */
     void run();
+
+
+    /** Get Original Image */
+    Image get_image() const                         {return *im;}
+    /** Get current border */
+    std::vector<border_point> get_border() const    {return border;}
+    /** Get current border by index */
+    border_point get_border(unsigned int i) const   {return border[i];}
+    /** Get size of the border */
+    int get_border_size() const                     {return border.size();}
+    /** Set the pointer to the parent Image */
+    void set_image(Image* image)                    { im = image;}
+    /** Set the current border */
+    void set_border(std::vector<border_point>& b)   {border =b;}
+
+
+    /** Get border point by coordinates */ //NOT IMPLEMENTED ?
+    border_point get_border(cv::Point2i p);
+
+
+
+
+
 
 
 private:
