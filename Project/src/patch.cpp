@@ -8,13 +8,12 @@ patch::patch()
 
 patch::patch(Image* im, int x,int y, cv::Point2i center, bool source)
 {
+    //TODO : If source is true , else
     image_data = im;
     sizex = x;
     sizey = y;
     center_data = center;
     patch_data = cv::Mat::zeros(sizex,sizey,im->image().type());
-//    std::cout << "taille patch pendant definition : " << sizex << " " << sizey << std::endl;
-
     int stepx = floor(sizex/2);
     int stepy = floor(sizey/2);
 
@@ -26,7 +25,7 @@ patch::patch(Image* im, int x,int y, cv::Point2i center, bool source)
 
     sizex = x1-x0+1;
     sizey = y1-y0+1;
-//    std::cout << "taille patch apres definition : " << sizex << " " << sizey << std::endl;
+
     patch_data = cv::Mat(im->image(),cv::Rect(center.x,center.y,sizex,sizey));
 }
 
@@ -132,7 +131,7 @@ void patch::mask(patch P, bool src)
     if(src)
         mask_a = (mask_alpha == SOURCE);
     else
-        mask_a = (mask_alpha == BORDER + mask_alpha == IN ); //if updated ?
+        mask_a = ((mask_alpha == BORDER )+ (mask_alpha == IN) ); //if updated ?
     patch_data.copyTo(alpha_Q,mask_a);
     patch_data = alpha_Q;
 

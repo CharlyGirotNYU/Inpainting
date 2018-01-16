@@ -272,7 +272,14 @@ void RegionFill::propagate_texture(cv::Point2i p, cv::Point2i q,int sizex,int si
     sizex = x1-x0+1;
     sizey = y1-y0+1;
 
-    Q(cv::Range(0,sizex-1),cv::Range(0,sizey-1)).copyTo(im->image()(cv::Range(x0,x1),cv::Range(y0,y1)));
+    cv::Mat alpha_Q = cv::Mat::zeros(sizex,sizey,im->alpha().type());
+    cv::Mat mask_a = cv::Mat::zeros(sizex,sizey,im->alpha().type());
+    cv::Mat mask_alpha = cv::Mat(im->alpha(),cv::Rect(x0,y0,sizex,sizey));
+
+    mask_a = (mask_alpha == IN) + (mask_alpha == BORDER);
+    Q.copyTo(alpha_Q,mask_a);
+    alpha_Q(cv::Range(0,sizex-1),cv::Range(0,sizey-1)).copyTo(im->image()(cv::Range(x0,x1),cv::Range(y0,y1)));
+//    Q(cv::Range(0,sizex-1),cv::Range(0,sizey-1)).copyTo(im->image()(cv::Range(x0,x1),cv::Range(y0,y1)),mask_a);
 }
 
 
