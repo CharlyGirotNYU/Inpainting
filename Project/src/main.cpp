@@ -15,10 +15,11 @@ int main()
 
     RegionFill region = RegionFill();
     region.set_image(&image);
+    std::cout << "main " << image.get_cols() << std::endl;
 
-    cv::Point a = region.compute_isophotes(cv::Point2i(101,187));
-    std::cout<< a.x << " "<<a.y<<std::endl;
-//    region.run();
+//    cv::Point a = region.compute_isophotes(cv::Point2i(101,187));
+//    std::cout<< a.x << " "<<a.y<<std::endl;
+    region.run();
 
     std::cout << "SOURCE " << SOURCE << std::endl ;
     std::cout << "UPDATED " << UPDATED << std::endl ;

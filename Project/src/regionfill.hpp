@@ -45,7 +45,7 @@ public:
     /** Update alpha  after a patch copy centered at bp */
     void update_alpha(cv::Point2i bp);
     /** Update the border */
-    void update_border(border_point point, int status); // Can we rename it : update_alpha_status ? cause it's not only updating the border points
+    void update_border(cv::Point2i point, int status); // Can we rename it : update_alpha_status ? cause it's not only updating the border points
     /** Return true if the point if a new border, else false */
     bool is_new_border(int u, int v);
 
