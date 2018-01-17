@@ -28,7 +28,8 @@ int main()
     /** Furnish the Image containing image and mask to the algorithm */
     region.set_image(&image);
     /** Run the algorithm */
-        region.run();
+    region.run();
+//    region.compute_isophotes(cv::Point2i(54,31));
 
 //    region.init_border();
 //    region.compute_priority();
