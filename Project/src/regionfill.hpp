@@ -10,8 +10,6 @@
 struct border_point
 {
     cv::Point2i  coord;
-    //    float        confidence;
-    float  data_term;
     float priority;
 };
 

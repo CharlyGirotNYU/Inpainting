@@ -7,17 +7,18 @@
 int main()
 {
     /** Disable Output */
-//    // get underlying buffer
-//    std::streambuf* orig_buf = std::cout.rdbuf();
-//    // set null
-//    std::cout.rdbuf(NULL);
-//    // restore buffer
-//    std::cout.rdbuf(orig_buf);
+    //    // get underlying buffer
+    //    std::streambuf* orig_buf = std::cout.rdbuf();
+    //    // set null
+    //    std::cout.rdbuf(NULL);
+    //    // restore buffer
+    //    std::cout.rdbuf(orig_buf);
 
     /** Read Image */
     Image image = Image();
-    //    image.imread("../../images/lincoln.jpg","../../images/mask_lincoln.png");
-    image.imread("../../images/mask_oval.png","../../images/masked_oval.png");
+//        image.imread("../../images/lincoln.jpg","../../images/mask_lincoln.png");
+//    image.imread("../../images/mask_oval.png","../../images/masked_oval.png");
+    image.imread("../../images/a.png","../../images/b.png");
 
 
     image.imwrite("test.jpg");
@@ -27,7 +28,25 @@ int main()
     /** Furnish the Image containing image and mask to the algorithm */
     region.set_image(&image);
     /** Run the algorithm */
-    region.run();
+        region.run();
+
+//    region.init_border();
+//    region.compute_priority();
+//    cv::namedWindow("Coucou",cv::WINDOW_NORMAL);
+//    cv::imshow("Coucou",region.get_image().image());
+//    cv::waitKey(0);
+//    //Test distance
+
+//    patch P(&image,9,9,cv::Point2i(267,373),false);
+//    patch Q(&image,9,9,cv::Point2i(230,390),false);
+    //    cv::imshow("P", P.get_patch());
+    //    cv::imshow("Q", Q.get_patch());
+    //    cv::waitKey(0);
+//    std::cout << P.compute_distance_SSD_LAB(Q) << std::endl;
+//    std::cout << P.is_whole_patch_source() << std::endl;
+//    std::cout << Q.is_whole_patch_source() << std::endl;
+
+
 
 
 
