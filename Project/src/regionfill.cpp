@@ -4,8 +4,8 @@
 
 RegionFill::RegionFill()
 {
-    patch_size_x=9; //has to be impaired
-    patch_size_y=9;
+    patch_size_x=13; //has to be impaired
+    patch_size_y=13;
 }
 
 patch P;
@@ -15,6 +15,7 @@ void RegionFill::init_confidence()
     double min, max;
     cv::minMaxLoc(im->mask(), &min, &max);
     confidence = (im->mask()==0)/255;
+
 }
 
 /** get and fill the border */
@@ -40,10 +41,9 @@ void RegionFill::compute_priority()
     std::cout<<"Border size "<<get_border_size()<<std::endl;
     if(get_border_size()==1)
     {
-        border_point bp;
+        border_point bp = border[0];
         bp.priority =100.0f;
         border[0]=bp;
-
     }
     else
     {
@@ -79,17 +79,19 @@ float RegionFill::compute_confidence(cv::Point2i p)
                 {
                     patch.at<cv::Vec3b>(i+stepx,j+stepy) = im->get_image_pixel(i+p.x,j+p.y); //why just im->image(i,j) doesn't work ?? we changed the prototype in image.hc
                     if(im->get_alpha_pixel(i+p.x,j+p.y) ==  SOURCE)
+                    {
                         conf += confidence.at<uchar>(i+p.x,j+p.y);
+                    }
                 }
         }
     conf = conf/(patch_size_x*patch_size_y);
     return conf;
 }
 
-float RegionFill::compute_data_term(cv::Point p)
+float RegionFill::compute_data_term(cv::Point2i p)
 {
 
-    float data_term;
+    float data_term=0.0f;
     //Need to change y and x because of at in im->alpha(i,j)
     if(im->get_alpha_pixel(p.x,p.y) == BORDER)
     {
@@ -121,7 +123,6 @@ float RegionFill::compute_data_term(cv::Point p)
 
         x = (int)(round(n_p.x)) + p.x;
         y = (int)(round(n_p.y)) + p.y;
-        //        std::cout<<"x" <<x<<" y "<<y<<std::endl;
 
         if(y>0 && y<size_y  && x>0 && x<size_x)
         {
@@ -131,14 +132,11 @@ float RegionFill::compute_data_term(cv::Point p)
             }
         }
 
-        cv::Point Ip =compute_isophotes(p);
-        //        std::cout<< Ip<< n_p<<std::endl;
+        cv::Point2f Ip =compute_isophotes(p);
         float alpha =255.0f;
         data_term = std::abs(Ip.x * n_p.y - Ip.y * n_p.x)/alpha;
-
     }
 
-    //    std::cout <<"Data term"<< data_term<<std::endl;
     return data_term; //debug
 }
 
@@ -197,13 +195,15 @@ cv::Point2i RegionFill::running_through_patches()
 {
     float priority = 0.0f;
     float store=0.0f; // Only to show the priority of the point
-    cv::Point2i coord_priority =border[0].coord; // !!!!!!!!!! Permet de faire marcher malgré une priority nulle
+    cv::Point2i coord_priority;
     for( border_point& bPoint : border)
     {
 
-        if(bPoint.priority > priority)
+        if(bPoint.priority >= priority)
         {
             coord_priority = bPoint.coord;
+            priority = bPoint.priority;
+
             store=bPoint.priority;
         }
     }
@@ -316,7 +316,7 @@ void RegionFill::propagate_texture(cv::Point2i p, cv::Point2i q,int sizex,int si
 
 
 
-cv::Point RegionFill::compute_isophotes(cv::Point2i p)
+cv::Point2f RegionFill::compute_isophotes(cv::Point2i p)
 {
     cv::Mat I;
     cvtColor( im->image(), I, CV_RGB2GRAY );
@@ -354,24 +354,9 @@ cv::Point RegionFill::compute_isophotes(cv::Point2i p)
     cv::Point2i max_loc,new_max_loc;
 
     cv::minMaxLoc(magnitude, &min, &max,NULL,&max_loc);
+    cv::Point2f Ip(grad_x.at<float>(max_loc),grad_y.at<float>(max_loc));
 
-
-    //    magnitude.at<float>(max_loc) =0.0f;
-
-    // Handle the case with 2 maximum positions
-    //        double new_max;
-    //        cv::minMaxLoc(magnitude, &min, &new_max,NULL,&new_max_loc);
-
-    //        if(new_max==max)
-    //        {
-    //            float milieu =round(patch_size/2);
-    //            float distance = sqrt((max_loc.x-milieu)*(max_loc.x-milieu)+(max_loc.y-milieu)*(max_loc.y-milieu));
-    //            float distance_new = sqrt((new_max_loc.x-milieu)*(new_max_loc.x-milieu)+(new_max_loc.y-milieu)*(new_max_loc.y-milieu));
-    //            if(distance >= distance_new)
-    //                return new_max_loc;
-    //        }
-
-    return max_loc;
+    return Ip;
 }
 
 
@@ -412,17 +397,11 @@ void RegionFill::update_alpha(cv::Point2i bp, int sizex, int sizey)
             if(im->get_alpha_pixel(i,j) != SOURCE) //TOUT LES POINTS SONT SOURCES ...
             {
                 im->set_alpha_pixel(i,j) = UPDATED;
-                border_point new_bp;
-                new_bp.coord = cv::Point2i(i,j);
-                new_bp.priority=0.0f;
-                update_border(new_bp.coord,UPDATED); //PB
-                //                    //update confidence
-                //                confidence(i,j) = compute_confidence(bp.coord);
+                update_border( cv::Point2i(i,j),UPDATED);
+                //update confidence
+                confidence.at<uchar>(i,j) = confidence.at<uchar>(bp.x,bp.y);
             }
         }
-    //std::cout << std::endl;
-    // Update the possible border around the new patch. Only the points that
-    //were in the mask can become a border (in the mask like not in the patch ? )
 
     //Taking care of the angles
     if(bp.x-stepx-1 < 0)                { x0=0; }                 else { x0= bp.x-stepx-1; }
@@ -465,11 +444,13 @@ void RegionFill::update_border(cv::Point2i point, int status)
 {
     border_point b;
     b.coord = point;
+    b.priority =0.0f;
     if(status == BORDER)
     {
         border.push_back(b);
         //Update the alpha value
         im->set_alpha_pixel(b.coord.x,b.coord.y) = BORDER;
+        confidence.at<float>(b.coord.x,b.coord.y) = compute_confidence(b.coord);
     }
     else if(status == UPDATED)
     {

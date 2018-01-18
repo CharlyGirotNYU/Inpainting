@@ -16,7 +16,7 @@ int main()
 
     /** Read Image */
     Image image = Image();
-//        image.imread("../../images/lincoln.jpg","../../images/mask_lincoln.png");
+//        image.imread("../../images/lincoln.jpg","../../images/mask_lincoln2.png");
 //    image.imread("../../images/mask_oval.png","../../images/masked_oval.png");
     image.imread("../../images/a.png","../../images/b.png");
 
@@ -29,7 +29,17 @@ int main()
     region.set_image(&image);
     /** Run the algorithm */
     region.run();
-//    region.compute_isophotes(cv::Point2i(54,31));
+
+
+
+
+//    region.init_confidence();
+//    region.init_border();
+//    cv::Point p =cv::Point2i(48,53);
+//    cv::Point p1 =cv::Point2i(64,87);
+//    std::cout<< region.compute_data_term(p)<<" "<<region.compute_confidence(p)<<std::endl;
+//    std::cout<< region.compute_data_term(p1)<<" "<<region.compute_confidence(p1)<<std::endl;
+
 
 //    region.init_border();
 //    region.compute_priority();

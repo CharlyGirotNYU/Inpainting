@@ -35,7 +35,7 @@ public:
     /** Compute Isophote of the image
     *   -L : Luminance of the input image
     *   -alpha : Threshold of isophotes */
-    cv::Point compute_isophotes(cv::Point2i p);
+    cv::Point2f compute_isophotes(cv::Point2i p);
 
     /** Init confidence term Mat*/
     void init_confidence();
@@ -45,7 +45,7 @@ public:
 
     /** Compute data_term */
 
-    float compute_data_term(cv::Point p);
+    float compute_data_term(cv::Point2i p);
 
     /** Compute the vector n_p from the point p and his nieghbors */
     cv::Point2f compute_vector_normal(cv::Point p,  cv::Mat p_neighbors);
