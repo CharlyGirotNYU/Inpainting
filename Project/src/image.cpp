@@ -51,7 +51,7 @@ void Image::imread(std::string image_path, std::string mask_path)
 void Image::imwrite(std::string filename)
 {
     cv::imwrite(filename,image_data);
-    cv::imwrite("alpha.bmp", alpha_data*100); //*100 Just for visualizatio
+    cv::imwrite("alpha.bmp", alpha_data*50); //*100 Just for visualizatio
 }
 
 /** Get Image mat */

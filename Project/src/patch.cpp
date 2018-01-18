@@ -60,18 +60,6 @@ void patch::set_center_and_fill(cv::Point2i center, bool source)
     sizey = y1-y0+1;
 
     patch_data = image_data->image()(cv::Range(x0,x1),cv::Range(y0,y1));
-
-//    for(int i=-stepx; i<=stepx; ++i)
-//        for(int j=-stepy; j<=stepy; ++j)
-//        {
-//            patch_data.at<cv::Vec3b>(i+stepx,j+stepy) = image_data->get_image_pixel(i+center.x,j+center.y);
-//            //            cv::Vec3b a = image_data->get_image_pixel(i+center.x,j+center.y);
-//            if(source)
-//                if(! image_data->get_alpha_pixel(i+center.x,j+center.y) == SOURCE)
-//                {
-//                    patch_data.at<cv::Vec3b>(i+stepx,j+stepy) = cv::Vec3b(0,0,0);
-//                }
-//        }
 }
 
 bool patch::is_whole_patch_source()
@@ -156,7 +144,7 @@ void patch::mask(patch P, bool src)
     cv::Mat mask_alpha = P.get_alpha()(cv::Range(x0,x1),cv::Range(y0,y1));//,cv::Rect(x0,y0,sizex,sizey));
 
     if(src)
-        mask_a = (mask_alpha == SOURCE);
+        mask_a = (mask_alpha == SOURCE) + (mask_alpha == UPDATED);
     else
         mask_a = ((mask_alpha == BORDER )+ (mask_alpha == IN) ); //if updated ?
     patch_data.copyTo(alpha_Q,mask_a);
