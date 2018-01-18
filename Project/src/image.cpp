@@ -39,9 +39,16 @@ void Image::imread(std::string image_path, std::string mask_path)
             if(nb_out == 0)
                 set_alpha_pixel(i,j) = SOURCE;
             else if(nb_out >0 && nb_out<8)
+            {
                 set_alpha_pixel(i,j) = get_mask_pixel(i,j)!=0 ? BORDER : SOURCE;
+                if(get_mask_pixel(i,j)!=0)
+                    set_image_pixel(i,j) = cv::Vec3b(0,0,0);
+            }
             else
+            {
                 set_alpha_pixel(i,j) = IN;
+                set_image_pixel(i,j) = cv::Vec3b(0,0,0);
+            }
         }
 //    cv::imshow("alpha dans image.cpp" , alpha()*100);
 //    cv::waitKey(0);

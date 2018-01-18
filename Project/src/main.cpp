@@ -30,7 +30,7 @@ image.imread("../../images/test_priority.png","../../images/test_priority_mask.p
     region.set_image(&image);
     /** Run the algorithm */
     region.run();
-//    std::cout << region.compute_isophotes(cv::Point2i(33,113)) << std::endl;
+    std::cout << region.compute_isophotes(cv::Point2i(33,113)) << std::endl;
 
 
 
