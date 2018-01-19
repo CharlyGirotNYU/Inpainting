@@ -105,6 +105,7 @@ public:
 
 
 
+
 private:
     /** Pointer to the original image */
     Image *im;
