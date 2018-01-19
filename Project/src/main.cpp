@@ -18,9 +18,9 @@ int main()
     Image image = Image();
     //        image.imread("../../images/lincoln.jpg","../../images/mask_lincoln2.png");
     //    image.imread("../../images/mask_oval.png","../../images/masked_oval.png");
-        image.imread("../../images/a.png","../../images/b.png");
+//        image.imread("../../images/a.png","../../images/b.png");
     //image.imread("../../images/test_filling_order_carre.png","../../images/mask_test_filling_order_carre.png");
-//    image.imread("../../images/test_priority.png","../../images/test_priority_mask.png");
+    image.imread("../../images/test_priority.png","../../images/test_priority_mask.png");
     //image.imread("../../images/c.png","../../images/d.png");
     image.imwrite("test.jpg");
 

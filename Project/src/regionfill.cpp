@@ -6,8 +6,8 @@ patch P;
 
 RegionFill::RegionFill()
 {
-    patch_size_x=9; //has to be impaired
-    patch_size_y=9;
+    patch_size_x=14; //has to be impaired
+    patch_size_y=14;
 }
 
 
@@ -70,10 +70,6 @@ void RegionFill::compute_priority()
             confidence.at<float>(bp.coord.x,bp.coord.y) = compute_confidence(bp.coord);
             bordure.at<float>(bp.coord.x,bp.coord.y) = 255.0f;
             bp.priority =  data_term.at<float>(bp.coord.x,bp.coord.y) * confidence.at<float>(bp.coord.x,bp.coord.y);
-            if((bp.coord.x ==33  && bp.coord.y ==113 ) ||(bp.coord.x ==195 && bp.coord.y ==132 ) )
-                std::cout << bp.coord << bp.priority<<std::endl;
-
-
 
 
             //            std::cout << compute_confidence(bp.coord)<<" "<< compute_data_term(bp.coord)<<std::endl;
@@ -163,10 +159,10 @@ float RegionFill::compute_data_term(cv::Point2i p)
 
         if(y>0 && y<size_y  && x>0 && x<size_x)
         {
-            std::cout << x << y << std::endl;
+//            std::cout << x << y << std::endl;
             if(im->get_alpha_pixel(x,y) == SOURCE || im->get_alpha_pixel(x,y)== UPDATED)
             {
-                std::cout<<"SOURCE OU UPDATED";
+//                std::cout<<"SOURCE OU UPDATED";
                 n_p = -n_p;
             }
         }
@@ -174,7 +170,7 @@ float RegionFill::compute_data_term(cv::Point2i p)
         cv::Point2f Ip =compute_isophotes(p);
         float alpha =255.0f;
         data_term = std::abs(Ip.x * n_p.y - Ip.y * n_p.x)/alpha;
-        std::cout << Ip << n_p <<std::endl;
+//        std::cout << Ip << n_p <<std::endl;
     }
     return data_term; //debug
 }
