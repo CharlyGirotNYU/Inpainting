@@ -107,7 +107,7 @@ float patch::compute_distance_SSD_LAB(patch B)
                 float da = pixPLab.at<uchar>(1) - pixQLab.at<uchar>(1);
                 float db = pixPLab.at<uchar>(2) - pixQLab.at<uchar>(2);
 
-                //            std::cout << "dL " << dL << " da " << da << " db " << db <<std::endl;
+                //std::cout << "dL " << dL << " da " << da << " db " << db <<std::endl;
                 dist += (float)std::sqrt(dL*dL + da*da + db*db);
             }
         }

@@ -37,8 +37,8 @@ int main()
 
     std::cout << region.compute_data_term(cv::Point2i(33,113)) << std::endl;
     std::cout << region.compute_confidence(cv::Point2i(33,113)) << std::endl;
-    std::cout << region.compute_data_term(cv::Point2i(196,132)) << std::endl;
-    std::cout << region.compute_confidence(cv::Point2i(196,132)) << std::endl;
+    std::cout << region.compute_data_term(cv::Point2i(195,132)) << std::endl;
+    std::cout << region.compute_confidence(cv::Point2i(195,132)) << std::endl;
 
 
 
