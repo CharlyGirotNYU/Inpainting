@@ -6,8 +6,8 @@ patch P;
 
 RegionFill::RegionFill()
 {
-    patch_size_x=11; //has to be impaired
-    patch_size_y=11;
+    patch_size_x=9; //has to be impaired
+    patch_size_y=9;
 }
 
 
@@ -17,20 +17,14 @@ void RegionFill::init_confidence()
     double min, max;
     cv::minMaxLoc(im->mask(), &min, &max);
     confidence = cv::Mat::zeros(im->get_rows(),im->get_cols(),CV_32FC1);
-    //    confidence = (im->mask()==0) /*/(im->mask()==0)*/;///255.0f;
 
-
-    cv::Mat a = (im->mask()==0 ) /*+ (im->mask() == 2)*/;
-    for(int j =0; j < im->get_cols();j++)
-    {
-        for(int i =0; i < im->get_rows();i++)
+    cv::Mat a = (im->mask() == SOURCE);
+    for(int j=0; j <im->get_cols(); j++)
+        for(int i=0; i<im->get_rows(); i++)
         {
-            if((int)a.at<uchar>(i,j) > 10)
-            {
+            if(a.at<uchar>(i,j) !=0)
                 confidence.at<float>(i,j)=1.0f;
-            }
         }
-    }
 }
 
 /** get and fill the border */
@@ -93,7 +87,7 @@ void RegionFill::compute_priority()
         cv::imshow("data term",data_term*10);
         //            cv::waitKey(0);
         cv::namedWindow("confidence",cv::WINDOW_NORMAL);
-        cv::imshow("confidence",confidence*100);
+        cv::imshow("confidence",confidence);
         cv::namedWindow("bordure",cv::WINDOW_NORMAL);
         cv::imshow("bordure",bordure);
         cv::waitKey(10);
@@ -109,7 +103,9 @@ float RegionFill::compute_confidence(cv::Point2i p)
 
     int stepx = floor(patch_size_x/2);
     int stepy = floor(patch_size_y/2);
-    float conf=0;
+
+    float conf=0.0f;
+
 
     for(int j=-stepy; j<=stepy; ++j)
         for(int i=-stepx; i<=stepx; ++i)
@@ -126,7 +122,6 @@ float RegionFill::compute_confidence(cv::Point2i p)
                 }
         }
     conf = conf/(patch_size_x*patch_size_y);
-
     return conf;
 }
 
@@ -201,7 +196,6 @@ cv::Point2f RegionFill::compute_vector_normal(cv::Point p,  cv::Mat p_neighbors)
     cv::Point suc = max_loc2;
     p_neighbors.at<float>(max_loc2) = -1.0f;
 
-
     //Compute the middle of line between previous and successive
     cv::Point2f milieu;
     milieu.x  = (suc.x+pre.x)/2.0f-1.0f;
@@ -229,7 +223,6 @@ cv::Point2f RegionFill::compute_vector_normal(cv::Point p,  cv::Mat p_neighbors)
 
     return cv::Point2f(n_p.y/norm, n_p.x/norm);
 }
-
 
 /** Running through patches along the border
     * Maybe we shall return a border point and not a cv::Point2i */
@@ -515,21 +508,17 @@ void RegionFill::update_alpha(cv::Point2i bp, int sizex, int sizey)
     if(bp.y+stepy >= im->get_cols())  { y1= im->get_cols()-1; } else { y1= bp.y+stepy; }
     //    std::cout << "x0 x1 y0 y1 :" << x0 << " "<< x1 << " " << y0 << " " << y1 << std::endl;
 
-    // Update alpha of the points belonging to the patch arround the border point
-
+    float cf = compute_confidence(bp);
     for(int j=y0; j<=y1; ++j)
         for(int i=x0; i<=x1; ++i)
         {
-            //int x = bp.coord.x+i; int y = bp.coord.y+j;
-            //            int x = bp.x+i; int y = bp.y +j;
-            //            std::cout << "Alpha " << (int) im->get_alpha_pixel(i,j) << " for pixel " << i << " " << j << " # ";
             if(im->get_alpha_pixel(i,j) != SOURCE)
             {
                 //                im->set_alpha_pixel(i,j) = UPDATED;
                 update_border( cv::Point2i(i,j),UPDATED);
                 //update confidence
-                if(i!=bp.x && j!= bp.y)
-                    confidence.at<float>(i,j) = confidence.at<float>(bp.x,bp.y);
+                if((i!=bp.x) && (j!= bp.y));
+                    confidence.at<float>(i,j) = cf;// confidence.at<float>(bp.x,bp.y);
             }
         }
 
@@ -583,7 +572,7 @@ void RegionFill::update_border(cv::Point2i point, int status)
         border.push_back(b);
         //Update the alpha value
         im->set_alpha_pixel(b.coord.x,b.coord.y) = BORDER;
-        confidence.at<float>(b.coord.x,b.coord.y) = compute_confidence(b.coord);
+//        confidence.at<float>(b.coord.x,b.coord.y) = compute_confidence(b.coord);
     }
     else if(status == UPDATED)
     {
