@@ -6,8 +6,8 @@ patch P;
 
 RegionFill::RegionFill()
 {
-    patch_size_x=9; //has to be impaired
-    patch_size_y=9;
+    patch_size_x=13; //has to be impaired
+    patch_size_y=13;
 }
 
 
@@ -434,7 +434,8 @@ cv::Point2f RegionFill::compute_isophotes(cv::Point2i p)
    for(int i=0; i<sizex-1; ++i)
        for(int j=0; j<sizey-1; ++j)
        {
-           if(im->get_alpha_pixel(x0+i+1, y0+j) == BORDER || im->get_alpha_pixel(x0+i, y0+j+1) == BORDER)
+           if(im->get_alpha_pixel(x0+i+1, y0+j) == BORDER || im->get_alpha_pixel(x0+i-1, y0+j) == BORDER
+                   || im->get_alpha_pixel(x0+i, y0+j+1) == BORDER || im->get_alpha_pixel(x0+i, y0+j-1) == BORDER)
                mask_source.at<uchar>(i,j)=0;
        }
 
