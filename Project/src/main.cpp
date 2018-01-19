@@ -21,8 +21,8 @@ int main()
 //        image.imread("../../images/a.png","../../images/b.png");
     //image.imread("../../images/test_filling_order_carre.png","../../images/mask_test_filling_order_carre.png");
     image.imread("../../images/test_priority.png","../../images/test_priority_mask.png");
-    //image.imread("../../images/c.png","../../images/d.png");
-    image.imwrite("test.jpg");
+//    image.imread("../../images/c.png","../../images/d.png");
+    image.imwrite("test.bmp");
 
     /** Create the instance for the algorithm */
     RegionFill region = RegionFill();
@@ -39,6 +39,8 @@ int main()
     std::cout << region.compute_confidence(cv::Point2i(33,113)) << std::endl;
     std::cout << region.compute_data_term(cv::Point2i(196,132)) << std::endl;
     std::cout << region.compute_confidence(cv::Point2i(196,132)) << std::endl;
+
+
 
 //    std::cout << region.compute_data_term(cv::Point2i(33,113)) << std::endl;
 //    std::cout << region.compute_confidence(cv::Point2i(195,132)) << std::endl;

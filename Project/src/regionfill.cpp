@@ -6,8 +6,8 @@ patch P;
 
 RegionFill::RegionFill()
 {
-    patch_size_x=14; //has to be impaired
-    patch_size_y=14;
+    patch_size_x=7; //has to be impaired
+    patch_size_y=7;
 }
 
 
@@ -288,7 +288,7 @@ cv::Point2i RegionFill::find_exemplar_patch(cv::Point2i p)
                     Q.mask(P,true); //true ==> get points in the source
                     distance = P.compute_distance_SSD_LAB(Q);
 
-                    if(distance < distance_max && distance != 0.0f) //minimise la distance
+                    if(distance <= distance_max)// && distance != 0.0f) //minimise la distance
                     {
                         distance_max = distance;
                         coord_center_patchQ = cv::Point2i(u,v);
@@ -297,6 +297,7 @@ cv::Point2i RegionFill::find_exemplar_patch(cv::Point2i p)
                 }
             }
         }
+    std::cout << "distance max " << distance_max << std::endl;
 
     return coord_center_patchQ;
 }
@@ -312,23 +313,14 @@ void RegionFill::propagate_texture(cv::Point2i p, cv::Point2i q,int sizex,int si
     if(p.x+stepx >= im->get_rows())  { x1= im->get_rows()-1; } else { x1= p.x+stepx; }
     if(p.y-stepy < 0)                { y0=0; }                 else { y0= p.y-stepy; }
     if(p.y+stepy >= im->get_cols())  { y1= im->get_cols()-1; } else { y1= p.y+stepy; }
-    //    std::cout << "x0 x1 y0 y1 :" << x0 << " "<< x1 << " " << y0 << " " << y1 << std::endl;
-    //    std::cout << im->get_rows() << " " << im->get_cols() << std::endl;
-    //    std::cout << "" << std::endl ;
-
-    //TODO : MASK q01
 
     cv::Mat Q = im->image()(cv::Range(q.x-stepx,q.x+stepx),cv::Range(q.y-stepy,q.y+stepy));//sizex,sizey));
-
-    //    cv::imshow("Q",Q);
-    //    cv::waitKey(0);
 
     sizex = x1-x0+1;
     sizey = y1-y0+1;
 
-
-
     std::cout << "p " << p << std::endl;
+    std::cout << "q " << q << std::endl;
     std::cout << "x0 x1 " << x0 << " " << x1 <<std::endl;
     std::cout << "y0 y1 " << y0 << " " << y1 <<std::endl;
     cv::Mat mask_P_source = (im->alpha()(cv::Range(x0,x1),cv::Range(y0,y1)) == SOURCE)
@@ -350,7 +342,8 @@ void RegionFill::propagate_texture(cv::Point2i p, cv::Point2i q,int sizex,int si
     Q.copyTo(Q_in,mask_P_in);
 
     cv::Mat new_patch = cv::Mat::zeros(sizex,sizey,im->image().type());
-    new_patch = P_source + Q_in ;
+    cv::add(P_source,Q_in,new_patch);
+    //    new_patch = P_source + Q_in ;
     //    cv::add(P_source,Q,new_patch);
     //    im->image()(cv::Range(x0,x1),cv::Range(y0,y1)).copyTo(Q_in, mask_P_in);
 
@@ -373,7 +366,7 @@ void RegionFill::propagate_texture(cv::Point2i p, cv::Point2i q,int sizex,int si
     //    Q.copyTo(alpha_Q,mask_a);
     //    alpha_Q(cv::Range(0,sizex-1),cv::Range(0,sizey-1)).copyTo(im->image()(cv::Range(x0,x1),cv::Range(y0,y1)));
     //    new_patch.copyTo(im->image()(cv::Range(x0,x1),cv::Range(y0,y1)));
-    new_patch.copyTo(im->image()(cv::Range(p.x-stepx,p.x+stepx),cv::Range(p.y-stepy,p.y+stepy)));
+    new_patch.copyTo(im->image()(cv::Range(x0,x1),cv::Range(y0,y1)));
 }
 
 
@@ -663,7 +656,7 @@ void RegionFill::run()
     init_confidence();
     init_border();
     while(!whole_image_processed())
-        //            for(int k=0; k< 3; k++)
+//        //            for(int k=0; k< 3; k++)
     {
 
 
@@ -687,11 +680,16 @@ void RegionFill::run()
         im->imwrite("result2.bmp");
 
     }
-    //    im->imwrite("result.png");
+        im->imwrite("result.png");
     //    exit(0);
 
 
-    compute_priority();
-
+//    compute_priority();
+//    cv::Point2i point_priority = cv::Point2i(196,132);
+//    cv::Point2i exemplar = find_exemplar_patch(point_priority);
+//    std::cout << exemplar << std::endl;
+//    propagate_texture(point_priority, exemplar, P.get_size().x, P.get_size().y);
+//    im->imwrite("result2.bmp");
+    //    196,132
 }
 
