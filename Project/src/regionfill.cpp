@@ -277,22 +277,24 @@ cv::Point2i RegionFill::find_exemplar_patch(cv::Point2i p)
         for(int u=stepx+1; u< im->get_rows()-stepx-1; u++)
         {
             float distance = 0.0f;
-            Q.set_center_and_fill(cv::Point2i(u,v),false);
+            bool valid = Q.set_center_and_fill(cv::Point2i(u,v),false);
 
             //            std::cout << "taille patch Q apres remplissage : " << Q.get_size().x << " " << Q.get_size().y << std::endl;
-
-            if(Q.is_whole_patch_source()) //check if Q is all in the source
+            if(valid == true)
             {
-                //                std::cout << "coordonnées patch Q : " << u << " " << v << std::endl;
-                Q.mask(P,true); //true ==> get points in the source
-                distance = P.compute_distance_SSD_LAB(Q);
-
-                if(distance < distance_max && distance != 0.0f) //minimise la distance
+                if(Q.is_whole_patch_source()) //check if Q is all in the source
                 {
-                    distance_max = distance;
-                    coord_center_patchQ = cv::Point2i(u,v);
-                }
+                    //                std::cout << "coordonnées patch Q : " << u << " " << v << std::endl;
+                    Q.mask(P,true); //true ==> get points in the source
+                    distance = P.compute_distance_SSD_LAB(Q);
 
+                    if(distance < distance_max && distance != 0.0f) //minimise la distance
+                    {
+                        distance_max = distance;
+                        coord_center_patchQ = cv::Point2i(u,v);
+                    }
+
+                }
             }
         }
 
@@ -302,7 +304,6 @@ cv::Point2i RegionFill::find_exemplar_patch(cv::Point2i p)
 
 void RegionFill::propagate_texture(cv::Point2i p, cv::Point2i q,int sizex,int sizey)
 {
-
     int stepx = floor(sizex/2);
     int stepy = floor(sizey/2);
 
@@ -673,8 +674,8 @@ void RegionFill::run()
         std::cout <<  "point priority " << point_priority << std::endl;
         cv::Point2i point_exemplar = find_exemplar_patch(point_priority);
         std::cout << "point exemplar "  << point_exemplar << std::endl;
-        propagate_texture(point_priority, point_exemplar,P.get_size().x,P.get_size().y);
-        update_alpha(point_priority, P.get_size().x,P.get_size().y); //Actually : update alpha, border, confidence
+        propagate_texture(point_priority, point_exemplar, P.get_size().x, P.get_size().y);
+        update_alpha(point_priority, P.get_size().x, P.get_size().y); //Actually : update alpha, border, confidence
 
         //        border.clear();
         //        init_border();

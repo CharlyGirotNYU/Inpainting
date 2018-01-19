@@ -11,7 +11,7 @@ public:
     patch();
     patch(Image *im,  int x, int y ,cv::Point2i center,bool source);
     patch(Image *im, int x, int y);
-    void set_center_and_fill(cv::Point2i center,bool source);
+    bool set_center_and_fill(cv::Point2i center,bool source);
 
 
     void mask(patch P, bool src);
@@ -32,7 +32,7 @@ public:
     /** Get center of the patch */
     cv::Point2i get_center() {return center_data; }
 
-     cv::Point2i get_size(){return cv::Point2i(sizex,sizey);}
+    cv::Point2i get_size(){return cv::Point2i(sizex,sizey);}
 
 
 private:
