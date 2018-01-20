@@ -6,8 +6,8 @@ patch P;
 
 RegionFill::RegionFill()
 {
-    patch_size_x=13; //has to be impaired
-    patch_size_y=13;
+    patch_size_x=9; //has to be impaired
+    patch_size_y=9;
 }
 
 
@@ -271,6 +271,10 @@ cv::Point2i RegionFill::find_exemplar_patch(cv::Point2i p)
     //        for(int u=0; u< im->get_rows()-1; u++)
     for(int v=stepy+1; v< im->get_cols()-stepy-1; v++)
         for(int u=stepx+1; u< im->get_rows()-stepx-1; u++)
+//    int offset_y = 2*patch_size_y;
+//    int offset_x = 2*patch_size_x;
+//    for(int v = p.y-offset_y ; v<= p.y+offset_y; ++v )
+//        for(int u = p.x-offset_x ; u<= p.x+offset_x; ++u )
         {
             float distance = 0.0f;
             bool valid = Q.set_center_and_fill(cv::Point2i(u,v),false);
@@ -319,59 +323,68 @@ void RegionFill::propagate_texture(cv::Point2i p, cv::Point2i q, int sizex, int 
 
     cv::Mat Q = im->image()(cv::Range(q.x-stepx,q.x+stepx),cv::Range(q.y-stepy,q.y+stepy));//sizex,sizey));
 
-//    sizex = x1-x0+1;
-//    sizey = y1-y0+1;
+
 
     int x0 = p.x-stepx;
     int x1 = p.x+stepx;
     int y0 = p.y-stepy;
     int y1 = p.y+stepy;
+//        sizex = x1-x0+1;
+//        sizey = y1-y0+1;
+
+
+    for(int j=0;j<sizey;++j)
+        for(int i=0; i<sizex;++i)
+        {
+            if(im->get_alpha_pixel(p.x-stepx+i,p.y-stepy+j)==IN ||im->get_alpha_pixel(p.x-stepx+i,p.y-stepy+j)==BORDER )
+                im->set_image_pixel(p.x-stepx+i,p.y-stepy+j) = im->get_image_pixel(q.x-stepx+i,q.y-stepy+j);
+        }
     //std::cout << "p " << p << std::endl;
     //std::cout << "q " << q << std::endl;
     //std::cout << "x0 x1 " << x0 << " " << x1 <<std::endl;
     //std::cout << "y0 y1 " << y0 << " " << y1 <<std::endl;
-    cv::Mat mask_P_source = (im->alpha()(cv::Range(x0,x1),cv::Range(y0,y1)) == SOURCE)
-            + (im->alpha()(cv::Range(x0,x1),cv::Range(y0,y1)) == UPDATED);
-    cv::Mat mask_P_in = (im->alpha()(cv::Range(x0,x1),cv::Range(y0,y1)) == BORDER)
-            + (im->alpha()(cv::Range(x0,x1),cv::Range(y0,y1)) == IN);
+//    cv::Mat mask_P_source = (im->alpha()(cv::Range(x0,x1),cv::Range(y0,y1)) == SOURCE)
+//            + (im->alpha()(cv::Range(x0,x1),cv::Range(y0,y1)) == UPDATED);
+//    cv::Mat mask_P_in = (im->alpha()(cv::Range(x0,x1),cv::Range(y0,y1)) == BORDER)
+//            + (im->alpha()(cv::Range(x0,x1),cv::Range(y0,y1)) == IN);
 
-    //    cv::imshow("Q",mask_P_source);
-    //    cv::waitKey(0);
-    //    cv::imshow("Q",mask_P_in);
-    //    cv::waitKey(0);
+//    //    cv::imshow("Q",mask_P_source);
+//    //    cv::waitKey(0);
+//    //    cv::imshow("Q",mask_P_in);
+//    //    cv::waitKey(0);
 
-    cv::Mat P_source = cv::Mat::zeros(sizex,sizey,im->image().type());
-    cv::Mat Q_in = cv::Mat::zeros(sizex,sizey,im->image().type());
+//    cv::Mat P_source = cv::Mat::zeros(sizex,sizey,im->image().type());
+//    cv::Mat Q_in = cv::Mat::zeros(sizex,sizey,im->image().type());
 
-    im->image()(cv::Range(x0,x1),cv::Range(y0,y1)).copyTo(P_source, mask_P_source);
-    Q.copyTo(Q_in,mask_P_in);
+//    im->image()(cv::Range(x0,x1),cv::Range(y0,y1)).copyTo(P_source, mask_P_source);
+//    Q.copyTo(Q_in,mask_P_in);
 
-    cv::Mat new_patch = cv::Mat::zeros(sizex,sizey,im->image().type());
-    cv::add(P_source,Q_in,new_patch);
-    //    new_patch = P_source + Q_in ;
-    //    cv::add(P_source,Q,new_patch);
-    //    im->image()(cv::Range(x0,x1),cv::Range(y0,y1)).copyTo(Q_in, mask_P_in);
+//    cv::Mat new_patch = cv::Mat::zeros(sizex,sizey,im->image().type());
+//    cv::add(P_source,Q_in,new_patch);
+//    //    new_patch = P_source + Q_in ;
+//    //    cv::add(P_source,Q,new_patch);
+//    //    im->image()(cv::Range(x0,x1),cv::Range(y0,y1)).copyTo(Q_in, mask_P_in);
 
-    //    cv::imshow("Q",P_source);
-    //    cv::waitKey(0);
-    //    cv::imshow("Q",Q_in);
-    //    cv::waitKey(0);
-    //    cv::imshow("Q",new_patch);
-    //    cv::waitKey(0);
-    //    std::cout << Q_in.at<cv::Vec3b>(14,0) <<std::endl;
+//    //    cv::imshow("Q",P_source);
+//    //    cv::waitKey(0);
+//    //    cv::imshow("Q",Q_in);
+//    //    cv::waitKey(0);
+//    //    cv::imshow("Q",new_patch);
+//    //    cv::waitKey(0);
+//    //    std::cout << Q_in.at<cv::Vec3b>(14,0) <<std::endl;
 
 
 
-    //    patch P(im->image(),)
-    //    cv::Mat alpha_Q = cv::Mat::zeros(sizex,sizey,im->alpha().type());
-    //    cv::Mat mask_a = cv::Mat::zeros(sizex,sizey,im->alpha().type());
-    //    cv::Mat mask_alpha = cv::Mat(im->alpha(),cv::Rect(x0,y0,sizex,sizey));
+//    //    patch P(im->image(),)
+//    //    cv::Mat alpha_Q = cv::Mat::zeros(sizex,sizey,im->alpha().type());
+//    //    cv::Mat mask_a = cv::Mat::zeros(sizex,sizey,im->alpha().type());
+//    //    cv::Mat mask_alpha = cv::Mat(im->alpha(),cv::Rect(x0,y0,sizex,sizey));
 
-    //    mask_a = (mask_alpha == IN) + (mask_alpha == BORDER);
-    //    Q.copyTo(alpha_Q,mask_a);
-    //    alpha_Q(cv::Range(0,sizex-1),cv::Range(0,sizey-1)).copyTo(im->image()(cv::Range(x0,x1),cv::Range(y0,y1)));
-    //    new_patch.copyTo(im->image()(cv::Range(x0,x1),cv::Range(y0,y1)));
-    new_patch.copyTo(im->image()(cv::Range(x0,x1),cv::Range(y0,y1)));
+//    //    mask_a = (mask_alpha == IN) + (mask_alpha == BORDER);
+//    //    Q.copyTo(alpha_Q,mask_a);
+//    //    alpha_Q(cv::Range(0,sizex-1),cv::Range(0,sizey-1)).copyTo(im->image()(cv::Range(x0,x1),cv::Range(y0,y1)));
+//    //    new_patch.copyTo(im->image()(cv::Range(x0,x1),cv::Range(y0,y1)));
+//    new_patch.copyTo(im->image()(cv::Range(x0,x1),cv::Range(y0,y1)));
 }
 
 
