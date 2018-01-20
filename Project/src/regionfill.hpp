@@ -10,8 +10,6 @@
 struct border_point
 {
     cv::Point2i  coord;
-    //    float        confidence;
-    float  data_term;
     float priority;
 };
 
@@ -24,28 +22,12 @@ public:
     void init_border();
 
 
-    /** Get current border */
-    std::vector<border_point> get_border() const;
-    /** Set the current border */
-    void set_border(std::vector<border_point>& b);
 
-    /** Get current border by index */
-    border_point get_border(unsigned int i) const;
-    /** Get border point by coordinates */
-    border_point get_border(cv::Point2i p);
-
-    /** Set the pointer to the parent Image */
-    void set_image(Image* image);
-    /** Get Original Image */
-    Image get_image() const;
-
-    /** Get size of the border */
-    int get_border_size() const;
 
     /** Update alpha  after a patch copy centered at bp */
-    void update_alpha();
+    void update_alpha(cv::Point2i bp,int sizex,int sizey);
     /** Update the border */
-    void update_border(border_point point, int status); // Can we rename it : update_alpha_status ? cause it's not only updating the border points
+    void update_border(cv::Point2i point, int status); // Can we rename it : update_alpha_status ? cause it's not only updating the border points
     /** Return true if the point if a new border, else false */
     bool is_new_border(int u, int v);
 
@@ -53,7 +35,7 @@ public:
     /** Compute Isophote of the image
     *   -L : Luminance of the input image
     *   -alpha : Threshold of isophotes */
-    void compute_isophotes();
+    cv::Point2f compute_isophotes(cv::Point2i p);
 
     /** Init confidence term Mat*/
     void init_confidence();
@@ -63,7 +45,7 @@ public:
 
     /** Compute data_term */
 
-    float compute_data_term(cv::Point p);
+    float compute_data_term(cv::Point2i p);
 
     /** Compute the vector n_p from the point p and his nieghbors */
     cv::Point2f compute_vector_normal(cv::Point p,  cv::Mat p_neighbors);
@@ -91,13 +73,37 @@ public:
     cv::Point2i find_exemplar_patch(cv::Point2i p);
 
     /** Compute distance (SSD) between 2 RGB patch of size_patch in the CIELab Color Space */
-    float compute_patch_SSD_LAB(cv::Mat A, cv::Mat B);
+//    float compute_patch_SSD_LAB(cv::Mat A, cv::Mat B);
 
     /** Propagate texture from exemplar Patch to patch on the border */
-    void propagate_texture(cv::Point2i p, cv::Point2i q);
+    void propagate_texture(cv::Point2i p, cv::Point2i q, int sizex, int sizey);
 
     /** Run the algo */
     void run();
+
+
+    /** Get Original Image */
+    Image get_image() const                         {return *im;}
+    /** Get current border */
+    std::vector<border_point> get_border() const    {return border;}
+    /** Get current border by index */
+    border_point get_border(unsigned int i) const   {return border[i];}
+    /** Get size of the border */
+    int get_border_size() const                     {return border.size();}
+    /** Set the pointer to the parent Image */
+    void set_image(Image* image)                    { im = image;}
+    /** Set the current border */
+    void set_border(std::vector<border_point>& b)   {border =b;}
+
+
+    /** Get border point by coordinates */ //NOT IMPLEMENTED ?
+    border_point get_border(cv::Point2i p);
+
+
+
+
+
+
 
 
 private:
@@ -114,7 +120,8 @@ private:
     cv::Mat isophotes_data_orientation;
 
     /** Size of a patch (width=height)(9*9 in Creiminisi)*/
-    int patch_size;
+    int patch_size_x;
+    int patch_size_y;
 
     /** Patch */
     //    cv::Mat patch; !! attention aux conflits de noms

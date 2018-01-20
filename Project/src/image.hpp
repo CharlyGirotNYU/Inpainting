@@ -36,17 +36,20 @@ public:
     /** Get alpha Map */
     cv::Mat  alpha() const;
 
+    /** Set Image */
+    cv::Mat& image();
+
     /** Get Image value at pixel u,v */
-    cv::Vec3b get_image(int u, int v) const;
+    cv::Vec3b get_image_pixel(int u, int v) const;
     /** Get Mask value at pixel u,v */
-     uchar mask(int u, int v) const;
+     uchar get_mask_pixel(int u, int v) const;
     /** Get alpha value at pixel u,v */
-    uchar get_alpha(int u, int v) const;
+    uchar get_alpha_pixel(int u, int v) const;
 
     /** Set Image value at pixel u,v */
-    uchar& image(int u, int v);
+    cv::Vec3b& set_image_pixel(int u, int v);
     /** Set Alpha value at pixel u,v */
-    uchar& alpha(int u, int v);
+    uchar& set_alpha_pixel(int u, int v);
 
     /** Get image rows */
     int const& get_rows() const;

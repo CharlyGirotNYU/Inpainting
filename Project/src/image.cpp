@@ -37,11 +37,18 @@ void Image::imread(std::string image_path, std::string mask_path)
             int nb_out = num_outside_mask(i,j);
 
             if(nb_out == 0)
-                alpha(i,j) = SOURCE;
+                set_alpha_pixel(i,j) = SOURCE;
             else if(nb_out >0 && nb_out<8)
-                alpha(i,j) = mask(i,j)!=0 ? BORDER : SOURCE;
+            {
+                set_alpha_pixel(i,j) = get_mask_pixel(i,j)!=0 ? BORDER : SOURCE;
+                if(get_mask_pixel(i,j)!=0)
+                    set_image_pixel(i,j) = cv::Vec3b(0,0,0);
+            }
             else
-                alpha(i,j) = IN;
+            {
+                set_alpha_pixel(i,j) = IN;
+                set_image_pixel(i,j) = cv::Vec3b(0,0,0);
+            }
         }
 //    cv::imshow("alpha dans image.cpp" , alpha()*100);
 //    cv::waitKey(0);
@@ -51,48 +58,53 @@ void Image::imread(std::string image_path, std::string mask_path)
 void Image::imwrite(std::string filename)
 {
     cv::imwrite(filename,image_data);
-    cv::imwrite("alpha.bmp", alpha_data*100); //*100 Just for visualizatio
+    cv::imwrite("alpha.bmp", alpha_data*50); //*100 Just for visualizatio
 }
 
-
+/** Get Image mat */
 cv::Mat Image::image() const
 {
     return image_data;
 }
+cv::Mat& Image::image() {return image_data;}
+
+/** Get mask mat */
 cv::Mat Image::mask() const
 {
     return mask_data;
 }
-
+/** Get alpha mat */
 cv::Mat Image::alpha() const
 {
     return alpha_data;
 }
 
-cv::Vec3b Image::get_image(int u, int v) const
+/** Get image_data pixel */
+cv::Vec3b Image::get_image_pixel(int u, int v) const
 {
 //    std::cout << "get "<< std::endl;
     return image_data.at<cv::Vec3b>(u,v);
 }
 
-uchar Image::mask(int u, int v) const
+/** Get mask pixel*/
+uchar Image::get_mask_pixel(int u, int v) const
 {
     return mask_data.at<uchar>(u,v);
 }
-
-uchar Image::get_alpha(int u, int v) const
+/** Get alpha pixel */
+uchar Image::get_alpha_pixel(int u, int v) const
 {
 //    std::cout << "get "<< std::endl;
     return alpha_data.at<uchar>(u,v);
 }
-
-uchar &Image::image(int u, int v)
+/** Set image pixel */
+cv::Vec3b &Image::set_image_pixel(int u, int v)
 {
 //    std::cout << "set"<<std::endl;
-    return image_data.at<uchar>(u,v);
+    return image_data.at<cv::Vec3b>(u,v);
 }
-
-uchar &Image::alpha(int u, int v)
+/** Set alpha pixel */
+uchar &Image::set_alpha_pixel(int u, int v)
 {
 //    std::cout << "set"<<std::endl;
     return alpha_data.at<uchar>(u,v);
@@ -120,7 +132,7 @@ int Image::num_outside_mask(int u, int v)
             if(!(i==0 && j == 0)) //don't test the center pixel
                 if(u+i>=0 && u+i<Nu) //Check if within the image region/size
                     if( v+j<Nv && v+j>=0)
-                        if(mask(u+i,v+j) != 0)
+                        if(get_mask_pixel(u+i,v+j) != 0)
                             nb_out++;
         }
     return nb_out;
