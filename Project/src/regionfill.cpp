@@ -156,10 +156,10 @@ float RegionFill::compute_data_term(cv::Point2i p)
 
         if(y>0 && y<size_y  && x>0 && x<size_x)
         {
-//            std::cout << x << y << std::endl;
+            //            std::cout << x << y << std::endl;
             if(im->get_alpha_pixel(x,y) == SOURCE || im->get_alpha_pixel(x,y)== UPDATED)
             {
-//                std::cout<<"SOURCE OU UPDATED";
+                //                std::cout<<"SOURCE OU UPDATED";
                 n_p = -n_p;
             }
         }
@@ -167,7 +167,7 @@ float RegionFill::compute_data_term(cv::Point2i p)
         cv::Point2f Ip =compute_isophotes(p);
         float alpha =255.0f;
         data_term = std::abs(Ip.x * n_p.x + Ip.y * n_p.y)/alpha;
-//        std::cout << Ip << n_p <<std::endl;
+        //        std::cout << Ip << n_p <<std::endl;
     }
     return data_term; //debug
 }
@@ -253,40 +253,46 @@ cv::Point2i RegionFill::running_through_patches()
 
 cv::Point2i RegionFill::find_exemplar_patch(cv::Point2i p)
 {
+    std::cout << " % 1 ";
     cv::Point2i coord_center_patchQ;
 
     P = patch(im,patch_size_x,patch_size_y,p,true);
     patch Q = patch(im,P.get_size().x,P.get_size().y);
 
-    //    std::cout << "taille patch P apres : " << P.get_size().x << " " << P.get_size().y << std::endl;
-    //    std::cout << "taille patch Q apres : " << Q.get_size().x << " " << Q.get_size().y << std::endl;
+
     int stepx = floor(P.get_size().x/2);
     int stepy = floor(P.get_size().y/2);
 
-    //    std::cout << "step " << stepx << " " << stepy << std::endl;
 
     float distance_max = 10e+7;
 
     //    for(int v=0; v< im->get_cols()-1; v++)
     //        for(int u=0; u< im->get_rows()-1; u++)
-    for(int v=stepy+1; v< im->get_cols()-stepy-1; v++)
-        for(int u=stepx+1; u< im->get_rows()-stepx-1; u++)
-//    int offset_y = 2*patch_size_y;
-//    int offset_x = 2*patch_size_x;
-//    for(int v = p.y-offset_y ; v<= p.y+offset_y; ++v )
-//        for(int u = p.x-offset_x ; u<= p.x+offset_x; ++u )
+        for(int v=5; v< im->get_cols()-5; v++)
+            for(int u=5; u< im->get_rows()-5; u++)
+
+//    int offset_x = 3000+5*stepx;
+//    int offset_y =3000;
+//    int x0=0,y0=0,x1=0,y1=0;
+//    if(p.x-offset_x < stepx)                { x0=stepx+1; }                 else { x0= p.x-offset_x; }
+//    if(p.x+offset_x >= im->get_rows()-stepx)  { x1= im->get_rows()-1-stepx; } else { x1= p.x+offset_x; }
+//    if(p.y-offset_y < stepy)                { y0=stepy+1; }                 else { y0= p.y-offset_y; }
+//    if(p.y+offset_y >= im->get_cols()-stepy)  { y1= im->get_cols()-1-stepy; } else { y1= p.y+offset_y; }
+//    std::cout <<" x0 " << x0 <<" x1 " << x1 << " y0 " << y0 << " y1 " << y1 << std::endl;
+//    for(int u=x0 ;u<=x1;++u)
+//        for(int v=y0 ;v<=y0;++v)
         {
+//            std::cout <<"u " << u << " v " << v << " # ";
             float distance = 0.0f;
             bool valid = Q.set_center_and_fill(cv::Point2i(u,v),false);
 
-            //            std::cout << "taille patch Q apres remplissage : " << Q.get_size().x << " " << Q.get_size().y << std::endl;
             if(valid == true)
             {
                 if(Q.is_whole_patch_source()) //check if Q is all in the source
                 {
-                    //                std::cout << "coordonnées patch Q : " << u << " " << v << std::endl;
-                    Q.mask(P,true); //true ==> get points in the source
+//                    Q.mask(P,true); //true ==> get points in the source
                     distance = P.compute_distance_SSD_LAB(Q);
+
 
                     if(distance < distance_max)// && distance != 0.0f) //minimise la distance
                     {
@@ -297,7 +303,7 @@ cv::Point2i RegionFill::find_exemplar_patch(cv::Point2i p)
                 }
             }
         }
-    //std::cout << "distance max " << distance_max << std::endl;
+        std::cout << " ditance " << distance_max << " ";
 
     return coord_center_patchQ;
 }
@@ -315,11 +321,11 @@ void RegionFill::propagate_texture(cv::Point2i p, cv::Point2i q, int sizex, int 
     }
 
     // Ne pas rechanger la taille du patch -> error
-//    int x0=0,y0=0,x1=0,y1=0;
-//    if(p.x-stepx < 0)                { x0=0; }                 else { x0= p.x-stepx; }
-//    if(p.x+stepx >= im->get_rows())  { x1= im->get_rows()-1; } else { x1= p.x+stepx; }
-//    if(p.y-stepy < 0)                { y0=0; }                 else { y0= p.y-stepy; }
-//    if(p.y+stepy >= im->get_cols())  { y1= im->get_cols()-1; } else { y1= p.y+stepy; }
+    //    int x0=0,y0=0,x1=0,y1=0;
+    //    if(p.x-stepx < 0)                { x0=0; }                 else { x0= p.x-stepx; }
+    //    if(p.x+stepx >= im->get_rows())  { x1= im->get_rows()-1; } else { x1= p.x+stepx; }
+    //    if(p.y-stepy < 0)                { y0=0; }                 else { y0= p.y-stepy; }
+    //    if(p.y+stepy >= im->get_cols())  { y1= im->get_cols()-1; } else { y1= p.y+stepy; }
 
     cv::Mat Q = im->image()(cv::Range(q.x-stepx,q.x+stepx),cv::Range(q.y-stepy,q.y+stepy));//sizex,sizey));
 
@@ -329,8 +335,8 @@ void RegionFill::propagate_texture(cv::Point2i p, cv::Point2i q, int sizex, int 
     int x1 = p.x+stepx;
     int y0 = p.y-stepy;
     int y1 = p.y+stepy;
-//        sizex = x1-x0+1;
-//        sizey = y1-y0+1;
+    //        sizex = x1-x0+1;
+    //        sizey = y1-y0+1;
 
 
     for(int j=0;j<sizey;++j)
@@ -343,48 +349,48 @@ void RegionFill::propagate_texture(cv::Point2i p, cv::Point2i q, int sizex, int 
     //std::cout << "q " << q << std::endl;
     //std::cout << "x0 x1 " << x0 << " " << x1 <<std::endl;
     //std::cout << "y0 y1 " << y0 << " " << y1 <<std::endl;
-//    cv::Mat mask_P_source = (im->alpha()(cv::Range(x0,x1),cv::Range(y0,y1)) == SOURCE)
-//            + (im->alpha()(cv::Range(x0,x1),cv::Range(y0,y1)) == UPDATED);
-//    cv::Mat mask_P_in = (im->alpha()(cv::Range(x0,x1),cv::Range(y0,y1)) == BORDER)
-//            + (im->alpha()(cv::Range(x0,x1),cv::Range(y0,y1)) == IN);
+    //    cv::Mat mask_P_source = (im->alpha()(cv::Range(x0,x1),cv::Range(y0,y1)) == SOURCE)
+    //            + (im->alpha()(cv::Range(x0,x1),cv::Range(y0,y1)) == UPDATED);
+    //    cv::Mat mask_P_in = (im->alpha()(cv::Range(x0,x1),cv::Range(y0,y1)) == BORDER)
+    //            + (im->alpha()(cv::Range(x0,x1),cv::Range(y0,y1)) == IN);
 
-//    //    cv::imshow("Q",mask_P_source);
-//    //    cv::waitKey(0);
-//    //    cv::imshow("Q",mask_P_in);
-//    //    cv::waitKey(0);
+    //    //    cv::imshow("Q",mask_P_source);
+    //    //    cv::waitKey(0);
+    //    //    cv::imshow("Q",mask_P_in);
+    //    //    cv::waitKey(0);
 
-//    cv::Mat P_source = cv::Mat::zeros(sizex,sizey,im->image().type());
-//    cv::Mat Q_in = cv::Mat::zeros(sizex,sizey,im->image().type());
+    //    cv::Mat P_source = cv::Mat::zeros(sizex,sizey,im->image().type());
+    //    cv::Mat Q_in = cv::Mat::zeros(sizex,sizey,im->image().type());
 
-//    im->image()(cv::Range(x0,x1),cv::Range(y0,y1)).copyTo(P_source, mask_P_source);
-//    Q.copyTo(Q_in,mask_P_in);
+    //    im->image()(cv::Range(x0,x1),cv::Range(y0,y1)).copyTo(P_source, mask_P_source);
+    //    Q.copyTo(Q_in,mask_P_in);
 
-//    cv::Mat new_patch = cv::Mat::zeros(sizex,sizey,im->image().type());
-//    cv::add(P_source,Q_in,new_patch);
-//    //    new_patch = P_source + Q_in ;
-//    //    cv::add(P_source,Q,new_patch);
-//    //    im->image()(cv::Range(x0,x1),cv::Range(y0,y1)).copyTo(Q_in, mask_P_in);
+    //    cv::Mat new_patch = cv::Mat::zeros(sizex,sizey,im->image().type());
+    //    cv::add(P_source,Q_in,new_patch);
+    //    //    new_patch = P_source + Q_in ;
+    //    //    cv::add(P_source,Q,new_patch);
+    //    //    im->image()(cv::Range(x0,x1),cv::Range(y0,y1)).copyTo(Q_in, mask_P_in);
 
-//    //    cv::imshow("Q",P_source);
-//    //    cv::waitKey(0);
-//    //    cv::imshow("Q",Q_in);
-//    //    cv::waitKey(0);
-//    //    cv::imshow("Q",new_patch);
-//    //    cv::waitKey(0);
-//    //    std::cout << Q_in.at<cv::Vec3b>(14,0) <<std::endl;
+    //    //    cv::imshow("Q",P_source);
+    //    //    cv::waitKey(0);
+    //    //    cv::imshow("Q",Q_in);
+    //    //    cv::waitKey(0);
+    //    //    cv::imshow("Q",new_patch);
+    //    //    cv::waitKey(0);
+    //    //    std::cout << Q_in.at<cv::Vec3b>(14,0) <<std::endl;
 
 
 
-//    //    patch P(im->image(),)
-//    //    cv::Mat alpha_Q = cv::Mat::zeros(sizex,sizey,im->alpha().type());
-//    //    cv::Mat mask_a = cv::Mat::zeros(sizex,sizey,im->alpha().type());
-//    //    cv::Mat mask_alpha = cv::Mat(im->alpha(),cv::Rect(x0,y0,sizex,sizey));
+    //    //    patch P(im->image(),)
+    //    //    cv::Mat alpha_Q = cv::Mat::zeros(sizex,sizey,im->alpha().type());
+    //    //    cv::Mat mask_a = cv::Mat::zeros(sizex,sizey,im->alpha().type());
+    //    //    cv::Mat mask_alpha = cv::Mat(im->alpha(),cv::Rect(x0,y0,sizex,sizey));
 
-//    //    mask_a = (mask_alpha == IN) + (mask_alpha == BORDER);
-//    //    Q.copyTo(alpha_Q,mask_a);
-//    //    alpha_Q(cv::Range(0,sizex-1),cv::Range(0,sizey-1)).copyTo(im->image()(cv::Range(x0,x1),cv::Range(y0,y1)));
-//    //    new_patch.copyTo(im->image()(cv::Range(x0,x1),cv::Range(y0,y1)));
-//    new_patch.copyTo(im->image()(cv::Range(x0,x1),cv::Range(y0,y1)));
+    //    //    mask_a = (mask_alpha == IN) + (mask_alpha == BORDER);
+    //    //    Q.copyTo(alpha_Q,mask_a);
+    //    //    alpha_Q(cv::Range(0,sizex-1),cv::Range(0,sizey-1)).copyTo(im->image()(cv::Range(x0,x1),cv::Range(y0,y1)));
+    //    //    new_patch.copyTo(im->image()(cv::Range(x0,x1),cv::Range(y0,y1)));
+    //    new_patch.copyTo(im->image()(cv::Range(x0,x1),cv::Range(y0,y1)));
 }
 
 
@@ -429,37 +435,37 @@ cv::Point2f RegionFill::compute_isophotes(cv::Point2i p)
     cv::Mat grad = cv::Mat::zeros(sizex,sizey,CV_32F);
 
     cv::sqrt(grad_x2+grad_y2,grad);
-//    for(int i =0;i<sizex;++i)
-//    {
-//        for(int j=0;j<sizey;++j)
-//        {
-//            std::cout<<(float)grad.at<float>(i,j)<<" " ;
-//        }
-//        std::cout<<std::endl;
-//    }
+    //    for(int i =0;i<sizex;++i)
+    //    {
+    //        for(int j=0;j<sizey;++j)
+    //        {
+    //            std::cout<<(float)grad.at<float>(i,j)<<" " ;
+    //        }
+    //        std::cout<<std::endl;
+    //    }
     //    cv::imshow("patch",grad);
     //    cv::waitKey(0);
 
-   cv::Point2i max_loc;
-   cv::Mat mask_source = cv::Mat::zeros(sizex,sizey,CV_8U);
-   mask_source = (im->alpha()(cv::Range(x0,x1),cv::Range(y0,y1)) == SOURCE) + (im->alpha()(cv::Range(x0,x1),cv::Range(y0,y1)) == UPDATED);
+    cv::Point2i max_loc;
+    cv::Mat mask_source = cv::Mat::zeros(sizex,sizey,CV_8U);
+    mask_source = (im->alpha()(cv::Range(x0,x1),cv::Range(y0,y1)) == SOURCE) + (im->alpha()(cv::Range(x0,x1),cv::Range(y0,y1)) == UPDATED);
 
-   for(int i=0; i<sizex-1; ++i)
-       for(int j=0; j<sizey-1; ++j)
-       {
-           if(im->get_alpha_pixel(x0+i+1, y0+j) == BORDER || im->get_alpha_pixel(x0+i-1, y0+j) == BORDER
-                   || im->get_alpha_pixel(x0+i, y0+j+1) == BORDER || im->get_alpha_pixel(x0+i, y0+j-1) == BORDER)
-               mask_source.at<uchar>(i,j)=0;
-       }
+    for(int i=0; i<sizex-1; ++i)
+        for(int j=0; j<sizey-1; ++j)
+        {
+            if(im->get_alpha_pixel(x0+i+1, y0+j) == BORDER || im->get_alpha_pixel(x0+i-1, y0+j) == BORDER
+                    || im->get_alpha_pixel(x0+i, y0+j+1) == BORDER || im->get_alpha_pixel(x0+i, y0+j-1) == BORDER)
+                mask_source.at<uchar>(i,j)=0;
+        }
 
-   cv::Mat grad_source = cv::Mat::zeros(sizex,sizey,CV_32F);
-   grad.copyTo(grad_source,mask_source);
+    cv::Mat grad_source = cv::Mat::zeros(sizex,sizey,CV_32F);
+    grad.copyTo(grad_source,mask_source);
 
-   cv::minMaxLoc(grad_source, NULL, &max, NULL, &max_loc);
+    cv::minMaxLoc(grad_source, NULL, &max, NULL, &max_loc);
 
     //Marche pour l'instant mais bancal
     cv::Point2f Ip(-grad_x.at<float>(max_loc),grad_y.at<float>(max_loc));
-//    cv::Point2f Ip(-grad_y.at<float>(max_loc),grad_x.at<float>(max_loc));
+    //    cv::Point2f Ip(-grad_y.at<float>(max_loc),grad_x.at<float>(max_loc));
     return Ip;
 }
 
@@ -548,7 +554,7 @@ void RegionFill::update_alpha(cv::Point2i bp, int sizex, int sizey)
                 update_border( cv::Point2i(i,j),UPDATED);
                 //update confidence
                 if((i!=bp.x) && (j!= bp.y));
-                    confidence.at<float>(i,j) = cf;// confidence.at<float>(bp.x,bp.y);
+                confidence.at<float>(i,j) = cf;// confidence.at<float>(bp.x,bp.y);
             }
         }
 
@@ -602,7 +608,7 @@ void RegionFill::update_border(cv::Point2i point, int status)
         border.push_back(b);
         //Update the alpha value
         im->set_alpha_pixel(b.coord.x,b.coord.y) = BORDER;
-//        confidence.at<float>(b.coord.x,b.coord.y) = compute_confidence(b.coord);
+        //        confidence.at<float>(b.coord.x,b.coord.y) = compute_confidence(b.coord);
     }
     else if(status == UPDATED)
     {
@@ -696,7 +702,7 @@ void RegionFill::run()
     init_confidence();
     init_border();
     while(!whole_image_processed())
-//        //            for(int k=0; k< 3; k++)
+        //        //            for(int k=0; k< 3; k++)
     {
 
 
@@ -708,13 +714,13 @@ void RegionFill::run()
         cv::Point2i point_exemplar = find_exemplar_patch(point_priority);
         //std::cout << "point exemplar "  << point_exemplar << std::endl;
 
-//        for (int i=-3; i<=3; ++i)
-//            for(int j=-3; j<=3; ++j)
-//            {
-//                im->set_image_pixel(point_priority.x+i, point_priority.y+j) = cv::Vec3b(255,0,0);
-//                im->set_image_pixel(point_exemplar.x+i, point_exemplar.y+j) = cv::Vec3b(0,0,255);
-//            }
-//        im->imwrite("essai.bmp");
+        //        for (int i=-3; i<=3; ++i)
+        //            for(int j=-3; j<=3; ++j)
+        //            {
+        //                im->set_image_pixel(point_priority.x+i, point_priority.y+j) = cv::Vec3b(255,0,0);
+        //                im->set_image_pixel(point_exemplar.x+i, point_exemplar.y+j) = cv::Vec3b(0,0,255);
+        //            }
+        //        im->imwrite("essai.bmp");
 
         propagate_texture(point_priority, point_exemplar, P.get_size().x, P.get_size().y);
         update_alpha(point_priority, P.get_size().x, P.get_size().y); //Actually : update alpha, border, confidence
@@ -729,16 +735,16 @@ void RegionFill::run()
         im->imwrite("result2.bmp");
 
     }
-        im->imwrite("result.png");
+    im->imwrite("result.png");
     //    exit(0);
 
 
-//    compute_priority();
-//    cv::Point2i point_priority = cv::Point2i(196,132);
-//    cv::Point2i exemplar = find_exemplar_patch(point_priority);
-//    std::cout << exemplar << std::endl;
-//    propagate_texture(point_priority, exemplar, P.get_size().x, P.get_size().y);
-//    im->imwrite("result2.bmp");
+    //    compute_priority();
+    //    cv::Point2i point_priority = cv::Point2i(196,132);
+    //    cv::Point2i exemplar = find_exemplar_patch(point_priority);
+    //    std::cout << exemplar << std::endl;
+    //    propagate_texture(point_priority, exemplar, P.get_size().x, P.get_size().y);
+    //    im->imwrite("result2.bmp");
     //    196,132
 }
 

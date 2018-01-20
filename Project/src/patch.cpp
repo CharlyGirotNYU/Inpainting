@@ -80,13 +80,14 @@ bool patch::is_whole_patch_source()
 float patch::compute_distance_SSD_LAB(patch B)
 {
     float dist = 0.0f;
-    //int stepx = floor(sizex/2);
-    //int stepy = floor(sizey/2);
+    int stepx = floor(sizex/2);
+    int stepy = floor(sizey/2);
     for(int i=0; i<sizex; ++i)
         for(int j=0; j<sizey; ++j)
         {
-            if(this->get_alpha().at<uchar>(i,j) == SOURCE || this->get_alpha().at<uchar>(i,j) == UPDATED)
+            if(this->get_alpha().at<uchar>(center_data.x-stepx+i,center_data.y-stepy+j) == SOURCE || this->get_alpha().at<uchar>(center_data.x-stepx+i,center_data.y-stepy+j) == UPDATED)
             {
+
                 // Get pixel (i,j) of both patch
                 cv::Mat3b pixP = cv::Mat3b::zeros(1,1);
                 pixP = this->patch_data.at<cv::Vec3b>(i,j);
@@ -107,11 +108,11 @@ float patch::compute_distance_SSD_LAB(patch B)
                 float da = pixPLab.at<uchar>(1) - pixQLab.at<uchar>(1);
                 float db = pixPLab.at<uchar>(2) - pixQLab.at<uchar>(2);
 
-                //std::cout << "dL " << dL << " da " << da << " db " << db <<std::endl;
+//                std::cout << "dL " << dL << " da " << da << " db " << db ;
                 dist += (float)std::sqrt(dL*dL + da*da + db*db);
             }
         }
-    //   std::cout << dist << std::endl;
+//       std::cout << dist << std::endl;
     return dist;
 }
 

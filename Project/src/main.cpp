@@ -19,7 +19,7 @@ int main()
     //        image.imread("../../images/lincoln.jpg","../../images/mask_lincoln2.png");
 //        image.imread("../../images/mask_oval.png","../../images/masked_oval.png");
 //        image.imread("../../images/a.png","../../images/b.png");
-    //image.imread("../../images/test_filling_order_carre.png","../../images/mask_test_filling_order_carre.png");
+//    image.imread("../../images/test_filling_order.png","../../images/mask_test_filling_order_carre.png");
     image.imread("../../images/test_priority.png","../../images/test_priority_mask.png");
 //    image.imread("../../images/c.png","../../images/d.png");
     image.imwrite("test.bmp");
@@ -61,12 +61,16 @@ int main()
     //    cv::waitKey(0);
     //    //Test distance
 
-    //    patch P(&image,9,9,cv::Point2i(267,373),false);
-    //    patch Q(&image,9,9,cv::Point2i(230,390),false);
+//        patch P(&image,9,9,cv::Point2i(267,373),false);
+//        patch Q(&image,9,9,cv::Point2i(230,390),false);
+//        patch P(&image,9,9,cv::Point2i(79,19),false);
+//        patch Q(&image,9,9,cv::Point2i(75,7),false);
+        patch P(&image,9,9,cv::Point2i(33,112),false);
+        patch Q(&image,9,9,cv::Point2i(23,116),false);
     //    cv::imshow("P", P.get_patch());
     //    cv::imshow("Q", Q.get_patch());
     //    cv::waitKey(0);
-    //    std::cout << P.compute_distance_SSD_LAB(Q) << std::endl;
+        std::cout << P.compute_distance_SSD_LAB(Q) << std::endl;
     //    std::cout << P.is_whole_patch_source() << std::endl;
     //    std::cout << Q.is_whole_patch_source() << std::endl;
 
