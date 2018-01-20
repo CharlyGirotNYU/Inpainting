@@ -6,8 +6,8 @@ patch P;
 
 RegionFill::RegionFill()
 {
-    patch_size_x=9; //has to be impaired
-    patch_size_y=9;
+    patch_size_x=7; //has to be impaired
+    patch_size_y=7;
 }
 
 
@@ -115,7 +115,8 @@ float RegionFill::compute_confidence(cv::Point2i p)
                     }
                 }
         }
-    conf = conf/nb_pixels;
+//    conf = conf/nb_pixels;
+    conf = conf/(patch_size_x*patch_size_y);
     return conf;
 }
 
@@ -266,10 +267,10 @@ cv::Point2i RegionFill::find_exemplar_patch(cv::Point2i p)
 
     float distance_max = 10e+7;
 
-    //    for(int v=0; v< im->get_cols()-1; v++)
-    //        for(int u=0; u< im->get_rows()-1; u++)
-        for(int v=5; v< im->get_cols()-5; v++)
-            for(int u=5; u< im->get_rows()-5; u++)
+        for(int v=stepy+1; v< im->get_cols()-1-stepy; v=v+stepy)
+            for(int u=stepx+1; u< im->get_rows()-1-stepx; u=u+stepx)
+//        for(int v=5; v< im->get_cols()-5; v++)
+//            for(int u=5; u< im->get_rows()-5; u++)
 
 //    int offset_x = 3000+5*stepx;
 //    int offset_y =3000;
@@ -732,7 +733,7 @@ void RegionFill::run()
             //        im->set_image_pixel(b.coord.x,b.coord.y) = cv::Vec3b(0,0,125);
             //        im->set_alpha_pixel(b.coord.x,b.coord.y) = 4;
         }
-        im->imwrite("result2.bmp");
+        im->imwrite("resultball7.bmp");
 
     }
     im->imwrite("result.png");
