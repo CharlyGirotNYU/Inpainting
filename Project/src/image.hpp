@@ -1,5 +1,15 @@
-/* Image.hpp */
-
+/** Image.hpp
+ * Inpainting project
+ * Developed by Di Folco Maxime, Girot Charly, Jallais Maëllis
+ * January 2018
+ * CPE Lyon - 5ETI IMI
+ * End of semester Project
+ *
+ * Based on the work and paper :
+ * Criminisi, Antonio, Patrick Pérez, and Kentaro Toyama.
+ * "Region filling and object removal by exemplar-based image inpainting."
+ * IEEE Transactions on image processing 13.9 (2004): 1200-1212.
+ * */
 #pragma once
 
 #ifndef IMAGE_HPP
