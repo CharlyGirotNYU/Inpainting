@@ -22,7 +22,7 @@ int main()
     /** Read Image */
     Image image = Image();
     /**Image de test */
-    image.imread("../../images/originales/oval_petit.png","../../images/mask/oval_petit_mask.png");
+//    image.imread("../../images/originales/oval_petit.png","../../images/mask/oval_petit_mask.png");
     //        image.imread("../../images/originales/oval_grand.png","../../images/mask/oval_grand_mask.png");
     //        image.imread("../../images/originales/linc.jpg","../../images/mask/linc-mask.bmp");
     //        image.imread("../../images/originales/fillorder.png","../../images/mask/fillorder_mask.png");
@@ -32,10 +32,11 @@ int main()
     //        image.imread("../../images/originales/trolltunga.jpg","../../images/mask/trolltunga_mask.bmp");
     //        image.imread("../../images/originales/lakeandballoon.jpg","../../images/mask/lakeandballoon_mask.bmp"); //only balloon
     //        image.imread("../../images/originales/lakeandballoon.jpg","../../images/mask/lakeandballoon_mask2.bmp"); //ballon + ballon in water
+    image.imread("../../images/originales/text.jpg","../../images/mask/text-mask.bmp");
 
 
     /** Create the instance for the algorithm */
-    RegionFill region = RegionFill(5,5);
+    RegionFill region = RegionFill(3,5);
     /** Furnish the Image containing image and mask to the algorithm */
     region.set_image(&image);
     /** Run the Object Filling algorithm */

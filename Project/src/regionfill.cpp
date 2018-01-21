@@ -90,7 +90,7 @@ void RegionFill::compute_priority()
         cv::imshow("confidence",confidence);
         cv::namedWindow("bordure",cv::WINDOW_NORMAL);
         cv::imshow("bordure",bordure);
-        cv::waitKey(0);
+        cv::waitKey(20);
     }
 }
 /** Compute confidence term of a point using patch arround it*/

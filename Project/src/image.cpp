@@ -25,13 +25,13 @@ void Image::imread(std::string image_path, std::string mask_path)
 
     // READ IMAGE
     cv::Mat image_read = cv::imread(image_path,CV_LOAD_IMAGE_UNCHANGED);
-    image_data = image_read;
+//    image_data = image_read;
+    image_data = image_read.clone();
     if (!image_read.data) {
         std::cout << "Error reading file 1 "<< image_path << std::endl;
         exit(0);
     }
     // READ MASK
-
 
     cv::Mat mask_read  = cv::imread(mask_path);
     cvtColor( mask_read, mask_data, CV_RGB2GRAY );
@@ -39,6 +39,7 @@ void Image::imread(std::string image_path, std::string mask_path)
         std::cout << "Error reading file 2" << mask_path << std::endl;
         exit(0);
     }
+
 
     //Set Image size
     Nu = image_read.rows;
@@ -49,10 +50,12 @@ void Image::imread(std::string image_path, std::string mask_path)
     for(int j=0; j<Nv; ++j) //colonne
         for(int i=0; i<Nu; ++i) //ligne
         {
+            if(get_mask_pixel(i,j) < 10)
+                mask_data.at<uchar>(i,j) = 0; //Ca c'est seulement pour certaines images qui veulent pas avoir des fond strictement nulles ...
             int nb_out = num_outside_mask(i,j);
 
-            if(nb_out == 0)
-                set_alpha_pixel(i,j) = SOURCE;
+            if(nb_out == 0){
+                set_alpha_pixel(i,j) = SOURCE; std::cout << "OUI " << std::endl; }
             else if(nb_out >0 && nb_out<8)
             {
                 set_alpha_pixel(i,j) = get_mask_pixel(i,j)!=0 ? BORDER : SOURCE;
@@ -65,8 +68,10 @@ void Image::imread(std::string image_path, std::string mask_path)
                 set_image_pixel(i,j) = cv::Vec3b(0,0,0);
             }
         }
-//    cv::imshow("alpha dans image.cpp" , alpha()*100);
-//    cv::waitKey(0);
+    cv::imshow("mage Originale " , image_data ); cv::waitKey(0);
+
+    cv::imshow("alpha dans image.cpp" , alpha()*100);
+    cv::waitKey(0);
 }
 
 
@@ -150,6 +155,7 @@ int Image::num_outside_mask(int u, int v)
                         if(get_mask_pixel(u+i,v+j) != 0)
                             nb_out++;
         }
+//    std::cout << nb_out << " " ;
     return nb_out;
 }
 
