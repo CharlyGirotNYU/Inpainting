@@ -31,6 +31,7 @@ class Image : public cv::Mat
 {
 public:
     Image();
+    ~Image();
 
 
     /** Read original image and mask then compute alphas <==> Set Image and Set Alpha */

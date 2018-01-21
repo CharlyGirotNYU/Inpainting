@@ -17,6 +17,8 @@ static std::string type2str(int type);
 
 Image::Image()
 {}
+Image::~Image()
+{}
 
 void Image::imread(std::string image_path, std::string mask_path)
 {

@@ -19,9 +19,14 @@ patch P;
 
 RegionFill::RegionFill()
 {
-    patch_size_x=9; //has to be impaired
-    patch_size_y=9;
+    patch_size_x=65; //has to be impaired
+    patch_size_y=65;
 }
+//RegionFill::~RegionFill()
+//{}
+
+RegionFill::RegionFill(int x,int y):
+    patch_size_x(x),patch_size_y(y){}
 
 /** Init confidence term of the whole image contained in im and store result in confidence*/
 void RegionFill::init_confidence()
@@ -85,7 +90,7 @@ void RegionFill::compute_priority()
         cv::imshow("confidence",confidence);
         cv::namedWindow("bordure",cv::WINDOW_NORMAL);
         cv::imshow("bordure",bordure);
-        cv::waitKey(10);
+        cv::waitKey(0);
     }
 }
 /** Compute confidence term of a point using patch arround it*/
@@ -149,6 +154,7 @@ float RegionFill::compute_data_term(cv::Point2i p)
         float alpha =255.0f;
         data_term = std::abs(Ip.x * n_p.x + Ip.y * n_p.y)/alpha;
     }
+//    std::cout << data_term << " " ;
     return data_term;
 }
 
@@ -274,7 +280,7 @@ void RegionFill::propagate_texture(cv::Point2i p, cv::Point2i q, int sizex, int 
     for(int j=0;j<sizey;++j)
         for(int i=0; i<sizex;++i)
         {
-            if(im->get_alpha_pixel(p.x-stepx+i,p.y-stepy+j)==IN ||im->get_alpha_pixel(p.x-stepx+i,p.y-stepy+j)==BORDER )
+            if(im->get_alpha_pixel(p.x-stepx+i,p.y-stepy+j)==IN ||im->get_alpha_pixel(p.x-stepx+i,p.y-stepy+j)==BORDER );// ||im->get_alpha_pixel(p.x-stepx+i,p.y-stepy+j)==UPDATED)
                 im->set_image_pixel(p.x-stepx+i,p.y-stepy+j) = im->get_image_pixel(q.x-stepx+i,q.y-stepy+j);
         }
 }
@@ -327,6 +333,7 @@ cv::Point2f RegionFill::compute_isophotes(cv::Point2i p)
 
     cv::Point2i max_loc;
     cv::Mat mask_source = cv::Mat::zeros(sizex,sizey,CV_8U);
+//    cv::Mat mask_source ; mask_source.create(sizex,sizey,CV_8U);
     mask_source = (im->alpha()(cv::Range(x0,x1),cv::Range(y0,y1)) == SOURCE) + (im->alpha()(cv::Range(x0,x1),cv::Range(y0,y1)) == UPDATED);
 
     for(int i=0; i<sizex-1; ++i)
@@ -334,14 +341,13 @@ cv::Point2f RegionFill::compute_isophotes(cv::Point2i p)
         {
             if(im->get_alpha_pixel(x0+i+1, y0+j) == BORDER || im->get_alpha_pixel(x0+i-1, y0+j) == BORDER
                     || im->get_alpha_pixel(x0+i, y0+j+1) == BORDER || im->get_alpha_pixel(x0+i, y0+j-1) == BORDER)
-                mask_source.at<uchar>(i,j)=0;
+                mask_source.at<uchar>(i,j)=0; // Cette ligne fait planter le process pour certaines images : raisons inconnues , des fois ca passe des fois ca passe pas.
         }
 
     cv::Mat grad_source = cv::Mat::zeros(sizex,sizey,CV_32F);
     grad.copyTo(grad_source,mask_source);
 
     cv::minMaxLoc(grad_source, NULL, &max, NULL, &max_loc);
-
     //Marche pour l'instant mais bancal
     cv::Point2f Ip(-grad_x.at<float>(max_loc),grad_y.at<float>(max_loc));
     //    cv::Point2f Ip(-grad_y.at<float>(max_loc),grad_x.at<float>(max_loc));
@@ -375,11 +381,11 @@ void RegionFill::update_alpha(cv::Point2i bp, int sizex, int sizey)
     for(int j=y0; j<=y1; ++j)
         for(int i=x0; i<=x1; ++i)
         {
-            if(im->get_alpha_pixel(i,j) != SOURCE)
+            if(im->get_alpha_pixel(i,j) != SOURCE && im->get_alpha_pixel(i,j) != UPDATED)
             {
                 update_border( cv::Point2i(i,j),UPDATED);
                 //update confidence
-                if((i!=bp.x) && (j!= bp.y))
+//                if((i!=bp.x) && (j!= bp.y))
                     confidence.at<float>(i,j) = cf;// confidence.at<float>(bp.x,bp.y);
             }
         }
@@ -529,10 +535,10 @@ void RegionFill::run()
         propagate_texture(point_priority, point_exemplar, P.get_size().x, P.get_size().y);
         update_alpha(point_priority, P.get_size().x, P.get_size().y); //Actually : update alpha, border, confidence
 
-        im->imwrite("resulttestprior.bmp");
+        im->imwrite("resultCurrent.bmp");
 
     }
-    im->imwrite("result.png");
-    exit(0);
+
+//    exit(0);
 }
 

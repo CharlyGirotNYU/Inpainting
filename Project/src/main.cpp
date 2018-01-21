@@ -21,22 +21,30 @@ int main()
 {
     /** Read Image */
     Image image = Image();
-//    image.imread("../../images/lincoln.jpg","../../images/mask_lincoln2.png");
-//    image.imread("../../images/mask_oval.png","../../images/masked_oval.png");
-//    image.imread("../../images/a.png","../../images/b.png");
-//    image.imread("../../images/test_filling_order.png","../../images/mask_test_filling_order_carre.png");
-//    image.imread("../../images/test_priority.png","../../images/test_priority_mask.png");
-//    image.imread("../../images/c.png","../../images/d.png");
-    image.imread("../../images/trolltunga.jpg","../../images/trolltunga_mask.bmp");
-//    image.imread("../../images/lakeandballoon.jpg","../../images/lakeandballoon_mask.bmp");
-//    image.imread("../../images/Criminisi.jpg","../../images/Criminisi-mask.bmp");
+    /**Image de test */
+    image.imread("../../images/originales/oval_petit.png","../../images/mask/oval_petit_mask.png");
+    //        image.imread("../../images/originales/oval_grand.png","../../images/mask/oval_grand_mask.png");
+    //        image.imread("../../images/originales/linc.jpg","../../images/mask/linc-mask.bmp");
+    //        image.imread("../../images/originales/fillorder.png","../../images/mask/fillorder_mask.png");
+    //        image.imread("../../images/originales/bungee0.png","../../images/mask/bungee0-mask.bmp"); //Not working - malloc corruption ...
+
+    /** Image réelles */
+    //        image.imread("../../images/originales/trolltunga.jpg","../../images/mask/trolltunga_mask.bmp");
+    //        image.imread("../../images/originales/lakeandballoon.jpg","../../images/mask/lakeandballoon_mask.bmp"); //only balloon
+    //        image.imread("../../images/originales/lakeandballoon.jpg","../../images/mask/lakeandballoon_mask2.bmp"); //ballon + ballon in water
+
 
     /** Create the instance for the algorithm */
-    RegionFill region = RegionFill();
+    RegionFill region = RegionFill(5,5);
     /** Furnish the Image containing image and mask to the algorithm */
     region.set_image(&image);
     /** Run the Object Filling algorithm */
     region.run();
+    /** Save the final result */
+    image.imwrite("resultOvalTest9.png");
+
+    ~image;
+    //    ~region;
 
     return 0;
 }

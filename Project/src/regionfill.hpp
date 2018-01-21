@@ -31,6 +31,9 @@ class RegionFill
 public:
     /** Empty Constructor */
     RegionFill();
+//    ~RegionFill();
+    /** Constructor with patch size on x and y */
+    RegionFill(int x, int y);
     /** get and fill the border of the mask*/
     void init_border();
 
