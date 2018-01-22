@@ -280,7 +280,7 @@ void RegionFill::propagate_texture(cv::Point2i p, cv::Point2i q, int sizex, int 
     for(int j=0;j<sizey;++j)
         for(int i=0; i<sizex;++i)
         {
-            if(im->get_alpha_pixel(p.x-stepx+i,p.y-stepy+j)==IN ||im->get_alpha_pixel(p.x-stepx+i,p.y-stepy+j)==BORDER );// ||im->get_alpha_pixel(p.x-stepx+i,p.y-stepy+j)==UPDATED)
+            if(im->get_alpha_pixel(p.x-stepx+i,p.y-stepy+j)==IN ||im->get_alpha_pixel(p.x-stepx+i,p.y-stepy+j)==BORDER)//  ||im->get_alpha_pixel(p.x-stepx+i,p.y-stepy+j)==UPDATED)
                 im->set_image_pixel(p.x-stepx+i,p.y-stepy+j) = im->get_image_pixel(q.x-stepx+i,q.y-stepy+j);
         }
 }
@@ -535,7 +535,9 @@ void RegionFill::run()
         propagate_texture(point_priority, point_exemplar, P.get_size().x, P.get_size().y);
         update_alpha(point_priority, P.get_size().x, P.get_size().y); //Actually : update alpha, border, confidence
 
-        im->imwrite("resultCurrent.bmp");
+//        im->imwrite("resultCurrent.bmp");
+        cv::namedWindow("Resultat Actuel",cv::WINDOW_NORMAL);
+        cv::imshow("Resultat Actuel",im->image()); cv::waitKey(1);
 
     }
 

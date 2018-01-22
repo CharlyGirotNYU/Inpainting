@@ -54,8 +54,8 @@ void Image::imread(std::string image_path, std::string mask_path)
                 mask_data.at<uchar>(i,j) = 0; //Ca c'est seulement pour certaines images qui veulent pas avoir des fond strictement nulles ...
             int nb_out = num_outside_mask(i,j);
 
-            if(nb_out == 0){
-                set_alpha_pixel(i,j) = SOURCE; std::cout << "OUI " << std::endl; }
+            if(nb_out == 0)
+                set_alpha_pixel(i,j) = SOURCE; //std::cout << "OUI " << std::endl; }
             else if(nb_out >0 && nb_out<8)
             {
                 set_alpha_pixel(i,j) = get_mask_pixel(i,j)!=0 ? BORDER : SOURCE;
@@ -68,9 +68,9 @@ void Image::imread(std::string image_path, std::string mask_path)
                 set_image_pixel(i,j) = cv::Vec3b(0,0,0);
             }
         }
-    cv::imshow("mage Originale " , image_data ); cv::waitKey(0);
+//    cv::imshow("mage Originale " , image_data ); cv::waitKey(0);
 
-    cv::imshow("alpha dans image.cpp" , alpha()*100);
+//    cv::imshow("alpha dans image.cpp" , alpha()*100);
     cv::waitKey(0);
 }
 

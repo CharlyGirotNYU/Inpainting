@@ -16,36 +16,54 @@
 #include<iostream>
 #include<stdlib.h>
 #include "patch.hpp"
+#include <chrono>
 
 int main()
 {
+    std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
+
+
+
+    std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
+
+
+
     /** Read Image */
     Image image = Image();
     /**Image de test */
-//    image.imread("../../images/originales/oval_petit.png","../../images/mask/oval_petit_mask.png");
-    //        image.imread("../../images/originales/oval_grand.png","../../images/mask/oval_grand_mask.png");
-    //        image.imread("../../images/originales/linc.jpg","../../images/mask/linc-mask.bmp");
-    //        image.imread("../../images/originales/fillorder.png","../../images/mask/fillorder_mask.png");
-    //        image.imread("../../images/originales/bungee0.png","../../images/mask/bungee0-mask.bmp"); //Not working - malloc corruption ...
+    //    image.imread("../../images/originales/oval_petit.png","../../images/mask/oval_petit_mask.png");
+    image.imread("../../images/originales/oval_grand.png","../../images/mask/oval_grand_mask.png");
+    //    image.imread("../../images/originales/linc.jpg","../../images/mask/linc-mask.bmp");
+    //    image.imread("../../images/originales/fillorder.png","../../images/mask/fillorder_mask.png");
+    //    image.imread("../../images/originales/bungee0.png","../../images/mask/bungee0-mask.bmp"); //Not working - malloc corruption ...
 
     /** Image réelles */
     //        image.imread("../../images/originales/trolltunga.jpg","../../images/mask/trolltunga_mask.bmp");
-    //        image.imread("../../images/originales/lakeandballoon.jpg","../../images/mask/lakeandballoon_mask.bmp"); //only balloon
-    //        image.imread("../../images/originales/lakeandballoon.jpg","../../images/mask/lakeandballoon_mask2.bmp"); //ballon + ballon in water
-    image.imread("../../images/originales/text.jpg","../../images/mask/text-mask.bmp");
+    //    image.imread("../../images/originales/lakeandballoon.jpg","../../images/mask/lakeandballoon_mask.bmp"); //only balloon
+    //    image.imread("../../images/originales/lakeandballoon.jpg","../../images/mask/lakeandballoon_mask2.bmp"); //ballon + ballon in water
+    //    image.imread("../../images/originales/text.jpg","../../images/mask/text-mask.bmp");
+    //    image.imread("../../images/originales/bruandet.png","../../images/mask/bruandet-mask.bmp");
+    //    image.imread("../../images/originales/bruandet2.png","../../images/mask/bruandet2-mask.bmp");
 
 
     /** Create the instance for the algorithm */
-    RegionFill region = RegionFill(3,5);
+    RegionFill region = RegionFill(43,43);
     /** Furnish the Image containing image and mask to the algorithm */
     region.set_image(&image);
     /** Run the Object Filling algorithm */
     region.run();
     /** Save the final result */
-    image.imwrite("resultOvalTest9.png");
+    image.imwrite("resulOval.png");
 
     ~image;
-    //    ~region;
+
+    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+    int time = std::chrono::duration_cast<std::chrono::seconds>(end - start).count();
+    std::cout << "Execution Time :" << std::endl;
+    int secondes = time%60;
+    int minutes = (time-secondes)/60.0f;
+    float heures = (time-secondes-60.0f*minutes)/60.0f;
+    std::cout << "Heure : " << heures << " Minutes : " << minutes << " secondes : " << secondes << std::endl;
 
     return 0;
 }
