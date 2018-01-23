@@ -1,5 +1,5 @@
 \documentclass[final,hyperref={pdfpagelabels=false}]{beamer}
-\usepackage[size=custom,orientation=landscape,width=88,7,height=116,2,scale=1.0]{beamerposter}
+\usepackage[size=custom,orientation=landscape,width=88,7,height=116,2,scale=1.03]{beamerposter}
 \usetheme{I6pd2}
 \usepackage[utf8]{inputenc}
 \usepackage[frenchb]{babel}
@@ -14,7 +14,8 @@
 \usepackage{enumitem}
 \setbeamercolor{background canvas}{bg=taaluminium,fg=taaluminium}
 %%%%%%% TITLE SECTION %%%%%%%
-\title{\huge  Object Removal by Exemplar-Based Inpainting \small Based on Criminisi work}
+\title{\huge  Region Filling and Object Removal by Exemplar-Based Inpainting \footnotesize
+Based on Criminisi work }
 \author{Di Folco Maxime, GIrot Charly, Jallais Maëliss}
 \institute{Ecole Supérieure de Chimie Physique Électronique de Lyon}
 %%%%%%%% FOOTER %%%%%%%%
@@ -23,6 +24,7 @@
 %\newcommand{\foot}{\textbf{References} : \hfill \break 
 
 \setlist[itemize]{label=$\blacktriangleright$, leftmargin=2cm, font=\normalsize \color{blue}}
+
 
 \begin{document}
 \addtobeamertemplate{block end}{}{\vspace{2ex}}
@@ -46,7 +48,7 @@
 \begin{itemize} 
 \item Remplir des régions masquées, par \textbf{propagation de texture} le long des structures linéaires 
 \item Utilisation du Principe de \textbf{connectivité} pour définir un ordre de traitement : propager les textures tout en conservant les structures linéaires de l'image
-\item Recherche de \textbf{patch similaire} par une analyse couleur
+\item Recherche de \textbf{patchs similaires} par une analyse couleur
 \end{itemize}
 \end{column}
 
@@ -56,14 +58,14 @@
 
 \textbf{État de l'art : 2 grandes approches}
 \begin{itemize}
-\item Technique d'Inpainting classique [1]
-\item Synthèse de textures [?]
-\item Mais aussi une combinaison Inpainting/Texture [3]
+\item Reconstruction structurelle [1]
+\item Synthèse de textures [3]
+\item Combinaison des deux méthodes précédentes  [2][4]
 \end{itemize}
 
 \textbf{Implémentation}
 \begin{itemize}
-\item Algorithme de \textbf{Criminisi} et al [3]
+\item Algorithme de \textbf{Criminisi} et al [4]
 \item \textbf{OpenCV} C++: gestion des images, des I/O
 \item Classes : RegionFill (Algorithmie), Image(I/O), Patch (traitement local)
 \end{itemize}
@@ -96,13 +98,22 @@
 
 \begin{block}{\Large Méthodes}
  
-\textbf{Algorithme en 3 étapes principales}
+
 \begin{itemize}
+
+
 %%%%
+\item Extraction de la bordure initiale $\delta \Omega$
+\item Tant que $\Omega$ n'est pas complétement remplie : 
+
+\begin{itemize}
+
+
+
 \item \textbf{Calcul des priorités} $\forall p \in \delta\Omega P(p)=D(p)C(p) $
 \begin{itemize}
 \item \textbf{Données} : Quantité de variation des textures autour du pixel courant $D(p) = \dfrac{\mid \nabla I_p^{\perp}.n_p \mid}{\alpha} $
-\end{itemize}
+
 
 \begin{figure}[H]
 \centering
@@ -111,36 +122,44 @@
 \caption{Evolution du terme de données}
 \end{figure}
 
-\begin{itemize}
+
 \item \textbf{Confiance} : importance accordée au pixel courant $C(p) = \dfrac{\sum_{q\in \Xi_p \cap(I-\Omega)} C(q)}{\mid \Xi_p\mid} $
-\end{itemize}
+
 \begin{figure}[H]
 \centering
 \subfigure[Confiance itération 0]{\label{fig:kabela} \includegraphics[width=0.3\textwidth]{figures/0conf.png}}
 \subfigure[Confiance itération 4]{\label{fig:kabelb} \includegraphics[width=0.3\textwidth]{figures/1conf.png}}
 \caption{Evolution de la confiance}
 \end{figure}
+\end{itemize}
 
 
-
-%%%\\
-%\begin{itemize}
 \item \textbf{Propagation de la texture et information structurelle}
-\begin{itemize}
-\item La priorité est donnée aux \textbf{zones de fortes variations} (terme de données)
-\item Propager la texture en commencant par ces zones permet de \textbf{conserver les structures linéaires} de l'image
-\item Données de textures manquantes extraites de la zone de l'\textbf{image la plus semblable} (calcul $SSD^a$ dans l'espace couleur Lab)
-\end{itemize}
-
-\begin{figure}[H]
-\centering
-\subfigure[Bordure originale]{\label{fig:priora} \includegraphics[width=0.3\textwidth]{figures/0oo.png}}
-\subfigure[Bordure après 4 itérations - supprimée là ou la priorité est élevée]{\label{fig:priorb} \includegraphics[width=0.3\textwidth]{figures/1oo.png}}
-\caption{Evolution de la bordure en fonction de la priorité}
-\end{figure}
+	\begin{itemize}
+	\item La priorité est donnée aux \textbf{zones de fortes variations} (terme de données)
+	\item Propager la texture en commençant par ces zones permet de \textbf{conserver les structures linéaires} de l'image
+	\item Données de textures manquantes extraites de la zone de l'\textbf{image la plus semblable} (calcul $SSD^a$ dans l'espace couleur CIE Lab)
+	
+	
+	\begin{figure}[H]
+	\centering
+	\subfigure[Bordure originale]{\label{fig:priora} \includegraphics[width=0.3\textwidth]{figures/0oo.png}}
+	\subfigure[Bordure après 4 itérations - supprimée là ou la priorité est élevée]{\label{fig:priorb} \includegraphics[width=0.3\textwidth]{figures/1oo.png}}
+	\caption{Evolution de la bordure en fonction de la priorité}
+	\end{figure}
+	 \end{itemize}
  
-\item \textbf{Mise à jour de la confiance} : Propagation de la confiance du pixel courant vers l'intérieur du masque
+\item \textbf{Mise à jour de la confiance} et de la bordure :
+	\begin{itemize}
+	\item Propagation de la confiance du pixel courant vers l'intérieur du masque
+	\item Mesurer la confiance relative des pixels sur le front
+	\item Incertitude croissante vers le centre de la région ciblée de la couleurs des pixels 
+	\end{itemize}
+
+\end{itemize} 
 \end{itemize}
+%\end{itemize}
+
 
 \end{block}
 
@@ -152,18 +171,19 @@
 
 \begin{block}{\Large Résultats}
 
+Les résultats suivants ont étés obtenus suite au traitement en C++ des données à l'aide d'un processeur Intel i5, 2,7GhZ.
 \begin{figure}[H]
 \centering
-\subfigure[Image Originale]{\label{fig:oval} \includegraphics[width=0.4\textwidth]{figures/oval_petit.png}}
-\subfigure[Image reconstruite - patch taille 13 - 14 sec]{\label{fig:ovalb} \includegraphics[width=0.4\textwidth]{figures/resultOval9.png}}
-\caption{Inpainting d'une image présentant une occlusion}
+\subfigure[Image Originale]{\label{fig:oval} \includegraphics[width=0.3\textwidth]{figures/oval_petit.png}}
+\subfigure[Image reconstruite]{\label{fig:ovalb} \includegraphics[width=0.3\textwidth]{figures/resultOval9.png}}
+\caption{Inpainting d'une image présentant une occlusion  - Patch taille 13 - 14''}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\subfigure[Photo Originale]{\label{fig:lincoln} \includegraphics[width=0.4\textwidth]{figures/lincoln.jpg}}
-\subfigure[Photo restaurée]{\label{fig:lincolnb} \includegraphics[width=0.4\textwidth]{figures/resultLinc5.png}}
-\caption{Restauration d'une image abimée}
+\subfigure[Photo Originale]{\label{fig:lincoln} \includegraphics[width=0.3\textwidth]{figures/lincoln.jpg}}
+\subfigure[Photo restaurée]{\label{fig:lincolnb} \includegraphics[width=0.3\textwidth]{figures/resultLinc5.png}}
+\caption{Restauration d'une image abimée - Patch taille 5 - 16'16''}
 \end{figure}
 %\begin{figure}[H]
 %\centering
@@ -172,11 +192,12 @@
 %\caption{Suppression d'une personne au milieu d'un paysage}
 %\end{figure}
 \begin{figure}[H]
-\includegraphics[width=0.5\textwidth]{figures/trolltunga.jpg}\label{fig:troll}
+\includegraphics[width=0.6\textwidth]{figures/trolltunga.jpg}\label{fig:troll}
+\caption{Image Originale}
 \end{figure}
 \begin{figure}[H]
-\includegraphics[width=0.5\textwidth]{figures/resultTroll9.png}\label{fig:trollb}
-\caption{Suppression d'une personne au milieu d'un paysage}
+\includegraphics[width=0.6\textwidth]{figures/resultTroll9.png}\label{fig:trollb}
+\caption{Suppression d'une personne au milieu d'un paysage - Patch taille 9 - 1'35''}
 \end{figure}
 
 
@@ -202,7 +223,7 @@
 \end{itemize}
 \textbf{Limitations}
 \begin{itemize}
-\item Importance de la \textbf{taille du patch} : trop grand (pixelise, ne capture pas toutes les variations), trop petit (ne capture pas corréctement les variations des textures plus grande). Doit être légèrement plus grand que le plus grand élément de texture. 
+\item Importance de la \textbf{taille du patch} : trop grand (pixelise, ne capture pas toutes les variations), trop petit (ne capture pas correctement les variations des textures plus grandes). Doit être légèrement plus grand que le plus grand élément de texture. 
 \item Echec de reconstruction sur \textbf{les bordures} de l'image
 \item Lab : \textbf{SSD} sous norme CIE 74, échoue parfois à détecter un patch similaire
 \end{itemize}
@@ -212,7 +233,7 @@
 \centering
 \subfigure[Originale avec occlusion]{\label{fig:order} \includegraphics[width=0.3\textwidth]{figures/fillorderd.png}}
 \subfigure[Inpainted]{ \includegraphics[width=0.3\textwidth]{figures/resultFillOrder35.png}}
-\caption{Inpainting de test pour les structures linéaires, démontre l'importance de la taille du patch}
+\caption{Inpainting de test pour les structures linéaires, démontre l'importance de la taille du patch - Patch de taille 35 ici}
 \end{figure}
 
 \end{column}
@@ -220,10 +241,10 @@
 \textbf{Améliorations futures}
 \begin{itemize}
 \item SSD sous norme CIE 94 ou 2000 - prendre en compte l'uniformité perceptuelle
-\item Patch de \textbf{taille variable} pour minimiser la distance à chaque application de texture
-\item \textbf{Zone de recherche} du patch à identifier (pas dans toute l'image) - Gain de temps et éventuellement amélioration des résultats avec des patchs plus cohérent dans une région proche
-\item Interface graphique pour masquage manuel 
-\item Utilisation des \textbf{GraphCut} pour séléctionner la meilleure zone à applliquer lors de recouvrement de patch. 
+\item Patchs de \textbf{tailles variables} pour minimiser la distance à chaque application de texture
+\item \textbf{Zone de recherche} du patch à identifier (pas dans toute l'image) - Gain de temps et éventuellement amélioration des résultats avec des patchs plus cohérents dans une région proche
+\item Interface graphique pour masquage manuel et choix de la taille du patch
+\item Utilisation des \textbf{GraphCut} pour séléctionner la meilleure zone à applliquer lors de recouvrement de patchs. 
 \end{itemize}
 
 \begin{figure}[H]
@@ -232,14 +253,15 @@
 \subfigure[patch taille 5]{\label{fig:lakeb} \includegraphics[width=0.24\textwidth]{figures/resultBallon5.png}}
 \subfigure[patch taille 13]{\label{fig:lakec}\includegraphics[width=0.24\textwidth]{figures/resultBallon13.png}}
 \subfigure[patch 9 et masque complet]{\label{fig:laked}\includegraphics[width=0.24\textwidth]{figures/resultBallonLake9.png}}
-\caption{Inpainting d'une montgolfière sur un Lac}
+\caption{Inpainting d'une montgolfière sur un Lac - Patchs de taille 5,13,9 - 2 masques différents - 40'22'' ,10'39'', 30'30''  }
 \end{figure}
 
 \begin{block}{Références}
 [1] Bertalmio et al, Image Inpainting. Proceedings of the 27th annual conference on Computer graphics and interactive techniques, 2000 \hfill \break 
 [2] Bertalmio et al, Simultaneous structure and texture image inpainting, IEEE Transactions on image processing, 2003 \hfill \break
-[3] Criminisi et al, Region filling and object removal by exemplar based image inpainting. IEEE Transactions on image processing, 2004 \hfill \break
-[4] \alert TECHNIQUE ONLY TEXTURE SYNTHESIS
+[3] Peyré, Gabriel, Texture synthesis with grouplets. IEEE TPAMI, 2010 \hfill \break
+[4] Criminisi et al, Region filling and object removal by exemplar based image inpainting. IEEE Transactions on image processing, 2004 
+
 
 \end{block}
 \end{column}
