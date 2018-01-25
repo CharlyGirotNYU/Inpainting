@@ -1,6 +1,6 @@
 /** Image.cpp
  * Inpainting project
- * Developed by Di Folco Maxime, Girot Charly, Jallais Maëllis
+ * Developed by Di Folco Maxime, Girot Charly, Jallais Maëliss
  * January 2018
  * CPE Lyon - 5ETI IMI
  * End of semester Project
@@ -25,14 +25,13 @@ void Image::imread(std::string image_path, std::string mask_path)
 
     // READ IMAGE
     cv::Mat image_read = cv::imread(image_path,CV_LOAD_IMAGE_UNCHANGED);
-//    image_data = image_read;
     image_data = image_read.clone();
     if (!image_read.data) {
         std::cout << "Error reading file 1 "<< image_path << std::endl;
         exit(0);
     }
-    // READ MASK
 
+    // READ MASK
     cv::Mat mask_read  = cv::imread(mask_path);
     cvtColor( mask_read, mask_data, CV_RGB2GRAY );
     if (!mask_read.data  ) {
@@ -51,11 +50,11 @@ void Image::imread(std::string image_path, std::string mask_path)
         for(int i=0; i<Nu; ++i) //ligne
         {
             if(get_mask_pixel(i,j) < 10)
-                mask_data.at<uchar>(i,j) = 0; //Ca c'est seulement pour certaines images qui veulent pas avoir des fond strictement nulles ...
+                mask_data.at<uchar>(i,j) = 0; //Seulement pour certaines images qui veulent pas avoir des fonds strictement nulles ...
             int nb_out = num_outside_mask(i,j);
 
             if(nb_out == 0)
-                set_alpha_pixel(i,j) = SOURCE; //std::cout << "OUI " << std::endl; }
+                set_alpha_pixel(i,j) = SOURCE;
             else if(nb_out >0 && nb_out<8)
             {
                 set_alpha_pixel(i,j) = get_mask_pixel(i,j)!=0 ? BORDER : SOURCE;
@@ -68,10 +67,6 @@ void Image::imread(std::string image_path, std::string mask_path)
                 set_image_pixel(i,j) = cv::Vec3b(0,0,0);
             }
         }
-//    cv::imshow("mage Originale " , image_data ); cv::waitKey(0);
-
-//    cv::imshow("alpha dans image.cpp" , alpha()*100);
-    cv::waitKey(0);
 }
 
 
@@ -86,6 +81,7 @@ cv::Mat Image::image() const
 {
     return image_data;
 }
+
 cv::Mat& Image::image() {return image_data;}
 
 /** Get mask mat */
@@ -93,6 +89,7 @@ cv::Mat Image::mask() const
 {
     return mask_data;
 }
+
 /** Get alpha mat */
 cv::Mat Image::alpha() const
 {
@@ -102,7 +99,6 @@ cv::Mat Image::alpha() const
 /** Get image_data pixel */
 cv::Vec3b Image::get_image_pixel(int u, int v) const
 {
-//    std::cout << "get "<< std::endl;
     return image_data.at<cv::Vec3b>(u,v);
 }
 
@@ -111,25 +107,24 @@ uchar Image::get_mask_pixel(int u, int v) const
 {
     return mask_data.at<uchar>(u,v);
 }
+
 /** Get alpha pixel */
 uchar Image::get_alpha_pixel(int u, int v) const
 {
-//    std::cout << "get "<< std::endl;
-    return alpha_data.at<uchar>(u,v);
-}
-/** Set image pixel */
-cv::Vec3b &Image::set_image_pixel(int u, int v)
-{
-//    std::cout << "set"<<std::endl;
-    return image_data.at<cv::Vec3b>(u,v);
-}
-/** Set alpha pixel */
-uchar &Image::set_alpha_pixel(int u, int v)
-{
-//    std::cout << "set"<<std::endl;
     return alpha_data.at<uchar>(u,v);
 }
 
+/** Set image pixel */
+cv::Vec3b &Image::set_image_pixel(int u, int v)
+{
+    return image_data.at<cv::Vec3b>(u,v);
+}
+
+/** Set alpha pixel */
+uchar &Image::set_alpha_pixel(int u, int v)
+{
+    return alpha_data.at<uchar>(u,v);
+}
 
 const int& Image::get_rows() const
 {
@@ -140,7 +135,6 @@ const int& Image::get_cols() const
 {
     return Nv;
 }
-
 
 int Image::num_outside_mask(int u, int v)
 {
@@ -155,12 +149,12 @@ int Image::num_outside_mask(int u, int v)
                         if(get_mask_pixel(u+i,v+j) != 0)
                             nb_out++;
         }
-//    std::cout << nb_out << " " ;
     return nb_out;
 }
 
 
-std::string type2str(int type) {
+std::string type2str(int type)
+{
     std::string r;
 
     uchar depth = type & CV_MAT_DEPTH_MASK;
@@ -181,9 +175,4 @@ std::string type2str(int type) {
     r += (chans+'0');
 
     return r;
-
-    //HOW TO USE
-    //Display Type of the matric // FOR DEBUG
-    //    std::string ty =  type2str( mask_data.type() );
-    //    printf("Matrix: %s %dx%d \n", ty.c_str(), Nv, Nu );
 }

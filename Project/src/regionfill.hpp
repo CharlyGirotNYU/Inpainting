@@ -31,9 +31,10 @@ class RegionFill
 public:
     /** Empty Constructor */
     RegionFill();
-//    ~RegionFill();
+    ~RegionFill();
     /** Constructor with patch size on x and y */
     RegionFill(int x, int y);
+
     /** get and fill the border of the mask*/
     void init_border();
 
@@ -57,10 +58,6 @@ public:
     float compute_data_term(cv::Point2i p);
     /** Compute the vector n_p from the point p and his nieghbors */
     cv::Point2f compute_vector_normal(cv::Point p,  cv::Mat p_neighbors);
-
-
-    /** Test de la fonction compute data term */
-    void test_compute_data_term();
 
     /** Compute priority for all point belonging to the border of mask */
     void compute_priority();
@@ -96,7 +93,7 @@ public:
     /** Set the current border */
     void set_border(std::vector<border_point>& b)   {border =b;}
 
-    /** Get border point by coordinates */ //NOT IMPLEMENTED ?
+    /** Get border point by coordinates */
     border_point get_border(cv::Point2i p);
 
 
@@ -116,10 +113,6 @@ private:
     /** Size of a patch (width=height)(9*9 in Creiminisi)*/
     int patch_size_x;
     int patch_size_y;
-
-    /** Patch */
-    //    cv::Mat patch; !! attention aux conflits de noms
-
 
 };
 

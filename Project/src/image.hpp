@@ -1,6 +1,6 @@
 /** Image.hpp
  * Inpainting project
- * Developed by Di Folco Maxime, Girot Charly, Jallais Maëllis
+ * Developed by Di Folco Maxime, Girot Charly, Jallais Maëliss
  * January 2018
  * CPE Lyon - 5ETI IMI
  * End of semester Project
@@ -53,7 +53,7 @@ public:
     /** Get Image value at pixel u,v */
     cv::Vec3b get_image_pixel(int u, int v) const;
     /** Get Mask value at pixel u,v */
-     uchar get_mask_pixel(int u, int v) const;
+    uchar get_mask_pixel(int u, int v) const;
     /** Get alpha value at pixel u,v */
     uchar get_alpha_pixel(int u, int v) const;
 
@@ -67,12 +67,8 @@ public:
     /** GEt image cols */
     int const& get_cols() const;
 
-
-
-
     /** Return number of pixels surrounding the current pixel that are outside the mask  */
     int num_outside_mask(int u, int v);
-
 
 
 private:
@@ -88,7 +84,5 @@ private:
     /** Image width */
     int Nv;
 };
-
-
 
 #endif

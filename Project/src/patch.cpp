@@ -1,6 +1,6 @@
 /** patch.cpp
  * Inpainting project
- * Developed by Di Folco Maxime, Girot Charly, Jallais Maëllis
+ * Developed by Di Folco Maxime, Girot Charly, Jallais Maëliss
  * January 2018
  * CPE Lyon - 5ETI IMI
  * End of semester Project
@@ -23,7 +23,6 @@ patch::patch()
 /** Constructor :: all parameters known */
 patch::patch(Image* im, int x,int y, cv::Point2i center, bool source)
 {
-    //TODO : If source is true , else
     image_data = im;
     sizex = x;
     sizey = y;
@@ -96,7 +95,6 @@ float patch::compute_distance_SSD_LAB(patch B)
             if(this->get_alpha().at<uchar>(center_data.x-stepx+i,center_data.y-stepy+j) == SOURCE
                     || this->get_alpha().at<uchar>(center_data.x-stepx+i,center_data.y-stepy+j) == UPDATED)
             {
-
                 // Get pixel (i,j) of both patch
                 cv::Mat3b pixP = cv::Mat3b::zeros(1,1);
                 pixP = this->patch_data.at<cv::Vec3b>(i,j);
@@ -118,23 +116,4 @@ float patch::compute_distance_SSD_LAB(patch B)
             }
         }
     return dist;
-}
-
-/** Mask the patch_data based on the other patch data point in the source or not
- * NOT WORKING WELL AND NOT USED ANYMORE*/
-void patch::mask(patch P, bool src)
-{
-    int stepx = floor(sizex/2);
-    int stepy = floor(sizey/2);
-
-    cv::Mat alpha_Q = cv::Mat::zeros(sizex,sizey,get_alpha().type());
-    cv::Mat mask_a = cv::Mat::zeros(sizex,sizey,get_alpha().type());
-    cv::Mat mask_alpha = P.get_alpha()(cv::Range(P.center_data.x-stepx,P.center_data.x+stepx),cv::Range(P.center_data.y-stepy,P.center_data.y+stepy));//,cv::Rect(x0,y0,sizex,sizey));
-
-    if(src)
-        mask_a = (mask_alpha == SOURCE);// + (mask_alpha == UPDATED);
-    else
-        mask_a = (mask_alpha == BORDER )+ (mask_alpha == IN); //if updated ?
-    patch_data.copyTo(alpha_Q,mask_a);
-    patch_data = alpha_Q;
 }

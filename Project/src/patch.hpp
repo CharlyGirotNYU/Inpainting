@@ -1,6 +1,6 @@
 /** patch.hpp
  * Inpainting project
- * Developed by Di Folco Maxime, Girot Charly, Jallais Maëllis
+ * Developed by Di Folco Maxime, Girot Charly, Jallais Maëliss
  * January 2018
  * CPE Lyon - 5ETI IMI
  * End of semester Project
@@ -40,10 +40,6 @@ public:
      * SSD Computed in Lab Color Space */
     float compute_distance_SSD_LAB(patch B);
 
-    /** Mask the patch_data based on the other patch data point in the source or not
-     * NOT WORKING WELL AND NOT USED ANYMORE*/
-    void mask(patch P, bool src);
-
     /** Get pixel value of the patch data at (i,j)*/
     cv::Vec3b get_pixel(int i, int j){return patch_data.at<cv::Vec3b>(i,j);}
     /** Get Patch Mat */
@@ -57,7 +53,6 @@ public:
     cv::Point2i get_center() {return center_data; }
 
     cv::Point2i get_size(){return cv::Point2i(sizex,sizey);}
-
 
 private:
 
